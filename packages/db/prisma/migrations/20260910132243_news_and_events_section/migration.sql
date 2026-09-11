@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "SectionType" ADD VALUE 'NEWS_AND_EVENTS';

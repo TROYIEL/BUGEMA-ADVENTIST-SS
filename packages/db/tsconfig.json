@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "paths": {
+      "@bass/db": ["./src/index.ts"],
+      "@bass/db/*": ["./src/*"],
+      "@bass/core/*": ["../core/src/*"],
+      "@bass/auth/*": ["../auth/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "prisma/**/*.ts", "scripts/**/*.ts"]
+}

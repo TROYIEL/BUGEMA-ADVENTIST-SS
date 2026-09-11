@@ -1,0 +1,41 @@
+{
+  "name": "bass",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@bass/web & npm run dev --workspace=@bass/admin & wait",
+    "dev:web": "npm run dev --workspace=@bass/web",
+    "dev:admin": "npm run dev --workspace=@bass/admin",
+    "build": "npm run build --workspace=@bass/web && npm run build --workspace=@bass/admin",
+    "build:web": "npm run build --workspace=@bass/web",
+    "build:admin": "npm run build --workspace=@bass/admin",
+    "start:web": "npm run start --workspace=@bass/web",
+    "start:admin": "npm run start --workspace=@bass/admin",
+    "lint": "npm run lint --workspace=@bass/web && npm run lint --workspace=@bass/admin",
+    "typecheck": "npm run typecheck --workspace=@bass/web && npm run typecheck --workspace=@bass/admin",
+    "test": "node --conditions=react-server --import tsx --test \"packages/*/src/**/*.test.ts\"",
+    "setup:env": "node scripts/setup-env.mjs",
+    "postinstall": "npm run db:generate",
+    "db:generate": "npm run generate --workspace=@bass/db",
+    "db:migrate": "npm run migrate --workspace=@bass/db",
+    "db:deploy": "npm run deploy --workspace=@bass/db",
+    "db:status": "npm run status --workspace=@bass/db",
+    "db:reset": "npm run reset --workspace=@bass/db",
+    "db:seed": "npm run seed --workspace=@bass/db",
+    "db:seed:demo": "npm run seed:demo --workspace=@bass/db",
+    "db:studio": "npm run studio --workspace=@bass/db",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "create-admin": "npm run create-admin --workspace=@bass/db",
+    "search:reindex": "npm run reindex --workspace=@bass/db"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "tsx": "^4.23.13",
+    "typescript": "^5"
+  }
+}

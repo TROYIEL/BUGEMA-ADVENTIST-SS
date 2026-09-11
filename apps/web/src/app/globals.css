@@ -1,0 +1,73 @@
+@import "tailwindcss";
+@import "../../../../packages/ui/src/tokens.css";
+
+/* Tailwind scans the importing project by default; the shared component
+   package sits outside it and has to be pointed at explicitly, or every
+   class used only in @bass/ui is dropped from the build. */
+@source "../../../../packages/ui/src";
+
+/* ---------------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------------- */
+
+/*
+ * 100rem, not the usual 80rem. On a 1080p-and-wider monitor an 80rem container
+ * leaves a wide dead margin either side and pushes the whole page into a
+ * narrow strip down the middle. The reference runs roughly 1600px, and matching
+ * it is what lets the hero headline and the photo collage actually spread out.
+ * Prose is kept readable by its own max-width, not by the container.
+ */
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  max-width: 100rem;
+
+  @media (width >= 48rem) {
+    padding-inline: 2.5rem;
+  }
+
+  @media (width >= 80rem) {
+    padding-inline: 4rem;
+  }
+}
+
+/* Skip link: off-screen until focused. */
+@utility skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  background-color: var(--color-navy-900);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+
+  &:focus {
+    top: 1rem;
+  }
+}
+
+/* The gold parallelogram that marks the priority navigation item. */
+@utility nav-flag {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--color-gold-500);
+    transform: skewX(-12deg);
+  }
+}
+
+/* Angled section edge, used between full-bleed bands. */
+@utility edge-angled-top {
+  clip-path: polygon(0 2.5rem, 100% 0, 100% 100%, 0 100%);
+}
+
+@utility edge-angled-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5rem), 0 100%);
+}

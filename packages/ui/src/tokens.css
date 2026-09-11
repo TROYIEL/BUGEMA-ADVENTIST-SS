@@ -1,0 +1,166 @@
+/* ---------------------------------------------------------------------------
+   BASS design tokens
+
+   Shared by the public website and the administration app so the two stay
+   recognisably the same institution, even though their chrome, navigation
+   and density are deliberately different.
+
+   The palette is drawn from the school crest and prefect ties visible in the
+   photographs in bass-images/. Tailwind v4 is CSS-first: these tokens are the
+   configuration, and there is deliberately no tailwind.config.js.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Navy — chrome, headers, primary actions */
+  --color-navy-50: #f2f6fc;
+  --color-navy-100: #e3ecf8;
+  --color-navy-200: #c2d6ee;
+  --color-navy-300: #93b5df;
+  --color-navy-400: #5c8ecb;
+  --color-navy-500: #2c5d9b;
+  --color-navy-600: #1e4a82;
+  --color-navy-700: #123a6b;
+  --color-navy-800: #0e2f57;
+  --color-navy-900: #0a2447;
+  --color-navy-950: #061733;
+
+  /* Gold — accents, active states, rules. Used sparingly. */
+  --color-gold-50: #fdf9ec;
+  --color-gold-100: #faf0ce;
+  --color-gold-200: #f3e09c;
+  --color-gold-300: #e3c465;
+  --color-gold-400: #d4ae41;
+  --color-gold-500: #c8a028;
+  --color-gold-600: #a8841e;
+  --color-gold-700: #86671a;
+  --color-gold-800: #6b521b;
+  --color-gold-900: #5a451b;
+
+  /* Warm neutral grounds */
+  --color-surface: #fbfaf7;
+  --color-surface-raised: #ffffff;
+  --color-surface-sunken: #f4f2ed;
+  --color-line: #e4e1da;
+  --color-line-strong: #cfcbc1;
+
+  /* Text */
+  --color-ink-900: #171a1f;
+  --color-ink-700: #333940;
+  --color-ink-600: #565c66;
+  --color-ink-500: #6e747e;
+  --color-ink-400: #969ca6;
+
+  /* Status */
+  --color-success-50: #eef7f0;
+  --color-success-600: #2e7d4f;
+  --color-success-700: #245f3d;
+  --color-warning-50: #fdf6e8;
+  --color-warning-600: #a8741b;
+  --color-warning-700: #855a14;
+  --color-danger-50: #fdf0ef;
+  --color-danger-600: #b3352c;
+  --color-danger-700: #8d2a22;
+  --color-info-50: #eef4fb;
+  --color-info-600: #2c5d9b;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, "Times New Roman",
+    serif;
+
+  /* A tighter, more editorial scale than Tailwind's default for display type */
+  --text-display-sm: 2rem;
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--letter-spacing: -0.02em;
+  --text-display-md: 2.75rem;
+  --text-display-md--line-height: 1.08;
+  --text-display-md--letter-spacing: -0.022em;
+  --text-display-lg: 3.75rem;
+  --text-display-lg--line-height: 1.03;
+  --text-display-lg--letter-spacing: -0.025em;
+  --text-display-xl: 4.75rem;
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.03em;
+
+  --radius-card: 0.25rem;
+
+  --shadow-card: 0 1px 2px rgb(10 36 71 / 0.04), 0 4px 16px rgb(10 36 71 / 0.06);
+  --shadow-raised: 0 2px 4px rgb(10 36 71 / 0.06), 0 12px 32px rgb(10 36 71 / 0.1);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    /* Next 16 no longer overrides scroll-behavior during route transitions;
+       this attribute is what re-enables the old, saner behaviour. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink-900);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    color: var(--color-navy-900);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* A single, consistent, clearly visible focus ring everywhere. Never
+     removed — keyboard users must always be able to see where they are. */
+  :focus-visible {
+    outline: 2px solid var(--color-navy-700);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* On dark backgrounds the navy ring is invisible; gold carries the contrast. */
+  .on-dark :focus-visible {
+    outline-color: var(--color-gold-300);
+  }
+
+  ::selection {
+    background-color: var(--color-gold-200);
+    color: var(--color-navy-950);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+
+   Animations are decorative only. Anyone who has asked their operating system
+   to reduce motion gets the final state immediately, never a broken layout.
+--------------------------------------------------------------------------- */
+
+@layer utilities {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

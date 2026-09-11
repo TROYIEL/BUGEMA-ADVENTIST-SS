@@ -1,0 +1,29 @@
+{
+  "name": "@bass/ui",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./alert": "./src/alert.tsx",
+    "./badge": "./src/badge.tsx",
+    "./breadcrumbs": "./src/breadcrumbs.tsx",
+    "./button": "./src/button.tsx",
+    "./card": "./src/card.tsx",
+    "./cn": "./src/cn.ts",
+    "./empty-state": "./src/empty-state.tsx",
+    "./field": "./src/field.tsx",
+    "./hover-fill": "./src/hover-fill.tsx",
+    "./pagination": "./src/pagination.tsx",
+    "./rich-text": "./src/rich-text.tsx",
+    "./skeleton": "./src/skeleton.tsx",
+    "./tokens.css": "./src/tokens.css"
+  },
+  "dependencies": {
+    "@bass/core": "*",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "peerDependencies": {
+    "next": "16.3.4",
+    "react": "19.2.8"
+  }
+}

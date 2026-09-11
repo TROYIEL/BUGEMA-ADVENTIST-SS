@@ -1,0 +1,96 @@
+import { logoutAction } from "@/app/login/actions";
+import { AdminNav, type NavGroup } from "@/components/admin-nav";
+import { getCurrentUser } from "@bass/auth/dal";
+import { ROLE_LABELS, hasPermission, type Permission } from "@bass/auth/rbac";
+import { redirect } from "next/navigation";
+
+/**
+ * The full navigation, before it is filtered for the signed-in role.
+ *
+ * `available` marks what has actually been built. Everything else is shown as
+ * a disabled row so the shape of the system is visible without the menu
+ * offering links that 404. As each module lands in milestone 4, its flag flips.
+ */
+const NAV: { heading: string; entries: { label: string; href: string; permission: Permission; available: boolean }[] }[] =
+  [
+    {
+      heading: "Overview",
+      entries: [{ label: "Dashboard", href: "/", permission: "admin:access", available: true }],
+    },
+    {
+      heading: "Admissions",
+      entries: [
+        { label: "Applications", href: "/applications", permission: "applications:read", available: false },
+        { label: "Documents", href: "/documents", permission: "documents:review", available: false },
+        { label: "Requirements", href: "/requirements", permission: "admissions:configure", available: false },
+        { label: "Academic years", href: "/academic-years", permission: "admissions:configure", available: false },
+      ],
+    },
+    {
+      heading: "Content",
+      entries: [
+        { label: "Pages", href: "/pages", permission: "content:write", available: false },
+        { label: "News", href: "/news", permission: "content:write", available: false },
+        { label: "Events", href: "/events", permission: "content:write", available: false },
+        { label: "Gallery", href: "/gallery", permission: "content:write", available: false },
+        { label: "Announcements", href: "/announcements", permission: "announcements:write", available: false },
+      ],
+    },
+    {
+      heading: "School",
+      entries: [
+        { label: "Academics", href: "/academics", permission: "academics:write", available: false },
+        { label: "Staff", href: "/staff", permission: "staff:write", available: false },
+        { label: "Media library", href: "/media", permission: "media:read", available: false },
+        { label: "Enquiries", href: "/enquiries", permission: "messages:read", available: false },
+      ],
+    },
+    {
+      heading: "Settings",
+      entries: [
+        { label: "Site settings", href: "/settings", permission: "settings:write", available: false },
+        { label: "Navigation", href: "/navigation", permission: "navigation:write", available: false },
+        { label: "Users", href: "/users", permission: "users:read", available: false },
+        { label: "Audit log", href: "/audit", permission: "audit:read", available: false },
+      ],
+    },
+  ];
+
+export default async function DashboardLayout({ children }: LayoutProps<"/">) {
+  // A layout is not a security boundary in the App Router — it does not
+  // re-render on navigation and does not stop children rendering — so this
+  // check is for the shell only. Every page performs its own.
+  const user = await getCurrentUser();
+  if (!user) redirect("/login");
+
+  // Entries the role cannot use are removed here, on the server, so the
+  // sidebar never advertises a page that would answer 403.
+  const groups: NavGroup[] = NAV.map((group) => ({
+    heading: group.heading,
+    entries: group.entries.filter((entry) => hasPermission(user.role, entry.permission)),
+  })).filter((group) => group.entries.length > 0);
+
+  return (
+    <div className="flex min-h-dvh flex-col lg:flex-row">
+      <AdminNav
+        groups={groups}
+        userName={user.name}
+        roleLabel={ROLE_LABELS[user.role]}
+        signOut={
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="w-full rounded-md border border-white/20 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-white/10"
+            >
+              Sign out
+            </button>
+          </form>
+        }
+      />
+
+      <main id="main" className="min-w-0 flex-1">
+        {children}
+      </main>
+    </div>
+  );
+}
