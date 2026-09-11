@@ -21,6 +21,7 @@ export async function SiteHeader({ logo }: { logo: MediaImageAsset | null }) {
     getSiteSettings(),
     getLatestNews(2),
   ]);
+  
 
   const schoolName =
     readSetting(settings, "school.name") ?? "Bugema Adventist Secondary School";
