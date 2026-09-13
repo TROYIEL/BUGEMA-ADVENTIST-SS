@@ -14,6 +14,8 @@
     "./hero-slides": "./src/hero-slides.ts",
     "./media-library": "./src/media-library.ts",
     "./content": "./src/content.ts",
+    "./content-admin": "./src/content-admin.ts",
+    "./content-shared": "./src/content-shared.ts",
     "./home": "./src/home.ts",
     "./mail": "./src/mail.ts",
     "./media": "./src/media.ts",

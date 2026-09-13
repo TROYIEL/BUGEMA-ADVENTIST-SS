@@ -15,6 +15,7 @@
     "./pagination": "./src/pagination.tsx",
     "./picker": "./src/picker.tsx",
     "./rich-text": "./src/rich-text.tsx",
+    "./rich-text-editor": "./src/rich-text-editor.tsx",
     "./skeleton": "./src/skeleton.tsx",
     "./tokens.css": "./src/tokens.css"
   },

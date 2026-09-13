@@ -3,9 +3,10 @@
 Two applications sharing one database: the public website, and the
 administration system that manages it.
 
-**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the whole
-Admissions group of the admin sidebar and hero slides are live), plus the
-split into separate applications. See [Milestones](#milestones).
+**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the
+Admissions and Content groups of the admin sidebar, hero slides and the media
+library are live), plus the split into separate applications. See
+[Milestones](#milestones).
 
 ---
 
@@ -227,6 +228,20 @@ deleted while anything on the website shows it — the page lists every place
 silently blank that place. It lives at `/media-library`, not `/media`, because
 `/media/[...key]` is where files are served from.
 
+### Content editing
+
+Pages, news, events, gallery albums and announcements are edited in the
+admin app over `@bass/core/content-admin` (`content:write` to edit,
+`content:publish` to publish; announcements use `announcements:write`).
+Bodies are written in `@bass/ui/rich-text-editor`, a small contentEditable
+editor whose toolbar matches the sanitiser's vocabulary; the sanitiser maps
+the browser's `<b>`/`<i>`/`<div>` to `<strong>`/`<em>`/`<p>` and still runs
+on render. Addresses (slugs) are made from titles and de-duplicated with a
+suffix; system pages keep theirs. Saving keeps the search index in step —
+published rows are indexed, everything else removed — so a draft cannot
+surface through search. Gallery albums add photographs from the media
+library, with captions and ordering, and the first one becomes the cover.
+
 ### Design language
 
 Adapted from the University of Kent's site as a UX benchmark — its structure
@@ -375,7 +390,7 @@ without leaning on repeated imagery.
 3. **Admissions** — multi-step application wizard, document upload, submission,
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
-   Applications, Documents, Requirements, Academic years, Hero slides and
-   Media library ✅ · Pages, News, Events, Gallery, Announcements, Academics,
+   Applications, Documents, Requirements, Academic years, Hero slides, Media
+   library, Pages, News, Events, Gallery and Announcements ✅ · Academics,
    Staff, Enquiries, Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.

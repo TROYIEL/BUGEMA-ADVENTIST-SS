@@ -283,7 +283,7 @@ export async function mediaUsage(id: string): Promise<MediaUsage> {
     ...asset.heroSlideImages,
     ...asset.heroSlideCollageOne,
     ...asset.heroSlideCollageTwo,
-    ...asset.heroSlideCollageThree,
+    ...asset.heroSlideCollageThree, 
   ].map((r) => ({ label: r.title })));
 
   for (const key of SETTING_KEYS) {
