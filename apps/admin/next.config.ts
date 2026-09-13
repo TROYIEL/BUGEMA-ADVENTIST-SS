@@ -12,9 +12,10 @@ const nextConfig: NextConfig = {
     // Required for forbidden() / unauthorized() and their route files.
     authInterrupts: true,
     serverActions: {
-      // Applies to Server Actions only. File uploads go through Route
-      // Handlers, which this limit does not govern.
-      bodySizeLimit: "2mb",
+      // Hero slides post up to four photographs in one form, re-encoded on
+      // the server. Unauthenticated bodies never reach an action: proxy.ts
+      // turns away requests without a session cookie first.
+      bodySizeLimit: "24mb",
     },
   },
 

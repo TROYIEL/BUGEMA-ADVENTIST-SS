@@ -20,8 +20,8 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "Admissions",
       entries: [
-        { label: "Applications", href: "/applications", permission: "applications:read", available: false },
-        { label: "Documents", href: "/documents", permission: "documents:review", available: false },
+        { label: "Applications", href: "/applications", permission: "applications:read", available: true },
+        { label: "Documents", href: "/documents", permission: "documents:review", available: true },
         { label: "Requirements", href: "/requirements", permission: "admissions:configure", available: false },
         { label: "Academic years", href: "/academic-years", permission: "admissions:configure", available: false },
       ],
@@ -29,6 +29,7 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "Content",
       entries: [
+        { label: "Hero slides", href: "/hero-slides", permission: "content:write", available: true },
         { label: "Pages", href: "/pages", permission: "content:write", available: false },
         { label: "News", href: "/news", permission: "content:write", available: false },
         { label: "Events", href: "/events", permission: "content:write", available: false },

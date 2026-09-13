@@ -1,6 +1,11 @@
 import Link from "next/link";
 
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
+import {
+  HoverReveal,
+  HoverRevealPanel,
+  HoverRevealToggle,
+} from "@/components/sections/hover-reveal";
 import { ButtonLink } from "@bass/ui/button";
 import { SectionHeading } from "@bass/ui/card";
 import { RichText } from "@bass/ui/rich-text";
@@ -20,6 +25,9 @@ export type BlockContent = {
   title?: string | null;
   subtitle?: string | null;
   body?: string | null;
+  /** Paragraphs behind a "show more", for a band that offers a little more than its blurb. */
+  details?: string[] | null;
+  detailsLabel?: string | null;
   ctaLabel?: string | null;
   ctaHref?: string | null;
   ctaSecondaryLabel?: string | null;
@@ -45,12 +53,12 @@ export function QuickActions({
     // reference uses between its hero and the first light content.
     <section
       aria-label="Quick links"
-      className="on-dark relative bg-navy-950 text-white [clip-path:polygon(5rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(9rem_0,100%_0,100%_100%,0_100%)]"
+      className="on-dark relative bg-navy-950 text-white mt-14 [clip-path:polygon(5rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(5rem_0,100%_0,100%_100%,7%_100%)]"
     >
       <div className="container-page py-12 md:py-14">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:gap-14">
           <div className="flex flex-col gap-2">
-            <h2 className="font-serif text-2xl text-white md:text-[1.75rem]">
+            <h2 className="font-serif text-2xl font-bold text-white md:text-4xl ">
               {title ?? "Start your application"}
             </h2>
             {body ? (
@@ -356,7 +364,9 @@ export function FeaturedStory({ content }: { content: BlockContent }) {
     <section className="relative my-28 bg-navy-100 lg:my-40">
       <div className="container-page">
         <div className="grid items-center gap-12 py-14 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16 lg:py-20">
-          <div className="flex flex-col gap-5">
+          {/* The framed panel is the hover area: resting the pointer on it
+              draws the cover off the extra paragraphs. */}
+          <HoverReveal hoverArea="panel" className="flex flex-col gap-5">
             {content.eyebrow ? (
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy-700">
                 {content.eyebrow}
@@ -368,6 +378,54 @@ export function FeaturedStory({ content }: { content: BlockContent }) {
             {content.body ? (
               <p className="max-w-xl text-lg leading-relaxed text-navy-900/80">{content.body}</p>
             ) : null}
+            {/* A little more without leaving the page; the full story is
+                still one click away on the button below. */}
+            {content.details && content.details.length > 0 ? (
+              <>
+                <HoverRevealToggle label={content.detailsLabel ?? "Read more"} />
+                {/* Gold frame over an offset navy one: the same layered
+                    device as the blocks behind the photograph, at text
+                    scale. The outer margin leaves room for the offset. */}
+                <HoverRevealPanel className="relative mr-2 mb-2 max-w-xl">
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 translate-x-2 translate-y-2 border-2 border-navy-700"
+                  />
+                  <div className="relative overflow-hidden border-2 border-gold-400 bg-white/70">
+                    {/* Extra right padding keeps every line clear of the
+                        sliver the cover parks at when it is drawn back. */}
+                    <div className="flex flex-col gap-4 p-5 pr-14 md:p-6 md:pr-16">
+                      {content.details.map((paragraph, index) => (
+                        <p key={index} className="leading-relaxed text-navy-900/85">
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                    {/* The cover. At rest it lies over the right three
+                        quarters of the text with a slanted leading edge, so
+                        the start of each line shows through; on hover it
+                        slides most of the way off to the right, leaving a
+                        sliver at the edge, and comes back when the pointer
+                        leaves. Two layers: gold beneath, navy on top and
+                        nudged right, so a gold edge follows the slant — a
+                        border cannot, because clip-path cuts it off. It
+                        transitions `translate`, not `transform`: Tailwind's
+                        translate utilities set the CSS translate property. */}
+                    <div
+                      aria-hidden="true"
+                      className={cn(
+                        "pointer-events-none absolute inset-0",
+                        "transition-[translate] duration-700 ease-[var(--ease-out-soft)] motion-reduce:transition-none",
+                        "translate-x-[20%] group-data-[state=open]/reveal:translate-x-[88%]",
+                      )}
+                    >
+                      <div className="absolute inset-0 bg-gold-500/50 [clip-path:polygon(10%_0,100%_0,100%_100%,0_100%)]" />
+                      <div className="absolute inset-y-0 left-1 right-0 opacity-85 bg-navy-800/85 [clip-path:polygon(11%_0,100%_0,100%_100%,0_100%)]" />
+                    </div>
+                  </div>
+                </HoverRevealPanel>
+              </>
+            ) : null}
             {content.ctaLabel && content.ctaHref ? (
               <div className="mt-2">
                 <ButtonLink href={content.ctaHref as never} withArrow>
@@ -375,26 +433,67 @@ export function FeaturedStory({ content }: { content: BlockContent }) {
                 </ButtonLink>
               </div>
             ) : null}
-          </div>
+          </HoverReveal>
 
           {content.media ? (
-            <div className="relative lg:-my-28">
+            <div className="group/photo relative lg:-my-28">
+              {/* Hovering the photograph makes the composition breathe: the
+                  blocks behind it push further out, the picture eases in a
+                  touch, a faint navy tint settles over the top-right corner
+                  and a pair of gold corner brackets draw themselves in. Every
+                  transition is on `translate`, `scale` or opacity — never
+                  `transform` — and all of it stops under reduced motion. */}
               {/* Offset blocks behind the photograph. Decorative only, so they
                   are hidden from assistive technology and dropped on small
                   screens where there is no room for them to read as layering. */}
               <div
                 aria-hidden="true"
-                className="absolute -right-5 -top-8 hidden size-40 bg-gold-400 lg:block"
+                className={cn(
+                  "absolute -right-5 -top-8 hidden size-40 bg-gold-400 lg:block",
+                  "transition-[translate] duration-500 ease-[var(--ease-out-soft)] motion-reduce:transition-none",
+                  "group-hover/photo:translate-x-3 group-hover/photo:-translate-y-3",
+                )}
               />
               <div
                 aria-hidden="true"
-                className="absolute -bottom-8 -left-6 hidden size-32 border-[6px] border-navy-700 lg:block"
+                className={cn(
+                  "absolute -bottom-8 -left-6 hidden size-32 border-[6px] border-navy-700 lg:block",
+                  "transition-[translate] duration-500 ease-[var(--ease-out-soft)] motion-reduce:transition-none",
+                  "group-hover/photo:-translate-x-3 group-hover/photo:translate-y-3",
+                )}
               />
-              <MediaImage
-                asset={content.media}
-                sizes="(min-width: 1024px) 55vw, 100vw"
-                className="relative aspect-[5/4] w-full object-cover shadow-raised"
-              />
+
+              <div className="relative overflow-hidden shadow-raised">
+                <MediaImage
+                  asset={content.media}
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  className={cn(
+                    "aspect-[5/4] w-full object-cover",
+                    "transition-[scale] duration-700 ease-[var(--ease-out-soft)] motion-reduce:transition-none",
+                    "group-hover/photo:scale-[1.03]",
+                  )}
+                />
+
+                {/* Faint tint from the top-right corner, matching the gold
+                    block's side of the picture. */}
+                <div
+                  aria-hidden="true"
+                  className={cn(
+                    "pointer-events-none absolute inset-0 bg-gradient-to-bl from-navy-950/45 via-navy-950/0 to-transparent",
+                    "opacity-0 transition-opacity duration-500 motion-reduce:transition-none",
+                    "group-hover/photo:opacity-100",
+                  )}
+                />
+
+                {/* Corner brackets: two gold lines at the top right, two at
+                    the bottom left, each growing from nothing along its edge. */}
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+                  <span className="absolute right-4 top-4 h-0.5 w-0 bg-gold-400 transition-[width] duration-500 delay-100 ease-[var(--ease-out-soft)] motion-reduce:transition-none group-hover/photo:w-16" />
+                  <span className="absolute right-4 top-4 h-0 w-0.5 bg-gold-400 transition-[height] duration-500 delay-100 ease-[var(--ease-out-soft)] motion-reduce:transition-none group-hover/photo:h-16" />
+                  <span className="absolute bottom-4 left-4 h-0.5 w-0 bg-gold-400 transition-[width] duration-500 delay-100 ease-[var(--ease-out-soft)] motion-reduce:transition-none group-hover/photo:w-16" />
+                  <span className="absolute bottom-4 left-4 h-0 w-0.5 bg-gold-400 transition-[height] duration-500 delay-100 ease-[var(--ease-out-soft)] motion-reduce:transition-none group-hover/photo:h-16" />
+                </div>
+              </div>
             </div>
           ) : null}
         </div>

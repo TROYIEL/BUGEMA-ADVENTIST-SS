@@ -1,5 +1,6 @@
 import {
   createHash,
+  createHmac,
   randomBytes,
   scrypt as scryptCallback,
   timingSafeEqual,
@@ -132,4 +133,31 @@ export function safeEqual(a: string, b: string): boolean {
 /** Stable checksum used to spot duplicate uploads in the media library. */
 export function checksum(buffer: Buffer): string {
   return createHash("sha256").update(buffer).digest("hex");
+}
+
+/**
+ * Signs a short value with HMAC-SHA256 so it can travel in a cookie with no
+ * database row behind it. Applicants have no account to hang a session on, so
+ * portal access is a signed, expiring claim rather than a stored token.
+ *
+ * The value must not contain "." — it is the separator between value and MAC.
+ */
+export function signValue(value: string, secret: string): string {
+  if (value.includes(".")) {
+    throw new Error("Signed values must not contain '.'");
+  }
+  const mac = createHmac("sha256", secret).update(value).digest("base64url");
+  return `${value}.${mac}`;
+}
+
+/** Returns the original value if the signature checks out, otherwise null. */
+export function verifySignedValue(signed: string, secret: string): string | null {
+  const index = signed.lastIndexOf(".");
+  if (index <= 0) return null;
+
+  const value = signed.slice(0, index);
+  const mac = signed.slice(index + 1);
+  const expected = createHmac("sha256", secret).update(value).digest("base64url");
+
+  return safeEqual(mac, expected) ? value : null;
 }

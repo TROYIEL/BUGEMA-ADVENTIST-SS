@@ -8,6 +8,7 @@ import { getSiteSettings, getUnconfiguredSettings } from "@bass/core/settings";
 import { isMailDeliveryConfigured } from "@bass/core/mail";
 import { Alert } from "@bass/ui/alert";
 import { Badge } from "@bass/ui/badge";
+import { ButtonLink } from "@bass/ui/button";
 
 export const dynamic = "force-dynamic";
 
@@ -175,10 +176,23 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      <Alert tone="info" title="Milestone 4" className="mt-8 max-w-3xl">
-        The management modules in the sidebar — applications, content, media,
-        staff and settings — are built next. Everything shown above is live data
-        from the database.
+      {canSeeApplications ? (
+        <section className="mt-8 flex flex-wrap gap-3">
+          <ButtonLink href="/applications" size="sm" withArrow>
+            Review applications
+          </ButtonLink>
+          {hasPermission(user.role, "documents:review") ? (
+            <ButtonLink href="/documents" size="sm" variant="secondary">
+              Documents to review
+            </ButtonLink>
+          ) : null}
+        </section>
+      ) : null}
+
+      <Alert tone="info" title="Milestone 4 in progress" className="mt-8 max-w-3xl">
+        Applications and document review are live. The remaining modules in the
+        sidebar — content, media, staff and settings — are built next.
+        Everything shown above is live data from the database.
       </Alert>
 
       <p className="mt-6 text-xs text-ink-500">

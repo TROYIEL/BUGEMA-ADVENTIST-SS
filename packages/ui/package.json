@@ -13,6 +13,7 @@
     "./field": "./src/field.tsx",
     "./hover-fill": "./src/hover-fill.tsx",
     "./pagination": "./src/pagination.tsx",
+    "./picker": "./src/picker.tsx",
     "./rich-text": "./src/rich-text.tsx",
     "./skeleton": "./src/skeleton.tsx",
     "./tokens.css": "./src/tokens.css"

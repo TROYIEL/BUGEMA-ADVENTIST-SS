@@ -2,7 +2,8 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "./cn";
 
-const CONTROL =
+/** The look every form control shares; exported so custom controls match. */
+export const CONTROL =
   "w-full rounded-card border border-line-strong bg-surface-raised px-3.5 py-2.5 " +
   "text-[0.9375rem] text-ink-900 placeholder:text-ink-400 " +
   "transition-colors duration-150 " +

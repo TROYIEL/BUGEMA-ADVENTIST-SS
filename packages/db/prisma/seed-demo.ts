@@ -544,8 +544,9 @@ async function applyDemo() {
       await db.applicationEvent.create({
         data: {
           applicationId: application.id,
-          action: "Application submitted",
+          action: "submitted",
           actorType: "APPLICANT",
+          newValue: ApplicationStatus.SUBMITTED,
           isVisibleToApplicant: true,
           createdAt: daysFromNow(-(index + 2)),
         },
@@ -555,7 +556,7 @@ async function applyDemo() {
         await db.applicationEvent.create({
           data: {
             applicationId: application.id,
-            action: "Status changed",
+            action: "status_changed",
             actorType: "STAFF",
             oldValue: "SUBMITTED",
             newValue: status,
