@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    "./admissions-config": "./src/admissions-config.ts",
+    "./admissions-config-shared": "./src/admissions-config-shared.ts",
     "./announcements": "./src/announcements.ts",
     "./application-mail": "./src/application-mail.ts",
     "./application-schemas": "./src/application-schemas.ts",

@@ -51,6 +51,31 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
   return settings;
 });
 
+/**
+ * Writes one setting. Marks it configured, since a value an administrator
+ * chose is real even when it equals the seeded default. Metadata comes from
+ * the registry so a key that was never seeded still gets a complete row.
+ */
+export async function setSetting(key: SettingKey, value: string | boolean): Promise<void> {
+  const definition = SETTINGS_REGISTRY[key];
+  // Booleans are stored as JSON booleans, as the seed stores them; the reader
+  // stringifies either form.
+  const stored = value;
+  await db.siteSetting.upsert({
+    where: { key },
+    update: { value: stored, isConfigured: true },
+    create: {
+      key,
+      group: definition.group,
+      label: definition.label,
+      description: definition.description,
+      order: definition.order,
+      value: stored,
+      isConfigured: true,
+    },
+  });
+}
+
 /** The configured value, or null when the school has not supplied one. */
 export async function getSetting(key: SettingKey): Promise<string | null> {
   const settings = await getSiteSettings();
