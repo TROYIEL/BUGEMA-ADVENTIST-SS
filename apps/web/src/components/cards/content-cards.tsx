@@ -185,9 +185,14 @@ export function ProgramCard({ program, sizes }: { program: ProgramCardData; size
 
       <div className="flex flex-col gap-2 p-6">
         <h3 className="font-serif text-2xl text-white">
+          {/* The ::before stretches this one link over the whole card. It is
+              raised above the card's content because the revealed panel below
+              animates with `translate`, which puts it in its own stacking
+              layer; without the z-index that panel would sit on top of the
+              overlay and the summary and "Find out more" would be dead. */}
           <Link
             href={`/academics/programmes/${program.slug}` as never}
-            className="before:absolute before:inset-0"
+            className="before:absolute before:inset-0 before:z-10"
           >
             {program.title}
           </Link>

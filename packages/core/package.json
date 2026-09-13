@@ -4,6 +4,10 @@
   "private": true,
   "exports": {
     "./announcements": "./src/announcements.ts",
+    "./application-mail": "./src/application-mail.ts",
+    "./application-schemas": "./src/application-schemas.ts",
+    "./applications": "./src/applications.ts",
+    "./applications-admin": "./src/applications-admin.ts",
     "./audit": "./src/audit.ts",
     "./content": "./src/content.ts",
     "./home": "./src/home.ts",

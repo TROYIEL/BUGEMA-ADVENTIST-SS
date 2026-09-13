@@ -20,8 +20,8 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "Admissions",
       entries: [
-        { label: "Applications", href: "/applications", permission: "applications:read", available: false },
-        { label: "Documents", href: "/documents", permission: "documents:review", available: false },
+        { label: "Applications", href: "/applications", permission: "applications:read", available: true },
+        { label: "Documents", href: "/documents", permission: "documents:review", available: true },
         { label: "Requirements", href: "/requirements", permission: "admissions:configure", available: false },
         { label: "Academic years", href: "/academic-years", permission: "admissions:configure", available: false },
       ],

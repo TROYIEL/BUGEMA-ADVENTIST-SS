@@ -85,7 +85,9 @@ export async function purgeExpiredRateLimits(): Promise<number> {
 export const RATE_LIMITS = {
   login: { limit: 8, windowSeconds: 15 * 60 },
   contactForm: { limit: 5, windowSeconds: 60 * 60 },
+  applicationStart: { limit: 10, windowSeconds: 60 * 60 },
   applicationSubmit: { limit: 5, windowSeconds: 60 * 60 },
+  applicationResumeLink: { limit: 3, windowSeconds: 60 * 60 },
   applicationStatusLookup: { limit: 10, windowSeconds: 15 * 60 },
   documentUpload: { limit: 30, windowSeconds: 60 * 60 },
 } as const;

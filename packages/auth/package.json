@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "exports": {
+    "./applicant": "./src/applicant.ts",
     "./crypto": "./src/crypto.ts",
     "./session": "./src/session.ts",
     "./dal": "./src/dal.ts",

@@ -3,8 +3,9 @@
 Two applications sharing one database: the public website, and the
 administration system that manages it.
 
-**Status: milestones 1–2 of 5 complete**, plus the split into separate
-applications. See [Milestones](#milestones).
+**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (applications
+and document review are live), plus the split into separate applications. See
+[Milestones](#milestones).
 
 ---
 
@@ -59,7 +60,8 @@ npm run dev                   # both apps together
 - Administration: <http://localhost:3001>
 
 Set `SESSION_SECRET` in the root `.env` before `setup:env`; generate one with
-`openssl rand -base64 32`. Rotating it signs everyone out.
+`openssl rand -base64 32`. It signs applicant portal cookies; rotating it signs
+every applicant out.
 
 Run one app at a time with `npm run dev:web` or `npm run dev:admin`.
 
@@ -138,6 +140,61 @@ school changes the content of the front page without a developer, while the
 layout stays designed rather than assembled. Each band renders nothing when it
 has no content, so an empty database gives a short, correct page rather than a
 row of blank cards.
+
+### Admissions
+
+Applicants have no accounts. Two cookies stand in for one, both issued from
+`@bass/auth/applicant`:
+
+- **Draft** (`bass_application_draft`, 30 days) holds the raw resume secret for
+  an unfinished application; only its SHA-256 is stored, as with admin
+  sessions. The "email me a link to continue" button and the confirmation
+  email's access link both land on a Route Handler that swaps the token in the
+  URL for a cookie and redirects, so secrets never sit in browser history.
+- **Portal** (`bass_applicant`, 2 hours) is a signed, expiring claim to one
+  submitted application — HMAC-SHA256 over `id:expiry` with `SESSION_SECRET`.
+  It is stateless, so there is no applicant session table, and rotating the
+  secret signs every applicant out. Issued after a reference + surname + date
+  of birth lookup (rate limited, same reply whichever field was wrong) or an
+  emailed access link.
+
+The wizard is `apps/web/src/app/(site)/admissions/apply/[step]`. Steps come
+from the `ApplicationStep` enum; "additional" only appears when the school has
+configured extra questions (`application_form_fields`), and "documents" only
+when there are document types for the level applied for. Every step is a plain
+`<form action>` to a Server Action, so it works without JavaScript;
+`useActionState` only adds pending state and carries validation errors back.
+The action never trusts the body for *which* application is being edited —
+that always comes from the cookie — and re-validates everything from the
+stored row at submission, since an administrator may have added a required
+question or document since a step was saved.
+
+Submission runs in one transaction in `@bass/core/applications`: the
+per-year counter is bumped with an upsert (`BASS-2026-000123`; concurrent
+submissions get consecutive numbers, a failed one burns none), the row is
+guarded on `status = DRAFT` so a double-click cannot submit twice, and the
+event is written. Mail is queued *after* the transaction — an SMTP outage
+must not undo a submission.
+
+Documents are re-encoded by `processUploadedDocument` (metadata stripped,
+PDFs byte-identical), stored `PRIVATE`, and served to their owner only by
+`admissions/application-status/documents/[id]`, which answers 404 for anyone
+else's. Uploads go through a Server Action, so `serverActions.bodySizeLimit`
+in `apps/web/next.config.ts` is raised to 10 MB against the 8 MB hard ceiling
+in `MAX_DOCUMENT_BYTES`; an administrator's per-type limit is capped by it.
+
+**The staff side** is `@bass/core/applications-admin` behind
+`apps/admin/.../applications` and `/documents`. Every action re-reads the
+row under the signed-in user's permissions and takes only an id plus the
+change. Moving into *or out of* an outcome (accepted, conditional, rejected)
+needs `applications:decide`; everything else needs `applications:write`.
+Rejecting a document or asking for a replacement moves a submitted or
+under-review application to "documents needed" automatically, which is what
+reopens the upload in the applicant's portal; staff move it on by hand once
+the new file is in. Status changes and messages are queued as email when the
+applicant gave an address, and always appear in the portal. CSV export honours
+the list's filters, guards against spreadsheet formula injection, and is
+written to the audit log — it is personal data about children leaving in bulk.
 
 ### Design language
 
@@ -234,6 +291,9 @@ immediately and `next build` does not require a reachable database.
   serving route makes rather than a consequence of where a file was written.
 - Sign-in is rate limited per IP address and per account, and returns the same
   message for a wrong password, an unknown address and a disabled account.
+- Starting an application, uploading a document, submitting, requesting a
+  resume link and looking up an application are each rate limited
+  (`RATE_LIMITS` in `@bass/core/rate-limit`).
 - The whole admin origin sends `X-Robots-Tag: noindex, nofollow, noarchive`.
 
 ## Splitting the apps apart
@@ -282,6 +342,9 @@ without leaning on repeated imagery.
 2. **Public website** — site shell, homepage, informational pages, news,
    events, gallery, search, contact form, SEO. ✅
 3. **Admissions** — multi-step application wizard, document upload, submission,
-   reference numbers, status lookup, applicant portal.
+   reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
+   Applications and Documents ✅ · Requirements, Academic years, Pages, News,
+   Events, Gallery, Announcements, Academics, Staff, Media library, Enquiries,
+   Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.

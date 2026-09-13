@@ -13,6 +13,15 @@ const nextConfig: NextConfig = {
 
   typedRoutes: true,
 
+  experimental: {
+    serverActions: {
+      // Applicant documents are uploaded through a Server Action. The default
+      // 1 MB cap is well under a scanned report card; this leaves headroom
+      // above MAX_DOCUMENT_BYTES (8 MB) for multipart framing.
+      bodySizeLimit: "10mb",
+    },
+  },
+
   images: {
     // Next 16 defaults this to [75] and coerces anything else to the nearest
     // allowed value, so every quality the app uses must be listed here.

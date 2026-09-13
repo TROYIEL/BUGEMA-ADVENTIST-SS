@@ -6,7 +6,9 @@ import {
   hashPassword,
   hashToken,
   safeEqual,
+  signValue,
   verifyPassword,
+  verifySignedValue,
 } from "./crypto";
 
 describe("password hashing", () => {
@@ -71,5 +73,33 @@ describe("safeEqual", () => {
     assert.equal(safeEqual("abc", "abd"), false);
     assert.equal(safeEqual("abc", "abcd"), false);
     assert.equal(safeEqual("", "a"), false);
+  });
+});
+
+describe("signed values", () => {
+  const secret = "test-secret-with-enough-length-to-be-realistic";
+
+  it("round-trips a value under the same secret", () => {
+    const signed = signValue("app_123:1700000000000", secret);
+    assert.equal(verifySignedValue(signed, secret), "app_123:1700000000000");
+  });
+
+  it("rejects a tampered value, a tampered signature and a different secret", () => {
+    const signed = signValue("app_123:1700000000000", secret);
+    const [value, mac] = signed.split(".");
+
+    assert.equal(verifySignedValue(`app_124:1700000000000.${mac}`, secret), null);
+    assert.equal(verifySignedValue(`${value}.${mac.slice(1)}x`, secret), null);
+    assert.equal(verifySignedValue(signed, `${secret}-other`), null);
+  });
+
+  it("rejects malformed input rather than throwing", () => {
+    assert.equal(verifySignedValue("", secret), null);
+    assert.equal(verifySignedValue("no-separator", secret), null);
+    assert.equal(verifySignedValue(".onlymac", secret), null);
+  });
+
+  it("refuses to sign a value containing the separator", () => {
+    assert.throws(() => signValue("a.b", secret));
   });
 });

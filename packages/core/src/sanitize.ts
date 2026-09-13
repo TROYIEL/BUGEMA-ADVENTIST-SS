@@ -68,6 +68,19 @@ export function richTextToPlainText(html: string | null | undefined): string {
     .trim();
 }
 
+/**
+ * Plain-text paragraphs, for excerpts that need more than one. Block-level
+ * closes and line breaks become paragraph boundaries before the tags go.
+ */
+export function richTextToParagraphs(html: string | null | undefined): string[] {
+  if (!html) return [];
+  const marked = html.replace(/<\/(p|div|h[1-6]|li|blockquote|tr)>|<br\s*\/?>/gi, "$&\n");
+  return sanitizeHtml(marked, { allowedTags: [], allowedAttributes: {} })
+    .split(/\n+/)
+    .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+    .filter(Boolean);
+}
+
 /** Truncates on a word boundary, for generated meta descriptions. */
 export function truncate(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;

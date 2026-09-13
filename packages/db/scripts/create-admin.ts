@@ -292,7 +292,7 @@ async function main() {
     });
 
     console.log(`\n  Created ${user.email} as ${user.role}.`);
-    console.log("  Sign in at /admin/login\n");
+    console.log("  Sign in to the administration app (http://localhost:3001 in development)\n");
   } finally {
     rl?.close();
   }
