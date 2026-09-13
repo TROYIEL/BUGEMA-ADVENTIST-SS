@@ -3,9 +3,9 @@
 Two applications sharing one database: the public website, and the
 administration system that manages it.
 
-**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (applications
-and document review are live), plus the split into separate applications. See
-[Milestones](#milestones).
+**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the whole
+Admissions group of the admin sidebar and hero slides are live), plus the
+split into separate applications. See [Milestones](#milestones).
 
 ---
 
@@ -183,6 +183,14 @@ else's. Uploads go through a Server Action, so `serverActions.bodySizeLimit`
 in `apps/web/next.config.ts` is raised to 10 MB against the 8 MB hard ceiling
 in `MAX_DOCUMENT_BYTES`; an administrator's per-type limit is capped by it.
 
+**Configuration** lives in `@bass/core/admissions-config` behind the admin
+`/requirements` (classes, document types, published entry requirements, extra
+questions) and `/academic-years` pages (`admissions:configure`). The wizard
+reads it live. Rows that applications already refer to are switched off, not
+deleted; a year with applications is kept as the record of that intake. The
+site-wide `admissions.isOpen` switch is on the years page too, since both it
+and the active year's switch must be on for the form to open.
+
 **The staff side** is `@bass/core/applications-admin` behind
 `apps/admin/.../applications` and `/documents`. Every action re-reads the
 row under the signed-in user's permissions and takes only an id plus the
@@ -355,7 +363,7 @@ without leaning on repeated imagery.
 3. **Admissions** — multi-step application wizard, document upload, submission,
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
-   Applications, Documents and Hero slides ✅ · Requirements, Academic years,
+   Applications, Documents, Requirements, Academic years and Hero slides ✅ ·
    Pages, News, Events, Gallery, Announcements, Academics, Staff, Media
    library, Enquiries, Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.
