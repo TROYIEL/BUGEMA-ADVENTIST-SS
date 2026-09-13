@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { getAdmissionsWindow } from "@bass/core/applications";
+import { getPublicHeroSlides } from "@bass/core/hero-slides";
 import { getHomeFeatures, getHomeHighlights, getHomeImages } from "@bass/core/home";
 import {
   formatDate,
@@ -76,7 +77,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [settings, images, features, highlights, aboutPage, admissions, news, events] =
+  const [settings, images, features, highlights, aboutPage, admissions, news, events, heroSlides] =
     await Promise.all([
       getSiteSettings(),
       getHomeImages(),
@@ -86,6 +87,7 @@ export default async function HomePage() {
       getAdmissionsWindow(),
       getLatestNews(3),
       getUpcomingEvents(3),
+      getPublicHeroSlides(),
     ]);
 
   const schoolName =
@@ -104,17 +106,36 @@ export default async function HomePage() {
     700,
   );
 
-  // The hero slides are assembled from content that already exists — the
-  // school's own settings, the admissions window, the latest story and the
-  // next event — never from copy written for the slider. A slide without its
-  // content is simply not built, so the hero is never padded out.
+  // Slides the school has composed in the administration app come first and
+  // alone. Without any, the hero assembles its own from content that already
+  // exists — the school's settings, the admissions window, the latest story
+  // and the next event — never from copy written for the slider. A slide
+  // without its content is simply not built, so the hero is never padded out.
+  const phone = readSetting(settings, "contact.phone");
+  const configuredSlides: HeroSlideData[] = heroSlides.map((slide) => ({
+    id: slide.id,
+    subtitle: slide.subtitle,
+    title: slide.title,
+    body: slide.body,
+    displayText: slide.displayText,
+    ctaLabel: slide.ctaLabel,
+    ctaHref: slide.ctaHref,
+    ctaSecondaryLabel: slide.ctaSecondaryLabel,
+    ctaSecondaryHref: slide.ctaSecondaryHref,
+    phone: slide.showPhone ? phone : null,
+    image: slide.image,
+    collage: [slide.collageOne, slide.collageTwo, slide.collageThree].filter(
+      (asset): asset is NonNullable<typeof asset> => Boolean(asset),
+    ),
+  }));
+
   const slides: HeroSlideData[] = [
     {
       id: "school",
       title: schoolName,
       body: readSetting(settings, "school.tagline"),
       displayText: readSetting(settings, "school.motto"),
-      phone: readSetting(settings, "contact.phone"),
+      phone,
       ctaLabel: "Apply for admission",
       ctaHref: "/admissions/apply",
       ctaSecondaryLabel: "Explore BASS",
@@ -185,7 +206,7 @@ export default async function HomePage() {
 
   return (
     <main id="main" className="flex flex-1 flex-col">
-      <HeroCarousel slides={slides} />
+      <HeroCarousel slides={configuredSlides.length > 0 ? configuredSlides : slides} />
 
       <QuickActions title="Start your application" body={"Start you journey with us click Apply  or check the requirements for applying"} actions={QUICK_ACTIONS} />
 

@@ -12,7 +12,8 @@ import {
 import { Button, ButtonLink } from "@bass/ui/button";
 import { cn } from "@bass/ui/cn";
 import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label, Select } from "@bass/ui/field";
+import { Input, Label } from "@bass/ui/field";
+import { Picker } from "@bass/ui/picker";
 import { Pagination, parsePageParam } from "@bass/ui/pagination";
 
 import { queryFor, readFilters, type Search } from "@/components/applications/filters";
@@ -116,33 +117,36 @@ export default async function ApplicationsPage({
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="year">Academic year</Label>
-          <Select id="year" name="year" defaultValue={filters.academicYearId ?? ""}>
-            <option value="">All years</option>
-            {options.years.map((year) => (
-              <option key={year.id} value={year.id}>
-                {year.name}
-              </option>
-            ))}
-          </Select>
+          <Picker
+            id="year"
+            name="year"
+            defaultValue={filters.academicYearId ?? ""}
+            emptyLabel="All years"
+            options={options.years.map((year) => ({ value: year.id, label: year.name }))}
+          />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="class">Class</Label>
-          <Select id="class" name="class" defaultValue={filters.applicationClassId ?? ""}>
-            <option value="">All classes</option>
-            {options.classes.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
-            ))}
-          </Select>
+          <Picker
+            id="class"
+            name="class"
+            defaultValue={filters.applicationClassId ?? ""}
+            emptyLabel="All classes"
+            options={options.classes.map((entry) => ({ value: entry.id, label: entry.name }))}
+          />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="sort">Order</Label>
-          <Select id="sort" name="sort" defaultValue={filters.sort ?? "newest"}>
-            <option value="newest">Newest first</option>
-            <option value="oldest">Oldest first</option>
-            <option value="name">By surname</option>
-          </Select>
+          <Picker
+            id="sort"
+            name="sort"
+            defaultValue={filters.sort ?? "newest"}
+            options={[
+              { value: "newest", label: "Newest first" },
+              { value: "oldest", label: "Oldest first" },
+              { value: "name", label: "By surname" },
+            ]}
+          />
         </div>
         <div className="flex items-end gap-2">
           <Button type="submit" size="md">

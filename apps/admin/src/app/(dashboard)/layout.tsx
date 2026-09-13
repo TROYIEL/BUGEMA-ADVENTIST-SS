@@ -29,6 +29,7 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "Content",
       entries: [
+        { label: "Hero slides", href: "/hero-slides", permission: "content:write", available: true },
         { label: "Pages", href: "/pages", permission: "content:write", available: false },
         { label: "News", href: "/news", permission: "content:write", available: false },
         { label: "Events", href: "/events", permission: "content:write", available: false },

@@ -223,6 +223,10 @@ model MediaAsset {
   pageOgImages          Page[]                @relation("PageOgImage")
   featureMedia          HomeFeature[]         @relation("FeatureMedia")
   highlightMedia        HomeHighlight[]       @relation("HighlightMedia")
+  heroSlideImages       HeroSlide[]           @relation("HeroSlideImage")
+  heroSlideCollageOne   HeroSlide[]           @relation("HeroSlideCollageOne")
+  heroSlideCollageTwo   HeroSlide[]           @relation("HeroSlideCollageTwo")
+  heroSlideCollageThree HeroSlide[]           @relation("HeroSlideCollageThree")
   newsImages            NewsArticle[]         @relation("ArticleImage")
   eventImages           Event[]               @relation("EventImage")
   albumCovers           GalleryAlbum[]        @relation("AlbumCover")
@@ -376,6 +380,44 @@ model HomeHighlight {
 
   @@index([isVisible, order])
   @@map("home_highlights")
+}
+
+/// One slide of the homepage hero carousel, composed by the school. Every
+/// part is optional except the title; the public site renders whatever is
+/// set. When no slide is active the site falls back to slides it builds
+/// itself from settings, admissions and the latest content.
+model HeroSlide {
+  id                String    @id @default(cuid())
+  title             String
+  /// Small caps line above the title.
+  subtitle          String?
+  body              String?
+  /// Short phrase set in oversized gold type beside the prints.
+  displayText       String?
+  ctaLabel          String?
+  ctaHref           String?
+  ctaSecondaryLabel String?
+  ctaSecondaryHref  String?
+  /// Lead with the school's telephone number as a "call now" action.
+  showPhone         Boolean   @default(false)
+  imageId           String?
+  collageOneId      String?
+  collageTwoId      String?
+  collageThreeId    String?
+  order             Int       @default(0)
+  isActive          Boolean   @default(true)
+  publishFrom       DateTime?
+  publishUntil      DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  image        MediaAsset? @relation("HeroSlideImage", fields: [imageId], references: [id], onDelete: SetNull)
+  collageOne   MediaAsset? @relation("HeroSlideCollageOne", fields: [collageOneId], references: [id], onDelete: SetNull)
+  collageTwo   MediaAsset? @relation("HeroSlideCollageTwo", fields: [collageTwoId], references: [id], onDelete: SetNull)
+  collageThree MediaAsset? @relation("HeroSlideCollageThree", fields: [collageThreeId], references: [id], onDelete: SetNull)
+
+  @@index([isActive, order])
+  @@map("hero_slides")
 }
 
 // ===========================================================================

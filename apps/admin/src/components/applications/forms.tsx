@@ -6,7 +6,8 @@ import { useFormStatus } from "react-dom";
 import { ApplicationStatus, DocumentVerificationStatus } from "@bass/db/enums";
 import { Alert } from "@bass/ui/alert";
 import { Button } from "@bass/ui/button";
-import { Field, Input, Select, Textarea } from "@bass/ui/field";
+import { Field, Input, Textarea } from "@bass/ui/field";
+import { Picker } from "@bass/ui/picker";
 
 import type { ActionState } from "@/app/(dashboard)/applications/actions";
 import { STAFF_STATUS_LABELS } from "./status-badge";
@@ -81,23 +82,23 @@ export function StatusForm({
 
       <Field id="status" label="Change status to" error={state.fieldErrors?.status}>
         {(props) => (
-          <Select {...props} name="status" defaultValue="">
-            <option value="">Choose…</option>
-            <optgroup label="Progress">
-              {PROGRESS.filter((status) => status !== current).map((status) => (
-                <option key={status} value={status}>
-                  {STAFF_STATUS_LABELS[status]}
-                </option>
-              ))}
-            </optgroup>
-            <optgroup label={canDecide ? "Decision" : "Decision (your role cannot decide)"}>
-              {OUTCOMES.filter((status) => status !== current).map((status) => (
-                <option key={status} value={status} disabled={!canDecide}>
-                  {STAFF_STATUS_LABELS[status]}
-                </option>
-              ))}
-            </optgroup>
-          </Select>
+          <Picker
+            {...props}
+            name="status"
+            options={[
+              ...PROGRESS.filter((status) => status !== current).map((status) => ({
+                value: status,
+                label: STAFF_STATUS_LABELS[status],
+                group: "Progress",
+              })),
+              ...OUTCOMES.filter((status) => status !== current).map((status) => ({
+                value: status,
+                label: STAFF_STATUS_LABELS[status],
+                group: canDecide ? "Decision" : "Decision (your role cannot decide)",
+                disabled: !canDecide,
+              })),
+            ]}
+          />
         )}
       </Field>
 
@@ -157,16 +158,13 @@ export function DocumentReviewForm({
       <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
         <Field id={`decision-${documentId}`} label="Outcome" error={state.fieldErrors?.decision}>
           {(props) => (
-            <Select {...props} name="decision" defaultValue="">
-              <option value="">Choose…</option>
-              {options
+            <Picker
+              {...props}
+              name="decision"
+              options={options
                 .filter((option) => option.value !== current)
-                .map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-            </Select>
+                .map((option) => ({ value: option.value, label: option.label }))}
+            />
           )}
         </Field>
         <Submit label="Save" pendingLabel="Saving…" size="md" variant="secondary" />

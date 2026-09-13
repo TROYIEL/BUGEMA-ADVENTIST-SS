@@ -9,6 +9,8 @@
     "./applications": "./src/applications.ts",
     "./applications-admin": "./src/applications-admin.ts",
     "./audit": "./src/audit.ts",
+    "./hero-slides": "./src/hero-slides.ts",
+    "./media-library": "./src/media-library.ts",
     "./content": "./src/content.ts",
     "./home": "./src/home.ts",
     "./mail": "./src/mail.ts",

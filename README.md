@@ -196,6 +196,17 @@ applicant gave an address, and always appear in the portal. CSV export honours
 the list's filters, guards against spreadsheet formula injection, and is
 written to the audit log — it is personal data about children leaving in bulk.
 
+### Homepage hero
+
+The hero is a carousel of `Hero` slides (`apps/web/src/components/sections/`).
+Slides the school composes in the admin app (`/hero-slides`, table
+`hero_slides`) are used when at least one is live — active and inside its
+optional dates. Otherwise the homepage assembles its own from settings, the
+admissions window, the latest story and the next event. Photographs are
+picked from the public media library or uploaded from the slide form, which
+posts them through a Server Action (`bodySizeLimit` is 24 MB in the admin
+app for that reason); `@bass/core/media-library` re-encodes and stores them.
+
 ### Design language
 
 Adapted from the University of Kent's site as a UX benchmark — its structure
@@ -344,7 +355,7 @@ without leaning on repeated imagery.
 3. **Admissions** — multi-step application wizard, document upload, submission,
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
-   Applications and Documents ✅ · Requirements, Academic years, Pages, News,
-   Events, Gallery, Announcements, Academics, Staff, Media library, Enquiries,
-   Site settings, Navigation, Users, Audit log — to do.
+   Applications, Documents and Hero slides ✅ · Requirements, Academic years,
+   Pages, News, Events, Gallery, Announcements, Academics, Staff, Media
+   library, Enquiries, Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.
