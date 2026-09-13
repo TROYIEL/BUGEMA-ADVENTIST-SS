@@ -42,7 +42,7 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
       entries: [
         { label: "Academics", href: "/academics", permission: "academics:write", available: false },
         { label: "Staff", href: "/staff", permission: "staff:write", available: false },
-        { label: "Media library", href: "/media", permission: "media:read", available: false },
+        { label: "Media library", href: "/media-library", permission: "media:read", available: true },
         { label: "Enquiries", href: "/enquiries", permission: "messages:read", available: false },
       ],
     },

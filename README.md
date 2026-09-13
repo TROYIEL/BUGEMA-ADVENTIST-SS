@@ -215,6 +215,18 @@ picked from the public media library or uploaded from the slide form, which
 posts them through a Server Action (`bodySizeLimit` is 24 MB in the admin
 app for that reason); `@bass/core/media-library` re-encodes and stores them.
 
+### Media library
+
+`/media-library` in the admin app (`media:read` to browse, `media:write` to
+upload and describe, `media:delete` to remove) over `@bass/core/media-library`.
+Uploads take several photographs at once and report per file; each is
+validated by magic bytes, re-encoded to WebP with metadata stripped, and
+stored PUBLIC under a folder that is only a label. A photograph cannot be
+deleted while anything on the website shows it — the page lists every place
+(content rows and image-type site settings) — because a deletion would
+silently blank that place. It lives at `/media-library`, not `/media`, because
+`/media/[...key]` is where files are served from.
+
 ### Design language
 
 Adapted from the University of Kent's site as a UX benchmark — its structure
@@ -363,7 +375,7 @@ without leaning on repeated imagery.
 3. **Admissions** — multi-step application wizard, document upload, submission,
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
-   Applications, Documents, Requirements, Academic years and Hero slides ✅ ·
-   Pages, News, Events, Gallery, Announcements, Academics, Staff, Media
-   library, Enquiries, Site settings, Navigation, Users, Audit log — to do.
+   Applications, Documents, Requirements, Academic years, Hero slides and
+   Media library ✅ · Pages, News, Events, Gallery, Announcements, Academics,
+   Staff, Enquiries, Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.

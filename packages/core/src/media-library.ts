@@ -6,9 +6,12 @@ import { checksum } from "@bass/auth/crypto";
 import { MediaVisibility } from "@bass/db/enums";
 import { db } from "@bass/db";
 
+import type { Prisma } from "@bass/db/types";
+
 import { MEDIA_SELECT } from "./content";
 import { processImage } from "./media";
 import { IMAGE_MIME_TYPES, validateUpload } from "./mime";
+import { SETTINGS_REGISTRY, SETTING_KEYS, getSiteSettings } from "./settings";
 import { buildStorageKey, storage } from "./storage";
 
 /**
@@ -121,4 +124,190 @@ export async function storePublicImage({
     await storage.delete(storageKey).catch(() => undefined);
     throw error;
   }
+}
+
+// ---------------------------------------------------------------------------
+// The library itself
+// ---------------------------------------------------------------------------
+
+export const MEDIA_PAGE_SIZE = 24;
+
+/** Folders are plain labels chosen at upload; these are offered first. */
+export const SUGGESTED_FOLDERS = [
+  "campus",
+  "academics",
+  "student-life",
+  "facilities",
+  "gallery",
+  "news",
+  "events",
+  "staff",
+  "hero",
+  "brand",
+] as const;
+
+const LIBRARY_SELECT = {
+  id: true,
+  originalName: true,
+  mimeType: true,
+  size: true,
+  folder: true,
+  caption: true,
+  createdAt: true,
+  updatedAt: true,
+  uploadedBy: { select: { name: true } },
+  ...MEDIA_SELECT,
+} satisfies Prisma.MediaAssetSelect;
+
+export type MediaAssetRow = Prisma.MediaAssetGetPayload<{ select: typeof LIBRARY_SELECT }>;
+
+export type MediaFilters = { folder?: string; q?: string };
+
+/** Only what the website may show: public assets. Applicant documents never appear. */
+function libraryWhere(filters: MediaFilters): Prisma.MediaAssetWhereInput {
+  const where: Prisma.MediaAssetWhereInput = { visibility: MediaVisibility.PUBLIC };
+  if (filters.folder) where.folder = filters.folder;
+  const q = filters.q?.trim();
+  if (q) {
+    where.OR = [
+      { originalName: { contains: q, mode: "insensitive" } },
+      { alt: { contains: q, mode: "insensitive" } },
+      { caption: { contains: q, mode: "insensitive" } },
+    ];
+  }
+  return where;
+}
+
+export async function listMediaAssets(
+  filters: MediaFilters,
+  page: number,
+): Promise<{ rows: MediaAssetRow[]; total: number; totalPages: number }> {
+  const where = libraryWhere(filters);
+  const [rows, total] = await Promise.all([
+    db.mediaAsset.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: (page - 1) * MEDIA_PAGE_SIZE,
+      take: MEDIA_PAGE_SIZE,
+      select: LIBRARY_SELECT,
+    }),
+    db.mediaAsset.count({ where }),
+  ]);
+  return { rows, total, totalPages: Math.max(1, Math.ceil(total / MEDIA_PAGE_SIZE)) };
+}
+
+/** Folders in use, with counts, plus the suggested ones not yet used. */
+export async function listFolders(): Promise<{ name: string; count: number }[]> {
+  const groups = await db.mediaAsset.groupBy({
+    by: ["folder"],
+    where: { visibility: MediaVisibility.PUBLIC },
+    _count: { _all: true },
+    orderBy: { folder: "asc" },
+  });
+  const used = groups.map((group) => ({ name: group.folder, count: group._count._all }));
+  const missing = SUGGESTED_FOLDERS.filter((name) => !used.some((entry) => entry.name === name)).map(
+    (name) => ({ name, count: 0 }),
+  );
+  return [...used, ...missing];
+}
+
+export async function getMediaAsset(id: string): Promise<MediaAssetRow | null> {
+  return db.mediaAsset.findFirst({
+    where: { id, visibility: MediaVisibility.PUBLIC },
+    select: LIBRARY_SELECT,
+  });
+}
+
+/** Folder names are labels, but they also form storage paths for new uploads. */
+export function normaliseFolder(input: string): string {
+  return input.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "uploads";
+}
+
+export async function updateMediaAsset(
+  id: string,
+  input: { alt: string | null; caption: string | null; folder: string },
+): Promise<void> {
+  await db.mediaAsset.update({
+    where: { id },
+    data: { alt: input.alt, caption: input.caption, folder: normaliseFolder(input.folder) },
+  });
+}
+
+export type MediaUsage = { where: string; label: string }[];
+
+/**
+ * Everywhere an image is shown from. Deleting an image that is in use would
+ * silently blank part of the website, so the library refuses until each of
+ * these has been changed.
+ */
+export async function mediaUsage(id: string): Promise<MediaUsage> {
+  const [asset, settings] = await Promise.all([
+    db.mediaAsset.findUnique({
+      where: { id },
+      select: {
+        pageOgImages: { select: { title: true } },
+        featureMedia: { select: { title: true } },
+        highlightMedia: { select: { label: true } },
+        newsImages: { select: { title: true } },
+        eventImages: { select: { title: true } },
+        albumCovers: { select: { title: true } },
+        galleryImages: { select: { album: { select: { title: true } } } },
+        staffPhotos: { select: { name: true } },
+        departmentImages: { select: { name: true } },
+        programImages: { select: { title: true } },
+        heroSlideImages: { select: { title: true } },
+        heroSlideCollageOne: { select: { title: true } },
+        heroSlideCollageTwo: { select: { title: true } },
+        heroSlideCollageThree: { select: { title: true } },
+      },
+    }),
+    getSiteSettings(),
+  ]);
+  if (!asset) return [];
+
+  const usage: MediaUsage = [];
+  const add = (where: string, rows: { label: string }[]) => {
+    for (const row of rows) usage.push({ where, label: row.label });
+  };
+  add("Page (social image)", asset.pageOgImages.map((r) => ({ label: r.title })));
+  add("Homepage feature", asset.featureMedia.map((r) => ({ label: r.title })));
+  add("Homepage highlight", asset.highlightMedia.map((r) => ({ label: r.label })));
+  add("News", asset.newsImages.map((r) => ({ label: r.title })));
+  add("Event", asset.eventImages.map((r) => ({ label: r.title })));
+  add("Gallery album cover", asset.albumCovers.map((r) => ({ label: r.title })));
+  add("Gallery", asset.galleryImages.map((r) => ({ label: r.album.title })));
+  add("Staff", asset.staffPhotos.map((r) => ({ label: r.name })));
+  add("Department", asset.departmentImages.map((r) => ({ label: r.name })));
+  add("Programme", asset.programImages.map((r) => ({ label: r.title })));
+  add("Hero slide", [
+    ...asset.heroSlideImages,
+    ...asset.heroSlideCollageOne,
+    ...asset.heroSlideCollageTwo,
+    ...asset.heroSlideCollageThree,
+  ].map((r) => ({ label: r.title })));
+
+  for (const key of SETTING_KEYS) {
+    if (SETTINGS_REGISTRY[key].type === "image" && settings[key].value === id) {
+      usage.push({ where: "Site setting", label: SETTINGS_REGISTRY[key].label });
+    }
+  }
+  return usage;
+}
+
+export type DeleteMediaResult = { ok: true } | { ok: false; usage: MediaUsage };
+
+/** Removes the row and the file. Refuses while anything still shows the image. */
+export async function deleteMediaAsset(id: string): Promise<DeleteMediaResult> {
+  const usage = await mediaUsage(id);
+  if (usage.length > 0) return { ok: false, usage };
+
+  const asset = await db.mediaAsset.findFirst({
+    where: { id, visibility: MediaVisibility.PUBLIC },
+    select: { storageKey: true },
+  });
+  if (!asset) return { ok: true };
+
+  await db.mediaAsset.delete({ where: { id } });
+  await storage.delete(asset.storageKey).catch(() => undefined);
+  return { ok: true };
 }
