@@ -60,7 +60,7 @@ export function Hero({
   const collageImages = collage.slice(0, 3);
 
   return (
-    <section className="on-dark relative isolate overflow-hidden bg-navy-950 text-white">
+    <section className="on-dark relative isolate overflow-hidden bg-navy-500 text-white">
       {/* Background photograph, held well back so the headline keeps contrast. */}
       {image ? (
         <div aria-hidden="true" className="absolute inset-0 -z-10">
@@ -72,11 +72,11 @@ export function Hero({
             fill
             className="object-cover object-center opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-950 via-navy-950/90 to-navy-950/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-950/70 via-navy-950/40 to-navy-950/60" />
         </div>
       ) : null}
 
-      <div className="container-page relative py-14 md:py-16 lg:py-20">
+      <div className="container-page relative py-14 md:py-16 lg:py-3">
         <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-14">
           <div className="flex max-w-xl flex-col gap-7">
             {subtitle ? (
@@ -138,7 +138,7 @@ export function Hero({
             </div>
           </div>
 
-          <div className="flex flex-col gap-20">
+          <div className="flex flex-col">
             {collageImages.length > 0 ? (
               <div
                 aria-hidden="true"

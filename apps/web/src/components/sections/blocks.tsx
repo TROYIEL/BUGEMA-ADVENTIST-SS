@@ -45,12 +45,12 @@ export function QuickActions({
     // reference uses between its hero and the first light content.
     <section
       aria-label="Quick links"
-      className="on-dark relative bg-navy-950 text-white [clip-path:polygon(5rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(9rem_0,100%_0,100%_100%,0_100%)]"
+      className="on-dark relative bg-navy-950 text-white mt-14 [clip-path:polygon(5rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(5rem_0,100%_0,100%_100%,7%_100%)]"
     >
       <div className="container-page py-12 md:py-14">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:gap-14">
           <div className="flex flex-col gap-2">
-            <h2 className="font-serif text-2xl text-white md:text-[1.75rem]">
+            <h2 className="font-serif text-2xl font-bold text-white md:text-4xl ">
               {title ?? "Start your application"}
             </h2>
             {body ? (
