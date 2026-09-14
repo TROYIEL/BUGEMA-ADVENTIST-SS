@@ -36,7 +36,7 @@ export function slugify(input: string, { allowSlashes = false } = {}): string {
   return slug.slice(0, 120);
 }
 
-type SlugTable = "page" | "newsArticle" | "event" | "galleryAlbum";
+type SlugTable = "page" | "newsArticle" | "event" | "galleryAlbum" | "academicProgram" | "academicDepartment" | "subject";
 
 async function slugTaken(table: SlugTable, slug: string, exceptId: string | null): Promise<boolean> {
   const where = { slug, NOT: exceptId ? { id: exceptId } : undefined };
@@ -49,6 +49,12 @@ async function slugTaken(table: SlugTable, slug: string, exceptId: string | null
       return (await db.event.count({ where })) > 0;
     case "galleryAlbum":
       return (await db.galleryAlbum.count({ where })) > 0;
+    case "academicProgram":
+      return (await db.academicProgram.count({ where })) > 0;
+    case "academicDepartment":
+      return (await db.academicDepartment.count({ where })) > 0;
+    case "subject":
+      return (await db.subject.count({ where })) > 0;
   }
 }
 

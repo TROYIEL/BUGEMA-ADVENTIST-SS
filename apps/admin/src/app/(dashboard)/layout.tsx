@@ -40,10 +40,10 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "School",
       entries: [
-        { label: "Academics", href: "/academics", permission: "academics:write", available: false },
-        { label: "Staff", href: "/staff", permission: "staff:write", available: false },
+        { label: "Academics", href: "/academics", permission: "academics:write", available: true },
+        { label: "Staff", href: "/staff", permission: "staff:write", available: true },
         { label: "Media library", href: "/media-library", permission: "media:read", available: true },
-        { label: "Enquiries", href: "/enquiries", permission: "messages:read", available: false },
+        { label: "Enquiries", href: "/enquiries", permission: "messages:read", available: true },
       ],
     },
     {

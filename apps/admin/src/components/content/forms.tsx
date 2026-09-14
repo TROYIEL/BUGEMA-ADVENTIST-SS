@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 import { AnnouncementPlacement } from "@bass/db/enums";
 import { PLACEMENT_LABELS } from "@bass/core/content-shared";
 import type { ImageChoice } from "@bass/core/media-library";
@@ -160,7 +162,10 @@ export function AlbumForm({ action, values, choices, isNew }: { action: BoundAct
 
 export function AnnouncementForm({ action, values, submitLabel }: { action: BoundAction; values: Values; submitLabel: string }) {
   const form = useContentForm(action, values);
-  const id = (name: string) => `${name}-${submitLabel.replace(/\s+/g, "-").toLowerCase()}`;
+  // Several of these forms share a page (one per announcement), so the
+  // field ids carry a per-instance suffix.
+  const instance = useId();
+  const id = (name: string) => `${name}-${instance}`;
   return (
     <form action={form.formAction} className="flex flex-col gap-4" noValidate>
       <FormMessage state={form.state} />

@@ -4,8 +4,8 @@ Two applications sharing one database: the public website, and the
 administration system that manages it.
 
 **Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the
-Admissions and Content groups of the admin sidebar, hero slides and the media
-library are live), plus the split into separate applications. See
+Admissions, Content and School groups of the admin sidebar are live; the
+Settings group is next), plus the split into separate applications. See
 [Milestones](#milestones).
 
 ---
@@ -242,6 +242,23 @@ published rows are indexed, everything else removed — so a draft cannot
 surface through search. Gallery albums add photographs from the media
 library, with captions and ordering, and the first one becomes the cover.
 
+### School: academics, staff and enquiries
+
+`@bass/core/school-admin` backs three admin sections. **Academics**
+(`academics:write`) keeps programmes, departments and subjects on one page in
+the order the website shows them, with up/down arrows that swap `order`
+values; programmes and departments have full editors, subjects are edited in
+place. A department's head and a subject's lead teacher are chosen from the
+staff list. **Staff** (`staff:write`) edits the profiles behind the
+leadership page, with a photograph from the media library, leadership and
+visibility flags, and ordering. **Enquiries** (`messages:read` to see,
+`messages:write` to handle) is the inbox for the website's contact form:
+opening an enquiry marks it read and records who did so; replies go through
+the reader's own mail program (a `mailto:` link with the message quoted),
+and an enquiry is then archived, marked unread, marked spam or deleted.
+Publishing academics content still needs `content:publish`; without it the
+save is refused with a note to keep it as a draft.
+
 ### Design language
 
 Adapted from the University of Kent's site as a UX benchmark — its structure
@@ -391,6 +408,6 @@ without leaning on repeated imagery.
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
    Applications, Documents, Requirements, Academic years, Hero slides, Media
-   library, Pages, News, Events, Gallery and Announcements ✅ · Academics,
-   Staff, Enquiries, Site settings, Navigation, Users, Audit log — to do.
+   library, Pages, News, Events, Gallery, Announcements, Academics, Staff and
+   Enquiries ✅ · Site settings, Navigation, Users, Audit log — to do.
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.
