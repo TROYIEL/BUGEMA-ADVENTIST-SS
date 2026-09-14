@@ -18,7 +18,7 @@ import { createPrismaClient } from "@bass/db/client";
 import { SETTINGS_REGISTRY, SETTING_KEYS } from "@bass/core/settings-registry";
 import { storage } from "@bass/core/storage";
 
-const db = createPrismaClient();
+const db = createPrismaClient({ direct: true });
 
 /**
  * Seeds structure, never facts.

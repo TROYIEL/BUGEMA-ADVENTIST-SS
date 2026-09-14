@@ -135,9 +135,16 @@ export function AdminNav({
         {nav}
 
         <div className="border-t border-white/10 p-4">
-          <p className="truncate text-sm font-medium text-white">{userName}</p>
-          <p className="mb-3 text-xs text-navy-300">{roleLabel}</p>
-          {signOut}
+          <Link
+            href="/account"
+            onClick={() => setOpen(false)}
+            className={cn("block rounded-md px-2 py-1 -mx-2 hover:bg-white/10", pathname === "/account" && "bg-white/10")}
+            title="Your account"
+          >
+            <p className="truncate text-sm font-medium text-white">{userName}</p>
+            <p className="text-xs text-navy-300">{roleLabel} · Your account</p>
+          </Link>
+          <div className="mt-3">{signOut}</div>
         </div>
       </aside>
     </>

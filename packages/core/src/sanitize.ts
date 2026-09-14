@@ -30,6 +30,12 @@ const OPTIONS: sanitizeHtml.IOptions = {
   allowedSchemesAppliedToAttributes: ["href", "src"],
   allowProtocolRelative: false,
   transformTags: {
+    // Browsers' editing commands and pasted documents produce the old
+    // presentational tags; they become their semantic equivalents rather
+    // than being stripped to bare text.
+    b: "strong",
+    i: "em",
+    div: "p",
     // Any link that leaves the site gets safe rel attributes, so a target
     //="_blank" link cannot reach back through window.opener.
     a: (tagName, attribs) => {
@@ -74,9 +80,12 @@ export function richTextToPlainText(html: string | null | undefined): string {
  */
 export function richTextToParagraphs(html: string | null | undefined): string[] {
   if (!html) return [];
-  const marked = html.replace(/<\/(p|div|h[1-6]|li|blockquote|tr)>|<br\s*\/?>/gi, "$&\n");
+  // A sentinel marks block boundaries, so a newline inside a paragraph's
+  // source is treated as the space it renders as, not as a break.
+  const BOUNDARY = "\u0001";
+  const marked = html.replace(/<\/(p|div|h[1-6]|li|blockquote|tr)>|<br\s*\/?>/gi, `$&${BOUNDARY}`);
   return sanitizeHtml(marked, { allowedTags: [], allowedAttributes: {} })
-    .split(/\n+/)
+    .split(BOUNDARY)
     .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
     .filter(Boolean);
 }

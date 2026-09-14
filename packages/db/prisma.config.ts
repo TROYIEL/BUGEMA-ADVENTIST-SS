@@ -21,6 +21,10 @@ export default defineConfig({
     seed: "node --conditions=react-server --import tsx prisma/seed.ts",
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    // Migrations, studio and the seed talk to the database directly. Through
+    // a connection pooler (Neon's "-pooler" host, PgBouncer) the advisory lock
+    // Prisma Migrate takes and the shadow database it creates do not work, so
+    // a hosted setup provides the direct address as DATABASE_URL_UNPOOLED.
+    url: process.env.DATABASE_URL_UNPOOLED ? env("DATABASE_URL_UNPOOLED") : env("DATABASE_URL"),
   },
 });

@@ -149,6 +149,19 @@ export async function revokeAllSessionsForUser(userId: string): Promise<void> {
   });
 }
 
+/**
+ * Revokes a user's other sessions but keeps the one making the request —
+ * for a password change, which should sign out every other device.
+ */
+export async function revokeOtherSessions(userId: string): Promise<number> {
+  const current = await getSession();
+  const { count } = await db.session.updateMany({
+    where: { userId, revokedAt: null, ...(current ? { id: { not: current.id } } : {}) },
+    data: { revokedAt: new Date() },
+  });
+  return count;
+}
+
 /** Housekeeping for expired rows; safe to call from a scheduled job. */
 export async function purgeExpiredSessions(): Promise<number> {
   const { count } = await db.session.deleteMany({

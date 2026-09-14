@@ -13,7 +13,7 @@ import {
 import { generateToken, hashToken } from "@bass/auth/crypto";
 import { createPrismaClient } from "@bass/db/client";
 
-const db = createPrismaClient();
+const db = createPrismaClient({ direct: true });
 
 /**
  * DEMONSTRATION DATA — NOT REAL SCHOOL INFORMATION.

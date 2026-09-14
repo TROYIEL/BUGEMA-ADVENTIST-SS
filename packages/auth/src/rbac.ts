@@ -104,6 +104,15 @@ export function hasAnyPermission(
   return permissions.some((permission) => hasPermission(role, permission));
 }
 
+/** Most privileged first: the order lists and role pickers use. */
+export const ROLE_ORDER: readonly UserRole[] = [
+  UserRole.SUPER_ADMIN,
+  UserRole.ADMIN,
+  UserRole.ADMISSIONS_OFFICER,
+  UserRole.CONTENT_EDITOR,
+  UserRole.STAFF,
+];
+
 export const ROLE_LABELS: Record<UserRole, string> = {
   [UserRole.SUPER_ADMIN]: "Super administrator",
   [UserRole.ADMIN]: "Administrator",

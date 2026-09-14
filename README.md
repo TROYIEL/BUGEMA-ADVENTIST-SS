@@ -3,9 +3,9 @@
 Two applications sharing one database: the public website, and the
 administration system that manages it.
 
-**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the whole
-Admissions group of the admin sidebar and hero slides are live), plus the
-split into separate applications. See [Milestones](#milestones).
+**Status: milestones 1–4 of 5 complete** — every module in the admin
+sidebar is live — plus the split into separate applications. Milestone 5,
+the hardening pass, is next. See [Milestones](#milestones).
 
 ---
 
@@ -65,6 +65,37 @@ every applicant out.
 
 Run one app at a time with `npm run dev:web` or `npm run dev:admin`.
 
+### A hosted database (Neon)
+
+Instead of Docker, `DATABASE_URL` can point at a hosted PostgreSQL. The
+repository is set up for Neon: `neon.ts` holds the branch policy, `.neon`
+(gitignored) the project and checked-out branch, and `neon env pull`
+writes `DATABASE_URL` (the **pooled** `-pooler` host), `DATABASE_URL_UNPOOLED`
+(the direct host) and `NEON_BRANCH` into the root `.env`. The apps go
+through the pooler; migrations, Studio and the CLI scripts use the direct
+host when it is set, which Prisma Migrate needs for its advisory lock and
+shadow database. `createPrismaClient` pins `sslmode=verify-full` on
+whatever string it is given, so the certificate is always checked even
+though providers hand out `sslmode=require`. After the root `.env` changes,
+`npm run setup:env -- --force` pushes it to both apps, and a running
+`next dev` needs a restart.
+
+To move an existing local database across, dump it and restore into the
+empty hosted one rather than seeding afresh — the migration history comes
+with it, so `npm run db:status` then reports the schema up to date:
+
+```bash
+docker exec bass-db pg_dump -U bass -d bass --no-owner --no-privileges > local.sql
+psql "$DATABASE_URL_UNPOOLED" -v ON_ERROR_STOP=1 --single-transaction < local.sql
+```
+
+Uploaded files are not in the database: `storage/` (or the S3 driver) has
+to travel with it.
+
+`npm test` runs its database tests against whatever `DATABASE_URL` says,
+creating and removing its own rows; point it at a local database rather
+than the live one.
+
 ### Demonstration data
 
 ```bash
@@ -110,7 +141,8 @@ BASS_ADMIN_PASSWORD='…' npm run create-admin -- \
   --name "Site Administrator" --email admin@example.com --password-from-env
 ```
 
-The first account is always a `SUPER_ADMIN`. Later accounts take `--role`.
+The first account is always a `SUPER_ADMIN`. Later accounts take `--role`,
+or are created by a super administrator under **Users** in the admin app.
 
 ## Architecture
 
@@ -214,6 +246,72 @@ admissions window, the latest story and the next event. Photographs are
 picked from the public media library or uploaded from the slide form, which
 posts them through a Server Action (`bodySizeLimit` is 24 MB in the admin
 app for that reason); `@bass/core/media-library` re-encodes and stores them.
+
+### Media library
+
+`/media-library` in the admin app (`media:read` to browse, `media:write` to
+upload and describe, `media:delete` to remove) over `@bass/core/media-library`.
+Uploads take several photographs at once and report per file; each is
+validated by magic bytes, re-encoded to WebP with metadata stripped, and
+stored PUBLIC under a folder that is only a label. A photograph cannot be
+deleted while anything on the website shows it — the page lists every place
+(content rows and image-type site settings) — because a deletion would
+silently blank that place. It lives at `/media-library`, not `/media`, because
+`/media/[...key]` is where files are served from.
+
+### Content editing
+
+Pages, news, events, gallery albums and announcements are edited in the
+admin app over `@bass/core/content-admin` (`content:write` to edit,
+`content:publish` to publish; announcements use `announcements:write`).
+Bodies are written in `@bass/ui/rich-text-editor`, a small contentEditable
+editor whose toolbar matches the sanitiser's vocabulary; the sanitiser maps
+the browser's `<b>`/`<i>`/`<div>` to `<strong>`/`<em>`/`<p>` and still runs
+on render. Addresses (slugs) are made from titles and de-duplicated with a
+suffix; system pages keep theirs. Saving keeps the search index in step —
+published rows are indexed, everything else removed — so a draft cannot
+surface through search. Gallery albums add photographs from the media
+library, with captions and ordering, and the first one becomes the cover.
+
+### School: academics, staff and enquiries
+
+`@bass/core/school-admin` backs three admin sections. **Academics**
+(`academics:write`) keeps programmes, departments and subjects on one page in
+the order the website shows them, with up/down arrows that swap `order`
+values; programmes and departments have full editors, subjects are edited in
+place. A department's head and a subject's lead teacher are chosen from the
+staff list. **Staff** (`staff:write`) edits the profiles behind the
+leadership page, with a photograph from the media library, leadership and
+visibility flags, and ordering. **Enquiries** (`messages:read` to see,
+`messages:write` to handle) is the inbox for the website's contact form:
+opening an enquiry marks it read and records who did so; replies go through
+the reader's own mail program (a `mailto:` link with the message quoted),
+and an enquiry is then archived, marked unread, marked spam or deleted.
+Publishing academics content still needs `content:publish`; without it the
+save is refused with a note to keep it as a draft.
+
+### Settings: site settings, navigation, users and the audit log
+
+**Site settings** (`settings:write`) is generated from the registry in
+`@bass/core/settings-registry`: one form per group, the control chosen by
+each setting's type, image settings picking from the media library. A
+setting the school has not supplied yet is badged, and clearing a value
+returns it to that state (`saveSettings` in `@bass/core/settings`), so the
+public site leaves it out again and the dashboard checklist asks for it.
+**Navigation** (`navigation:write`, `@bass/core/navigation-admin`) edits the
+four menus the site renders; the main menu has one level of sub-links, the
+footer menus are flat, and hiding a link keeps it for later. **Users**
+(`users:read` / `users:write`, super administrators only;
+`@bass/core/users-admin`) creates accounts with a first password, changes
+roles, resets passwords, and disables or re-enables accounts. A role change,
+a reset or a disabling signs the person out everywhere at once. Accounts
+that have been used are disabled rather than deleted, so the audit log and
+every "decided by" column keep their names; nobody can change their own
+role, disable themselves, or remove the last active super administrator.
+Everyone has an **account page** for their own name and password (a change
+signs out their other devices). The **audit log** (`audit:read`,
+`@bass/core/audit-admin`) is read-only, filterable by action, record type,
+person and date, and links each entry to the record it is about.
 
 ### Design language
 
@@ -363,7 +461,8 @@ without leaning on repeated imagery.
 3. **Admissions** — multi-step application wizard, document upload, submission,
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
-   Applications, Documents, Requirements, Academic years and Hero slides ✅ ·
-   Pages, News, Events, Gallery, Announcements, Academics, Staff, Media
-   library, Enquiries, Site settings, Navigation, Users, Audit log — to do.
+   Applications, Documents, Requirements, Academic years, Hero slides, Media
+   library, Pages, News, Events, Gallery, Announcements, Academics, Staff,
+   Enquiries, Site settings, Navigation, Users, Audit log, and a personal
+   account page. ✅
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.

@@ -9,8 +9,10 @@ import { fileURLToPath } from "node:url";
  * Next.js only reads .env from its own application directory, so the two apps
  * each need their own copy. Rather than ask anyone to keep three files in step
  * by hand, the root .env stays the single source of truth and this copies it
- * outward. Existing files are never overwritten.
+ * outward. Existing files are left alone unless `--force` is given, which
+ * is how a change to the root .env (a new database, say) reaches the apps.
  */
+const force = process.argv.includes("--force");
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const source = path.join(root, ".env");
 
@@ -30,10 +32,11 @@ const banner =
 
 for (const app of ["apps/web", "apps/admin"]) {
   const target = path.join(root, app, ".env");
-  if (existsSync(target)) {
-    console.log(`${app}/.env already exists — left alone.`);
+  const existed = existsSync(target);
+  if (existed && !force) {
+    console.log(`${app}/.env already exists — left alone (re-run with --force to replace it).`);
     continue;
   }
   writeFileSync(target, banner + contents);
-  console.log(`Wrote ${app}/.env`);
+  console.log(`${existed ? "Replaced" : "Wrote"} ${app}/.env`);
 }
