@@ -49,10 +49,10 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
     {
       heading: "Settings",
       entries: [
-        { label: "Site settings", href: "/settings", permission: "settings:write", available: false },
-        { label: "Navigation", href: "/navigation", permission: "navigation:write", available: false },
-        { label: "Users", href: "/users", permission: "users:read", available: false },
-        { label: "Audit log", href: "/audit", permission: "audit:read", available: false },
+        { label: "Site settings", href: "/settings", permission: "settings:write", available: true },
+        { label: "Navigation", href: "/navigation", permission: "navigation:write", available: true },
+        { label: "Users", href: "/users", permission: "users:read", available: true },
+        { label: "Audit log", href: "/audit", permission: "audit:read", available: true },
       ],
     },
   ];

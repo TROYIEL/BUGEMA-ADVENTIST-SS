@@ -3,10 +3,9 @@
 Two applications sharing one database: the public website, and the
 administration system that manages it.
 
-**Status: milestones 1–3 of 5 complete, milestone 4 in progress** (the
-Admissions, Content and School groups of the admin sidebar are live; the
-Settings group is next), plus the split into separate applications. See
-[Milestones](#milestones).
+**Status: milestones 1–4 of 5 complete** — every module in the admin
+sidebar is live — plus the split into separate applications. Milestone 5,
+the hardening pass, is next. See [Milestones](#milestones).
 
 ---
 
@@ -111,7 +110,8 @@ BASS_ADMIN_PASSWORD='…' npm run create-admin -- \
   --name "Site Administrator" --email admin@example.com --password-from-env
 ```
 
-The first account is always a `SUPER_ADMIN`. Later accounts take `--role`.
+The first account is always a `SUPER_ADMIN`. Later accounts take `--role`,
+or are created by a super administrator under **Users** in the admin app.
 
 ## Architecture
 
@@ -258,6 +258,29 @@ the reader's own mail program (a `mailto:` link with the message quoted),
 and an enquiry is then archived, marked unread, marked spam or deleted.
 Publishing academics content still needs `content:publish`; without it the
 save is refused with a note to keep it as a draft.
+
+### Settings: site settings, navigation, users and the audit log
+
+**Site settings** (`settings:write`) is generated from the registry in
+`@bass/core/settings-registry`: one form per group, the control chosen by
+each setting's type, image settings picking from the media library. A
+setting the school has not supplied yet is badged, and clearing a value
+returns it to that state (`saveSettings` in `@bass/core/settings`), so the
+public site leaves it out again and the dashboard checklist asks for it.
+**Navigation** (`navigation:write`, `@bass/core/navigation-admin`) edits the
+four menus the site renders; the main menu has one level of sub-links, the
+footer menus are flat, and hiding a link keeps it for later. **Users**
+(`users:read` / `users:write`, super administrators only;
+`@bass/core/users-admin`) creates accounts with a first password, changes
+roles, resets passwords, and disables or re-enables accounts. A role change,
+a reset or a disabling signs the person out everywhere at once. Accounts
+that have been used are disabled rather than deleted, so the audit log and
+every "decided by" column keep their names; nobody can change their own
+role, disable themselves, or remove the last active super administrator.
+Everyone has an **account page** for their own name and password (a change
+signs out their other devices). The **audit log** (`audit:read`,
+`@bass/core/audit-admin`) is read-only, filterable by action, record type,
+person and date, and links each entry to the record it is about.
 
 ### Design language
 
@@ -408,6 +431,7 @@ without leaning on repeated imagery.
    reference numbers, status lookup, applicant portal. ✅
 4. **Admin CMS** — the management modules listed in the admin sidebar.
    Applications, Documents, Requirements, Academic years, Hero slides, Media
-   library, Pages, News, Events, Gallery, Announcements, Academics, Staff and
-   Enquiries ✅ · Site settings, Navigation, Users, Audit log — to do.
+   library, Pages, News, Events, Gallery, Announcements, Academics, Staff,
+   Enquiries, Site settings, Navigation, Users, Audit log, and a personal
+   account page. ✅
 5. **Hardening** — security sweep, performance, accessibility, responsive pass.

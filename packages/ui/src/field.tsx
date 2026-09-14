@@ -51,7 +51,7 @@ export function Field({
   className,
 }: {
   id: string;
-  label: string;
+  label: ReactNode;
   hint?: string;
   error?: string | null;
   required?: boolean;

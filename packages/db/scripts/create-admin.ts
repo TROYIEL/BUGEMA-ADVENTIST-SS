@@ -6,6 +6,7 @@ import { createInterface } from "node:readline/promises";
 
 import { UserRole } from "@bass/db/enums";
 import { hashPassword } from "@bass/auth/crypto";
+import { describePasswordProblem } from "@bass/auth/password-policy";
 import { createPrismaClient } from "@bass/db/client";
 
 /**
@@ -25,8 +26,6 @@ import { createPrismaClient } from "@bass/db/client";
  */
 
 const db = createPrismaClient();
-
-const MIN_PASSWORD_LENGTH = 12;
 
 type Args = {
   email?: string;
@@ -90,19 +89,6 @@ Options:
 
 function isValidEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function describePasswordProblem(password: string): string | null {
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    return `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`;
-  }
-  if (!/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
-    return "Password must contain both upper and lower case letters.";
-  }
-  if (!/[0-9]/.test(password)) {
-    return "Password must contain at least one digit.";
-  }
-  return null;
 }
 
 /** Reads a line without echoing it to the terminal. */

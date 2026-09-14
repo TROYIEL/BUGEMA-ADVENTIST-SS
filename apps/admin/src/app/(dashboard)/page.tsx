@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { ApplicationStatus, ContentStatus, EnquiryStatus } from "@bass/db/enums";
 import { db } from "@bass/db";
@@ -159,7 +160,11 @@ export default async function DashboardPage() {
           <p className="mt-1 text-sm leading-relaxed text-ink-600">
             {outstanding.length} settings still need real values from the school.
             Until they are filled in the public website leaves them out rather
-            than showing a placeholder.
+            than showing a placeholder.{" "}
+            <Link href="/settings" className="font-semibold text-navy-800 underline-offset-4 hover:underline">
+              Fill them in
+            </Link>
+            .
           </p>
           <ul className="mt-4 flex flex-wrap gap-2">
             {outstanding.slice(0, 14).map(({ key, definition }) => (
@@ -189,10 +194,10 @@ export default async function DashboardPage() {
         </section>
       ) : null}
 
-      <Alert tone="info" title="Milestone 4 in progress" className="mt-8 max-w-3xl">
-        Applications and document review are live. The remaining modules in the
-        sidebar — content, media, staff and settings — are built next.
-        Everything shown above is live data from the database.
+      <Alert tone="info" title="Milestone 4 complete" className="mt-8 max-w-3xl">
+        Every module in the sidebar is live, and everything shown above is live
+        data from the database. Next is the hardening pass: security sweep,
+        performance, accessibility and a responsive check across both apps.
       </Alert>
 
       <p className="mt-6 text-xs text-ink-500">

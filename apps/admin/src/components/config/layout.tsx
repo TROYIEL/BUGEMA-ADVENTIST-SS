@@ -47,6 +47,7 @@ export function ConfigRow({
   editor,
   controls,
   muted = false,
+  indent = false,
 }: {
   title: ReactNode;
   meta?: ReactNode;
@@ -56,9 +57,11 @@ export function ConfigRow({
   /** Move / delete forms, laid out on the right, outside the fold-out. */
   controls: ReactNode;
   muted?: boolean;
+  /** Drawn as a sub-row of the one above, for a menu's second level. */
+  indent?: boolean;
 }) {
   return (
-    <li className={cn("flex flex-wrap items-start gap-x-4 gap-y-2 px-5 py-3", muted && "opacity-60")}>
+    <li className={cn("flex flex-wrap items-start gap-x-4 gap-y-2 px-5 py-3", muted && "opacity-60", indent && "bg-surface-sunken/40 pl-12")}>
       <details className="group/row min-w-0 flex-1">
         <summary className="cursor-pointer list-none rounded-md py-1 hover:bg-navy-50/60">
           <span className="flex flex-wrap items-center gap-2">

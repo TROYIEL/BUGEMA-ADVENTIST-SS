@@ -57,23 +57,62 @@ export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
  * the registry so a key that was never seeded still gets a complete row.
  */
 export async function setSetting(key: SettingKey, value: string | boolean): Promise<void> {
-  const definition = SETTINGS_REGISTRY[key];
-  // Booleans are stored as JSON booleans, as the seed stores them; the reader
-  // stringifies either form.
-  const stored = value;
-  await db.siteSetting.upsert({
-    where: { key },
-    update: { value: stored, isConfigured: true },
-    create: {
-      key,
-      group: definition.group,
-      label: definition.label,
-      description: definition.description,
-      order: definition.order,
-      value: stored,
-      isConfigured: true,
-    },
+  await saveSettings({ [key]: value });
+}
+
+export type SettingChange = { key: SettingKey; from: string; to: string };
+
+/**
+ * Writes several settings together and reports which ones changed, for the
+ * audit log. An emptied text value goes back to unconfigured, so the public
+ * site leaves that detail out again and the dashboard checklist asks for it;
+ * a boolean is always a choice, so it is always configured.
+ */
+export async function saveSettings(
+  values: Partial<Record<SettingKey, string | boolean>>,
+): Promise<SettingChange[]> {
+  const keys = Object.keys(values) as SettingKey[];
+  if (keys.length === 0) return [];
+
+  // Read straight from the table, not through the per-request cache: the
+  // cache may already hold what this same request rendered with.
+  const rows = await db.siteSetting.findMany({
+    where: { key: { in: keys } },
+    select: { key: true, value: true, isConfigured: true },
   });
+  const current = new Map(rows.map((row) => [row.key, row]));
+  const changes: SettingChange[] = [];
+
+  await db.$transaction(
+    keys.map((key) => {
+      const definition = SETTINGS_REGISTRY[key];
+      const value = values[key] as string | boolean;
+      // Booleans are stored as JSON booleans, as the seed stores them; the
+      // reader stringifies either form.
+      const stored = typeof value === "boolean" ? value : value.trim();
+      const isConfigured = typeof stored === "boolean" || stored !== "";
+      const before = current.get(key);
+      const beforeValue = before?.isConfigured ? String(before.value ?? "") : "";
+      if (String(stored) !== beforeValue || isConfigured !== Boolean(before?.isConfigured)) {
+        changes.push({ key, from: beforeValue, to: String(stored) });
+      }
+      return db.siteSetting.upsert({
+        where: { key },
+        update: { value: stored, isConfigured },
+        create: {
+          key,
+          group: definition.group,
+          label: definition.label,
+          description: definition.description,
+          order: definition.order,
+          value: stored,
+          isConfigured,
+        },
+      });
+    }),
+  );
+
+  return changes;
 }
 
 /** The configured value, or null when the school has not supplied one. */
