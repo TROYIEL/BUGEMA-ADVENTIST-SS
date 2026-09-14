@@ -65,6 +65,37 @@ every applicant out.
 
 Run one app at a time with `npm run dev:web` or `npm run dev:admin`.
 
+### A hosted database (Neon)
+
+Instead of Docker, `DATABASE_URL` can point at a hosted PostgreSQL. The
+repository is set up for Neon: `neon.ts` holds the branch policy, `.neon`
+(gitignored) the project and checked-out branch, and `neon env pull`
+writes `DATABASE_URL` (the **pooled** `-pooler` host), `DATABASE_URL_UNPOOLED`
+(the direct host) and `NEON_BRANCH` into the root `.env`. The apps go
+through the pooler; migrations, Studio and the CLI scripts use the direct
+host when it is set, which Prisma Migrate needs for its advisory lock and
+shadow database. `createPrismaClient` pins `sslmode=verify-full` on
+whatever string it is given, so the certificate is always checked even
+though providers hand out `sslmode=require`. After the root `.env` changes,
+`npm run setup:env -- --force` pushes it to both apps, and a running
+`next dev` needs a restart.
+
+To move an existing local database across, dump it and restore into the
+empty hosted one rather than seeding afresh — the migration history comes
+with it, so `npm run db:status` then reports the schema up to date:
+
+```bash
+docker exec bass-db pg_dump -U bass -d bass --no-owner --no-privileges > local.sql
+psql "$DATABASE_URL_UNPOOLED" -v ON_ERROR_STOP=1 --single-transaction < local.sql
+```
+
+Uploaded files are not in the database: `storage/` (or the S3 driver) has
+to travel with it.
+
+`npm test` runs its database tests against whatever `DATABASE_URL` says,
+creating and removing its own rows; point it at a local database rather
+than the live one.
+
 ### Demonstration data
 
 ```bash

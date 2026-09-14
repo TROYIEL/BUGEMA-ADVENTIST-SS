@@ -37,5 +37,9 @@
     "@types/node": "^20",
     "tsx": "^4.23.13",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "@neon/config": "^1.4.2",
+    "@neon/env": "^1.3.2"
   }
 }

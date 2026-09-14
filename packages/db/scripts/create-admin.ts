@@ -25,7 +25,7 @@ import { createPrismaClient } from "@bass/db/client";
  *     --name "Site Administrator" --email admin@example.com --password-from-env
  */
 
-const db = createPrismaClient();
+const db = createPrismaClient({ direct: true });
 
 type Args = {
   email?: string;

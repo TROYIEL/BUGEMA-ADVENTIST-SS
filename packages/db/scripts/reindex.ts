@@ -15,7 +15,7 @@ async function main() {
   console.log(`Indexed ${count} documents.`);
 }
 
-const db = createPrismaClient();
+const db = createPrismaClient({ direct: true });
 
 main()
   .catch((error) => {
