@@ -80,6 +80,7 @@ the reserved `@bass.example.com` domain and is removed again with
 | `npm run create-admin` | Create an administrator |
 | `npm run search:reindex` | Rebuild the website's search index |
 | `npm run mail:flush` | Retry queued and failed outbox mail (for cron) |
+| `npm run storage:push` | Copy every file under `STORAGE_LOCAL_DIR` into the S3 bucket, same keys (idempotent) — run once when switching from `local` to `s3` |
 
 ### Creating administrators
 
@@ -128,7 +129,7 @@ admin/
 | Validation | Zod |
 | Auth | Opaque session tokens, SHA-256 hashed in the database, 12-hour lifetime |
 | Passwords | Node's built-in `scrypt` |
-| File storage | `StorageAdapter` with `local` and `s3` drivers (`src/lib/storage.ts`) |
+| File storage | `StorageAdapter` with `local` and `s3` drivers (`src/lib/storage.ts`); S3 reads either `STORAGE_S3_*` or the AWS-standard `AWS_*` names Neon Object Storage hands out |
 | Images | `sharp` — EXIF stripped, bounded, re-encoded to WebP |
 | Email | `email_outbox` table; `outbox` / `console` / `smtp` drivers; retry via `mail:flush` and `/api/cron/mail` |
 | Search | PostgreSQL full-text (`tsvector` + trigram), maintained on every content write |

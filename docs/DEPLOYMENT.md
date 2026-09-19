@@ -18,7 +18,10 @@ services, and a single Linux server. Both share the same preparation.
 3. **Object storage** (platform deploys only). An S3-compatible bucket —
    AWS S3, Cloudflare R2, Neon Object Storage, MinIO. Create a bucket and an
    access key that can read, write, delete and list within it. The bucket
-   must **not** be public: every file is served through the apps.
+   must **not** be public: every file is served through the apps. With Neon
+   the credential block from the dashboard (`AWS_ENDPOINT_URL_S3`,
+   `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`) can be pasted
+   into both `.env` files as is; add `STORAGE_S3_BUCKET=<bucket>`.
 4. **SMTP.** A transactional mail account (or the school's mail server) that
    allows sending from `no-reply@…`. Until this exists mail is safely queued;
    set `MAIL_DRIVER=outbox` and nothing is lost.
@@ -86,8 +89,10 @@ docker exec bass-db pg_dump -U bass -d bass --no-owner --no-privileges > local.s
 psql "$DATABASE_URL_UNPOOLED" -v ON_ERROR_STOP=1 --single-transaction < local.sql
 ```
 
-and copy `storage/` into the bucket (or onto the server) — uploaded files
-are not in the database.
+and move the uploaded files with it — they are not in the database. Into a
+bucket: set the S3 variables in `admin/.env` and run `npm run storage:push`
+there, which copies everything under the local storage directory with the
+same keys. Onto a server: copy the directory.
 
 ## Route A — hosting platform (Vercel or similar)
 

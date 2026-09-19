@@ -129,9 +129,21 @@ type S3Config = {
  */
 function readS3Config(): S3Config {
   const env = process.env;
-  const missing = ["STORAGE_S3_BUCKET", "STORAGE_S3_ACCESS_KEY_ID", "STORAGE_S3_SECRET_ACCESS_KEY"].filter(
-    (name) => !env[name],
-  );
+
+  // Two spellings are accepted. STORAGE_S3_* is this project's own and wins
+  // when both are present; the AWS-standard names are what Neon Object
+  // Storage's dashboard and `neon env pull` hand out (and what the AWS CLI
+  // reads), so a pasted credential block works without renaming anything.
+  const bucket = env.STORAGE_S3_BUCKET;
+  const accessKeyId = env.STORAGE_S3_ACCESS_KEY_ID || env.AWS_ACCESS_KEY_ID;
+  const secretAccessKey = env.STORAGE_S3_SECRET_ACCESS_KEY || env.AWS_SECRET_ACCESS_KEY;
+  const endpoint = env.STORAGE_S3_ENDPOINT || env.AWS_ENDPOINT_URL_S3 || env.AWS_ENDPOINT_URL || undefined;
+
+  const missing = [
+    !bucket && "STORAGE_S3_BUCKET",
+    !accessKeyId && "STORAGE_S3_ACCESS_KEY_ID (or AWS_ACCESS_KEY_ID)",
+    !secretAccessKey && "STORAGE_S3_SECRET_ACCESS_KEY (or AWS_SECRET_ACCESS_KEY)",
+  ].filter((name): name is string => Boolean(name));
   if (missing.length > 0) {
     throw new Error(
       `STORAGE_DRIVER is "s3" but ${missing.join(", ")} ${missing.length === 1 ? "is" : "are"} not set. ` +
@@ -139,16 +151,15 @@ function readS3Config(): S3Config {
     );
   }
 
-  const endpoint = env.STORAGE_S3_ENDPOINT || undefined;
   return {
-    bucket: env.STORAGE_S3_BUCKET!,
+    bucket: bucket!,
     // Non-AWS stores (R2, Neon, MinIO) accept any region; "auto" is R2's own.
-    region: env.STORAGE_S3_REGION || "auto",
+    region: env.STORAGE_S3_REGION || env.AWS_REGION || "auto",
     endpoint,
-    accessKeyId: env.STORAGE_S3_ACCESS_KEY_ID!,
-    secretAccessKey: env.STORAGE_S3_SECRET_ACCESS_KEY!,
+    accessKeyId: accessKeyId!,
+    secretAccessKey: secretAccessKey!,
     // Custom endpoints generally want bucket-in-path rather than a bucket
-    // subdomain; AWS itself is fine either way.
+    // subdomain (Neon requires it); AWS itself is fine either way.
     forcePathStyle: env.STORAGE_S3_FORCE_PATH_STYLE
       ? env.STORAGE_S3_FORCE_PATH_STYLE === "true"
       : Boolean(endpoint),
@@ -251,8 +262,14 @@ function isNotFound(error: unknown): boolean {
   return name === "NotFound" || name === "NoSuchKey" || status === 404;
 }
 
-function createStorageAdapter(): StorageAdapter {
-  const driver = process.env.STORAGE_DRIVER ?? "local";
+/**
+ * Builds an adapter for the given driver — by default the one STORAGE_DRIVER
+ * names. Application code uses the `storage` singleton below; the explicit
+ * form exists for scripts that move files between drivers.
+ */
+export function createStorageAdapter(
+  driver: string = process.env.STORAGE_DRIVER ?? "local",
+): StorageAdapter {
 
   switch (driver) {
     case "local":
