@@ -1,0 +1,51 @@
+{
+  "name": "bass-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bugema Adventist Secondary School - public website, admissions and applicant portal",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "eslint",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "node --conditions=react-server --import tsx --test \"src/**/*.test.ts\"",
+    "test:e2e": "node scripts/e2e/run.mjs",
+    "postinstall": "prisma generate",
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1132.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "@prisma/client": "7.10.0",
+    "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
+    "next": "16.3.4",
+    "nodemailer": "^10.0.3",
+    "pg": "^8.23.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "sanitize-html": "^2.17.7",
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.4",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.6.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^20.19.43",
+    "@types/nodemailer": "^8.0.1",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/sanitize-html": "^2.16.1",
+    "axe-core": "^4.13.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.4",
+    "prisma": "7.10.0",
+    "puppeteer-core": "^25.11.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
+    "typescript": "^5.9.3"
+  }
+}
