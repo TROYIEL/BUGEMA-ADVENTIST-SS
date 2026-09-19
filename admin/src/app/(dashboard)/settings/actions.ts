@@ -3,11 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { MediaVisibility } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { recordAudit } from "@bass/core/audit";
-import { saveSettings, SETTINGS_REGISTRY, SETTING_KEYS, type SettingGroup, type SettingKey, type SettingType } from "@bass/core/settings";
+import { requirePermission } from "@/lib/auth/dal";
+import { MediaVisibility } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { recordAudit } from "@/lib/audit";
+import { saveSettings, SETTINGS_REGISTRY, SETTING_KEYS, type SettingGroup, type SettingKey, type SettingType } from "@/lib/settings";
 
 import { flag, text, type FormState } from "@/lib/forms";
 

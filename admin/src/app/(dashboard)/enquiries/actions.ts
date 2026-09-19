@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { requirePermission } from "@bass/auth/dal";
-import { EnquiryStatus } from "@bass/db/enums";
-import { recordAudit } from "@bass/core/audit";
-import { deleteEnquiry, getEnquiry, setEnquiryStatus } from "@bass/core/school-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { EnquiryStatus } from "@/generated/prisma/enums";
+import { recordAudit } from "@/lib/audit";
+import { deleteEnquiry, getEnquiry, setEnquiryStatus } from "@/lib/school-admin";
 
 import { text } from "@/lib/forms";
 

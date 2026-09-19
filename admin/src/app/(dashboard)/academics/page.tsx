@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { listDepartments, listPrograms, listStaffChoices, listSubjects, LEVEL_WORDS } from "@bass/core/school-admin";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { listDepartments, listPrograms, listStaffChoices, listSubjects, LEVEL_WORDS } from "@/lib/school-admin";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 
 import { ConfigRow, ConfigSection, DeleteControl, MoveControls } from "@/components/config/layout";
 import { SubjectForm } from "@/components/school/forms";

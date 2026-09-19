@@ -1,14 +1,14 @@
 "use client";
 
-import { BoardingPreference, Gender } from "@bass/db/enums";
+import { BoardingPreference, Gender } from "@/generated/prisma/enums";
 import {
   BOARDING_LABELS,
   GENDER_LABELS,
   LEVEL_LABELS,
   type FormFieldDefinition,
-} from "@bass/core/application-schemas";
-import type { ClassOption } from "@bass/core/applications";
-import { Field, Input, Select, Textarea } from "@bass/ui/field";
+} from "@/lib/application-schemas";
+import type { ClassOption } from "@/lib/applications";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
 
 import type { StepFormState } from "../actions";
 import {

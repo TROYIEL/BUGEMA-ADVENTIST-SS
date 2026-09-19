@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 import { Hero, type HeroSlideData } from "@/components/sections/hero";
 
 /**

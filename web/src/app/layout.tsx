@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Source_Serif_4 } from "next/font/google";
 
-import { getSiteSettings, readSetting } from "@bass/core/settings";
+import { getSiteSettings, readSetting } from "@/lib/settings";
 
 import "./globals.css";
 

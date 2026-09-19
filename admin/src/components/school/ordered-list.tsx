@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import type { ContentListRow } from "@bass/core/content-admin";
-import { ButtonLink } from "@bass/ui/button";
+import type { ContentListRow } from "@/lib/content-admin";
+import { ButtonLink } from "@/components/ui/button";
 
 import { StatusBadge } from "@/components/content/content-table";
 

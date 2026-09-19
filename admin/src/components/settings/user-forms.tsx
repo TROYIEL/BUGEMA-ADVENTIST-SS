@@ -3,12 +3,12 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { PASSWORD_RULE } from "@bass/auth/password-policy";
-import { ROLE_DESCRIPTIONS, ROLE_LABELS, ROLE_ORDER } from "@bass/auth/rbac";
-import { UserRole } from "@bass/db/enums";
-import { Button } from "@bass/ui/button";
-import { Field, Input } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { PASSWORD_RULE } from "@/lib/auth/password-policy";
+import { ROLE_DESCRIPTIONS, ROLE_LABELS, ROLE_ORDER } from "@/lib/auth/rbac";
+import { UserRole } from "@/generated/prisma/enums";
+import { Button } from "@/components/ui/button";
+import { Field, Input } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import { FormMessage, SaveBar, Section, useContentForm, type BoundAction, type Values } from "@/components/content/fields";
 import type { FormState } from "@/lib/forms";

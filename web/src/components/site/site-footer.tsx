@@ -1,11 +1,11 @@
 import Link from "next/link";
 
-import { NavigationMenu } from "@bass/db/enums";
+import { NavigationMenu } from "@/generated/prisma/enums";
 import { BrandMark } from "@/components/site/brand-mark";
 import type { MediaImageAsset } from "@/components/media-image";
-import { getNavigation } from "@bass/core/navigation";
-import { getSiteSettings, readSetting, type SettingKey } from "@bass/core/settings";
-import { db } from "@bass/db";
+import { getNavigation } from "@/lib/navigation";
+import { getSiteSettings, readSetting, type SettingKey } from "@/lib/settings";
+import { db } from "@/lib/db";
 
 const SOCIAL_LINKS: { key: SettingKey; label: string; path: string }[] = [
   {

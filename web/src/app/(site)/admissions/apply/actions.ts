@@ -9,11 +9,11 @@ import {
   getDraftToken,
   grantPortalAccess,
   setDraftCookie,
-} from "@bass/auth/applicant";
-import { getClientIp } from "@bass/auth/session";
-import { ApplicationStep } from "@bass/db/enums";
-import type { Prisma } from "@bass/db/types";
-import { sendDraftResumeLink } from "@bass/core/application-mail";
+} from "@/lib/auth/applicant";
+import { getClientIp } from "@/lib/auth/session";
+import { ApplicationStep } from "@/generated/prisma/enums";
+import type { Prisma } from "@/generated/prisma/client";
+import { sendDraftResumeLink } from "@/lib/application-mail";
 import {
   academicSchema,
   applicantSchema,
@@ -23,7 +23,7 @@ import {
   readAnswerFromForm,
   stepDefinition,
   type FormFieldDefinition,
-} from "@bass/core/application-schemas";
+} from "@/lib/application-schemas";
 import {
   createDraft,
   documentTypesFor,
@@ -40,8 +40,8 @@ import {
   updateDraft,
   visibleSteps,
   type DraftApplication,
-} from "@bass/core/applications";
-import { RATE_LIMITS, rateLimit } from "@bass/core/rate-limit";
+} from "@/lib/applications";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 /**
  * Server Actions behind the application wizard.

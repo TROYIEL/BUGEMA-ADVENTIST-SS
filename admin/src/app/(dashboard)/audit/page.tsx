@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import type { AuditAction } from "@bass/core/audit";
-import { ACTION_WORDS, AUDIT_PAGE_SIZE, entityPath, entityWords, listAuditEntries, listAuditFacets, type AuditEntry } from "@bass/core/audit-admin";
-import { Input } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { requirePagePermission } from "@/lib/auth/dal";
+import type { AuditAction } from "@/lib/audit";
+import { ACTION_WORDS, AUDIT_PAGE_SIZE, entityPath, entityWords, listAuditEntries, listAuditFacets, type AuditEntry } from "@/lib/audit-admin";
+import { Input } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import { formatDateTime } from "@/components/applications/format";
 import { dateFromInput } from "@/lib/forms";
@@ -96,7 +96,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
         </div>
       </form>
 
-      <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+      <div className="mt-6 relative overflow-x-auto rounded-lg border border-line bg-white">
         <table className="w-full text-sm">
           <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wide text-ink-600">
             <tr>
@@ -154,7 +154,7 @@ function Row({ entry }: { entry: AuditEntry }) {
       </td>
       <td className="px-4 py-3">
         {entry.actor ? (
-          <Link href={`/users/${entry.actor.id}`} className="font-medium text-navy-900 hover:underline">
+          <Link href={`/users/${entry.actor.id}`} className="font-medium text-navy-900 underline decoration-navy-900/30 underline-offset-4 hover:decoration-navy-900">
             {entry.actor.name}
           </Link>
         ) : (
@@ -164,7 +164,7 @@ function Row({ entry }: { entry: AuditEntry }) {
       <td className="px-4 py-3">
         <span className={failed ? "font-medium text-danger-600" : "font-medium text-navy-900"}>{ACTION_WORDS[entry.action as AuditAction] ?? entry.action}</span>{" "}
         {path ? (
-          <Link href={path as never} className="text-navy-800 underline-offset-4 hover:underline">
+          <Link href={path as never} className="text-navy-800 underline decoration-navy-800/30 underline-offset-4 hover:decoration-navy-800">
             {entityWords(entry.entityType).toLowerCase()}
           </Link>
         ) : (
@@ -177,8 +177,8 @@ function Row({ entry }: { entry: AuditEntry }) {
           <details className="mt-1 text-xs">
             <summary className="cursor-pointer text-navy-800">Before and after</summary>
             <div className="mt-1 grid gap-2 sm:grid-cols-2">
-              <pre className="overflow-x-auto rounded-md bg-surface-sunken p-2">{JSON.stringify(entry.oldValue, null, 1)}</pre>
-              <pre className="overflow-x-auto rounded-md bg-surface-sunken p-2">{JSON.stringify(entry.newValue, null, 1)}</pre>
+              <pre className="relative overflow-x-auto rounded-md bg-surface-sunken p-2">{JSON.stringify(entry.oldValue, null, 1)}</pre>
+              <pre className="relative overflow-x-auto rounded-md bg-surface-sunken p-2">{JSON.stringify(entry.newValue, null, 1)}</pre>
             </div>
           </details>
         ) : null}

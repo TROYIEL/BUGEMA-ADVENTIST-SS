@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import { requirePageUser } from "@bass/auth/dal";
-import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@bass/auth/rbac";
-import { db } from "@bass/db";
-import { Badge } from "@bass/ui/badge";
+import { requirePageUser } from "@/lib/auth/dal";
+import { ROLE_DESCRIPTIONS, ROLE_LABELS } from "@/lib/auth/rbac";
+import { db } from "@/lib/db";
+import { Badge } from "@/components/ui/badge";
 
 import { formatDateTime } from "@/components/applications/format";
 import { ChangePasswordForm, OwnNameForm } from "@/components/settings/user-forms";

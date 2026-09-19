@@ -5,12 +5,12 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import type { ImageChoice } from "@bass/core/media-library";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import type { ImageChoice } from "@/lib/media-library";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import type { SlideFormState } from "@/app/(dashboard)/hero-slides/actions";
 import type { SlideFormValues } from "./helpers";

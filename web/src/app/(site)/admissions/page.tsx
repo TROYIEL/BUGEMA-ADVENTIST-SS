@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 
 import { ContentPending } from "@/components/site/content-pending";
 import { PageHeader } from "@/components/site/page-header";
-import { Alert } from "@bass/ui/alert";
-import { ButtonLink } from "@bass/ui/button";
-import { RichText } from "@bass/ui/rich-text";
-import { ContentStatus } from "@bass/db/enums";
-import { getPageBySlug } from "@bass/core/content";
-import { db } from "@bass/db";
-import { getSiteSettings, readBooleanSetting, readSetting } from "@bass/core/settings";
+import { Alert } from "@/components/ui/alert";
+import { ButtonLink } from "@/components/ui/button";
+import { RichText } from "@/components/ui/rich-text";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { getPageBySlug } from "@/lib/content";
+import { db } from "@/lib/db";
+import { getSiteSettings, readBooleanSetting, readSetting } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 

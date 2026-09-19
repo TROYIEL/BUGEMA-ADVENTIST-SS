@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
 
-import { grantPortalAccess } from "@bass/auth/applicant";
-import { findSubmittedByAccessToken } from "@bass/core/applications";
+import { grantPortalAccess } from "@/lib/auth/applicant";
+import { getClientIp } from "@/lib/auth/session";
+import { findSubmittedByAccessToken } from "@/lib/applications";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +17,15 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(_request: Request, context: RouteContext<"/admissions/application-status/access/[token]">) {
   const { token } = await context.params;
+
+  // Same destination whether the limit is hit or the token is unknown: the
+  // lookup form, which explains itself. Nothing is learned from the response.
+  const limit = await rateLimit({
+    key: `token-exchange:${(await getClientIp()) ?? "unknown"}`,
+    ...RATE_LIMITS.tokenExchange,
+  });
+  if (!limit.ok) redirect("/admissions/application-status");
+
   const application = await findSubmittedByAccessToken(token);
 
   if (application) {

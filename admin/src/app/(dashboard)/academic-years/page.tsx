@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listAcademicYears } from "@bass/core/admissions-config";
-import { getAdmissionsWindow } from "@bass/core/applications";
-import { formatDate } from "@bass/core/content";
-import { getSiteSettings, readBooleanSetting } from "@bass/core/settings";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listAcademicYears } from "@/lib/admissions-config";
+import { getAdmissionsWindow } from "@/lib/applications";
+import { formatDate } from "@/lib/content";
+import { getSiteSettings, readBooleanSetting } from "@/lib/settings";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import { AcademicYearForm } from "@/components/config/forms";
 import { ConfigRow, ConfigSection, DeleteControl } from "@/components/config/layout";

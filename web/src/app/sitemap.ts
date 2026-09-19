@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 
-import { ContentStatus } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { publishedFilter } from "@bass/core/content";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { publishedFilter } from "@/lib/content";
 
 /**
  * Sitemap.

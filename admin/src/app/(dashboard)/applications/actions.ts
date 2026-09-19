@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { ApplicationStatus, DocumentVerificationStatus } from "@bass/db/enums";
-import { db } from "@bass/db";
+import { requirePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { ApplicationStatus, DocumentVerificationStatus } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
 import {
   STAFF_STATUSES,
   addInternalNote,
@@ -14,7 +14,7 @@ import {
   changeNeedsDecision,
   reviewDocument,
   sendApplicantMessage,
-} from "@bass/core/applications-admin";
+} from "@/lib/applications-admin";
 
 /**
  * Staff actions on one application. Each one takes the application (or

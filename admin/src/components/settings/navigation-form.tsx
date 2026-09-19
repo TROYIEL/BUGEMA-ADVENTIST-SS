@@ -2,9 +2,9 @@
 
 import { useId } from "react";
 
-import { MENUS, type MenuKey } from "@bass/core/navigation-shared";
-import { Field, Input } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { MENUS, type MenuKey } from "@/lib/navigation-shared";
+import { Field, Input } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import { Check, FormMessage, useContentForm, type BoundAction, type Values } from "@/components/content/fields";
 

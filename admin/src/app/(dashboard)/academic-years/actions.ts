@@ -3,15 +3,15 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { db } from "@bass/db";
+import { requirePermission } from "@/lib/auth/dal";
+import { db } from "@/lib/db";
 import {
   deleteAcademicYear,
   saveAcademicYear,
   setActiveAcademicYear,
-} from "@bass/core/admissions-config";
-import { recordAudit } from "@bass/core/audit";
-import { setSetting } from "@bass/core/settings";
+} from "@/lib/admissions-config";
+import { recordAudit } from "@/lib/audit";
+import { setSetting } from "@/lib/settings";
 
 import type { ConfigState } from "../requirements/actions";
 

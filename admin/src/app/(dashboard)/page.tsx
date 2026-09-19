@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { ApplicationStatus, ContentStatus, EnquiryStatus } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { requirePagePermission } from "@bass/auth/dal";
-import { ROLE_DESCRIPTIONS, ROLE_LABELS, ROLE_PERMISSIONS, hasPermission } from "@bass/auth/rbac";
-import { getSiteSettings, getUnconfiguredSettings } from "@bass/core/settings";
-import { isMailDeliveryConfigured } from "@bass/core/mail";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { ButtonLink } from "@bass/ui/button";
+import { ApplicationStatus, ContentStatus, EnquiryStatus } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ROLE_DESCRIPTIONS, ROLE_LABELS, ROLE_PERMISSIONS, hasPermission } from "@/lib/auth/rbac";
+import { getSiteSettings, getUnconfiguredSettings } from "@/lib/settings";
+import { isMailDeliveryConfigured } from "@/lib/mail";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
 

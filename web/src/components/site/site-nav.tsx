@@ -6,10 +6,10 @@ import { useEffect, useId, useRef, useState } from "react";
 
 import { BrandMark } from "@/components/site/brand-mark";
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
-import { ButtonLink } from "@bass/ui/button";
-import { HoverFill } from "@bass/ui/hover-fill";
-import { cn } from "@bass/ui/cn";
-import type { NavItem } from "@bass/core/navigation";
+import { ButtonLink } from "@/components/ui/button";
+import { HoverFill } from "@/components/ui/hover-fill";
+import { cn } from "@/components/ui/cn";
+import type { NavItem } from "@/lib/navigation";
 
 /** An article featured inside the mega-menu. Dates arrive pre-formatted. */
 export type MenuArticle = {

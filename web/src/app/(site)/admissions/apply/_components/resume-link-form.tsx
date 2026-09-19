@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { Alert } from "@bass/ui/alert";
+import { Alert } from "@/components/ui/alert";
 
 import type { StepFormState } from "../actions";
 

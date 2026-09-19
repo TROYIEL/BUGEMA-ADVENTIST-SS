@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { getNews, listNewsCategories } from "@bass/core/content-admin";
-import { listImageChoices } from "@bass/core/media-library";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { getNews, listNewsCategories } from "@/lib/content-admin";
+import { listImageChoices } from "@/lib/media-library";
 
 import { EditorShell, siteUrl } from "@/components/content/editor-shell";
 import { NewsForm } from "@/components/content/forms";

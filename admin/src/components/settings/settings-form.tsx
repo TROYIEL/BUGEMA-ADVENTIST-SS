@@ -3,13 +3,13 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import type { ImageChoice } from "@bass/core/media-library";
-import { SETTINGS_REGISTRY, type SettingDefinition, type SettingGroup, type SettingKey } from "@bass/core/settings-registry";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import type { ImageChoice } from "@/lib/media-library";
+import { SETTINGS_REGISTRY, type SettingDefinition, type SettingGroup, type SettingKey } from "@/lib/settings-registry";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import type { FormState } from "@/lib/forms";
 

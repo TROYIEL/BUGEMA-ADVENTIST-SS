@@ -1,5 +1,5 @@
-import { ButtonLink } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
+import { ButtonLink } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
 
 /**

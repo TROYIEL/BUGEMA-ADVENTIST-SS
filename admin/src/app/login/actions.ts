@@ -4,11 +4,11 @@ import type { Route } from "next";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { recordAudit } from "@bass/core/audit";
-import { createSession, destroySession, getClientIp } from "@bass/auth/session";
-import { verifyPassword } from "@bass/auth/crypto";
-import { db } from "@bass/db";
-import { RATE_LIMITS, rateLimit } from "@bass/core/rate-limit";
+import { recordAudit } from "@/lib/audit";
+import { createSession, destroySession, getClientIp } from "@/lib/auth/session";
+import { verifyPassword } from "@/lib/auth/crypto";
+import { db } from "@/lib/db";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 const loginSchema = z.object({
   email: z.email("Enter a valid email address.").max(254),
@@ -124,7 +124,7 @@ export async function loginAction(
 }
 
 export async function logoutAction(): Promise<void> {
-  const { getCurrentUser } = await import("@bass/auth/dal");
+  const { getCurrentUser } = await import("@/lib/auth/dal");
   const user = await getCurrentUser();
 
   if (user) {

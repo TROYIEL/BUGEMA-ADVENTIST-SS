@@ -13,7 +13,7 @@ import type { NextRequest } from "next/server";
  *    line of defense", and warns that moving a Server Action to another route
  *    can silently remove Proxy coverage.
  *
- * Real authentication and authorisation live in @bass/auth/dal and are
+ * Real authentication and authorisation live in @/lib/auth/dal and are
  * re-checked inside every Server Action, Route Handler and protected page.
  *
  * Because the administration app is now a separate deployment, the whole

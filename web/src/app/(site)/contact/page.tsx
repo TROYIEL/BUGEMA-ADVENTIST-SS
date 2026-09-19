@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 import { ContactForm } from "@/app/(site)/contact/contact-form";
 import { PageHeader } from "@/components/site/page-header";
-import { Alert } from "@bass/ui/alert";
-import { getPageBySlug } from "@bass/core/content";
-import { getSiteSettings, readSetting, type SettingKey } from "@bass/core/settings";
+import { Alert } from "@/components/ui/alert";
+import { getPageBySlug } from "@/lib/content";
+import { getSiteSettings, readSetting, type SettingKey } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 

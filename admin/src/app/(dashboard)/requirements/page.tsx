@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
 import {
   FIELD_TYPE_LABELS,
   STEP_LABELS,
@@ -10,9 +10,9 @@ import {
   listDocumentTypes,
   listFormFields,
   listRequirements,
-} from "@bass/core/admissions-config";
-import { LEVEL_LABELS } from "@bass/core/application-schemas";
-import { Badge } from "@bass/ui/badge";
+} from "@/lib/admissions-config";
+import { LEVEL_LABELS } from "@/lib/application-schemas";
+import { Badge } from "@/components/ui/badge";
 
 import { ClassForm, DocumentTypeForm, FormFieldForm, RequirementForm } from "@/components/config/forms";
 import { ConfigRow, ConfigSection, DeleteControl, MoveControls } from "@/components/config/layout";

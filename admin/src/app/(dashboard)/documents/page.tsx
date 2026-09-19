@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listPendingDocuments } from "@bass/core/applications-admin";
-import { EmptyState } from "@bass/ui/empty-state";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listPendingDocuments } from "@/lib/applications-admin";
+import { EmptyState } from "@/components/ui/empty-state";
 
 import { formatBytes, formatDateTime, fullName } from "@/components/applications/format";
 import { StatusBadge } from "@/components/applications/status-badge";
@@ -39,7 +39,7 @@ export default async function DocumentsPage() {
           description="New uploads from applicants will appear here until someone reviews them."
         />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+        <div className="mt-6 relative overflow-x-auto rounded-lg border border-line bg-white">
           <table className="w-full min-w-[48rem] text-sm">
             <thead className="bg-surface-sunken text-left text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">
               <tr>

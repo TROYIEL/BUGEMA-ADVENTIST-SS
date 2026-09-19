@@ -4,12 +4,12 @@ import Link from "next/link";
 import { useActionState, type ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 
-import { FormFieldType } from "@bass/db/enums";
-import type { FormFieldDefinition } from "@bass/core/application-schemas";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Select, Textarea } from "@bass/ui/field";
-import { cn } from "@bass/ui/cn";
+import { FormFieldType } from "@/generated/prisma/enums";
+import type { FormFieldDefinition } from "@/lib/application-schemas";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Select, Textarea } from "@/components/ui/field";
+import { cn } from "@/components/ui/cn";
 
 import type { StepFormState } from "../actions";
 

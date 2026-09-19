@@ -1,8 +1,8 @@
 // Must be first: loads the repository-root .env before anything reads it.
-import "@bass/db/env-load";
+import "@/lib/db/env-load";
 
-import { reindexAll } from "@bass/core/search";
-import { createPrismaClient } from "@bass/db/client";
+import { reindexAll } from "@/lib/search";
+import { createPrismaClient } from "@/lib/db/client";
 
 /**
  * Rebuilds the site search index from published content.

@@ -1,7 +1,7 @@
-import { authErrorResponse, requirePermission } from "@bass/auth/dal";
-import { ApplicationStatus } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { storage } from "@bass/core/storage";
+import { authErrorResponse, requirePermission } from "@/lib/auth/dal";
+import { ApplicationStatus } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { storage } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 

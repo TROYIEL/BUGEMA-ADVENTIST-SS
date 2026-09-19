@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { MediaVisibility } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { recordAudit } from "@bass/core/audit";
+import { requirePermission } from "@/lib/auth/dal";
+import { MediaVisibility } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { recordAudit } from "@/lib/audit";
 import {
   createHeroSlide,
   deleteHeroSlide,
@@ -16,8 +16,8 @@ import {
   setHeroSlideActive,
   updateHeroSlide,
   type HeroSlideInput,
-} from "@bass/core/hero-slides";
-import { storePublicImage } from "@bass/core/media-library";
+} from "@/lib/hero-slides";
+import { storePublicImage } from "@/lib/media-library";
 
 import type { SlideFormValues } from "@/components/hero-slides/helpers";
 

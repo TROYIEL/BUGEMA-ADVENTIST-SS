@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission, ROLE_LABELS } from "@bass/auth/rbac";
-import { ACTION_WORDS, entityPath, entityWords, listAuditForEntity } from "@bass/core/audit-admin";
-import type { AuditAction } from "@bass/core/audit";
-import { db } from "@bass/db";
-import { getUser, isDeletable } from "@bass/core/users-admin";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission, ROLE_LABELS } from "@/lib/auth/rbac";
+import { ACTION_WORDS, entityPath, entityWords, listAuditForEntity } from "@/lib/audit-admin";
+import type { AuditAction } from "@/lib/audit";
+import { db } from "@/lib/db";
+import { getUser, isDeletable } from "@/lib/users-admin";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 import { formatDateTime } from "@/components/applications/format";
 import { Breadcrumb } from "@/components/content/content-table";

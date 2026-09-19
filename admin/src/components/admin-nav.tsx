@@ -4,8 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-import { cn } from "@bass/ui/cn";
-import type { Permission } from "@bass/auth/rbac";
+import { cn } from "@/components/ui/cn";
+import type { Permission } from "@/lib/auth/rbac";
 
 export type NavEntry = {
   label: string;
@@ -52,7 +52,7 @@ export function AdminNav({
   }
 
   const nav = (
-    <nav aria-label="Administration" className="flex flex-1 flex-col gap-6 overflow-y-auto p-4">
+    <nav aria-label="Administration" className="flex flex-1 flex-col gap-6 overflow-y-auto scrollbar p-4">
       {groups.map((group) => (
         <div key={group.heading} className="flex flex-col gap-1">
           <p className="px-3 pb-1 text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-navy-300">

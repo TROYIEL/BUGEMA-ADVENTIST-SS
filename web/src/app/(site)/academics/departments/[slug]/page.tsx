@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 
 import { MediaImage } from "@/components/media-image";
 import { PageHeader } from "@/components/site/page-header";
-import { Badge } from "@bass/ui/badge";
-import { RichText } from "@bass/ui/rich-text";
-import { ContentStatus, StudyLevel } from "@bass/db/enums";
-import { MEDIA_SELECT } from "@bass/core/content";
-import { db } from "@bass/db";
+import { Badge } from "@/components/ui/badge";
+import { RichText } from "@/components/ui/rich-text";
+import { ContentStatus, StudyLevel } from "@/generated/prisma/enums";
+import { MEDIA_SELECT } from "@/lib/content";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

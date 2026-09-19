@@ -2,9 +2,9 @@
 
 import { useActionState } from "react";
 
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input } from "@bass/ui/field";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input } from "@/components/ui/field";
 
 import { lookup, type LookupState } from "./actions";
 

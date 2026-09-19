@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useId, useState, type ReactNode } from "react";
 
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 /**
  * A reveal driven by hovering a whole area, not one control.

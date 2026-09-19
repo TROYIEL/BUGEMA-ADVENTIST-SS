@@ -1,5 +1,5 @@
-import { ApplicationStatus } from "@bass/db/enums";
-import type { ApplicationFilters } from "@bass/core/applications-admin";
+import { ApplicationStatus } from "@/generated/prisma/enums";
+import type { ApplicationFilters } from "@/lib/applications-admin";
 
 /** The list's URL query, read and written in one place. */
 

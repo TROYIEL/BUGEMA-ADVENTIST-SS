@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { EnquiryStatus } from "@bass/db/enums";
-import { listEnquiries } from "@bass/core/school-admin";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label } from "@bass/ui/field";
-import { Pagination, parsePageParam } from "@bass/ui/pagination";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { EnquiryStatus } from "@/generated/prisma/enums";
+import { listEnquiries } from "@/lib/school-admin";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input, Label } from "@/components/ui/field";
+import { Pagination, parsePageParam } from "@/components/ui/pagination";
 
 import { formatDateTime } from "@/components/applications/format";
 import { ENQUIRY_BADGES } from "@/components/school/enquiry-badges";
@@ -62,7 +62,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
           {chip(EnquiryStatus.ARCHIVED, "Archived", counts.ARCHIVED)}
           {chip(EnquiryStatus.SPAM, "Spam", counts.SPAM)}
         </div>
-        <form method="get" action="/enquiries" className="flex items-end gap-2">
+        <form method="get" action="/enquiries" className="flex flex-wrap items-end gap-2">
           {filters.status ? <input type="hidden" name="status" value={filters.status} /> : null}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="q" className="sr-only">Search</Label>
@@ -75,7 +75,7 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
       {rows.length === 0 ? (
         <EmptyState className="mt-6" title={total === 0 && !filters.q ? "No enquiries" : "Nothing matches"} description={total === 0 && !filters.q ? "Messages from the contact form will appear here." : "Try another filter or search."} />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+        <div className="mt-6 relative overflow-x-auto rounded-lg border border-line bg-white">
           <table className="w-full min-w-[48rem] text-sm">
             <thead className="bg-surface-sunken text-left text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">
               <tr>
@@ -89,11 +89,11 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
               {rows.map((row) => (
                 <tr key={row.id} className={cn("hover:bg-navy-50/50", row.status === EnquiryStatus.UNREAD && "bg-gold-50/40")}>
                   <td className="px-4 py-3">
-                    <Link href={`/enquiries/${row.id}`} className={cn("text-navy-900 hover:underline", row.status === EnquiryStatus.UNREAD && "font-semibold")}>{row.name}</Link>
+                    <Link href={`/enquiries/${row.id}`} className={cn("text-navy-900 underline decoration-navy-900/30 underline-offset-4 hover:decoration-navy-900", row.status === EnquiryStatus.UNREAD && "font-semibold")}>{row.name}</Link>
                     <p className="text-xs text-ink-500">{row.email}</p>
                   </td>
                   <td className="px-4 py-3">
-                    <Link href={`/enquiries/${row.id}`} className="text-navy-900 hover:underline">{row.subject}</Link>
+                    <Link href={`/enquiries/${row.id}`} className="text-navy-900 underline decoration-navy-900/30 underline-offset-4 hover:decoration-navy-900">{row.subject}</Link>
                     <p className="line-clamp-1 text-xs text-ink-500">{row.body}</p>
                   </td>
                   <td className="px-4 py-3 text-ink-700">{formatDateTime(row.createdAt)}</td>

@@ -1,4 +1,4 @@
-import type { HeroSlideRow } from "@bass/core/hero-slides";
+import type { HeroSlideRow } from "@/lib/hero-slides";
 
 /** Everything the form edits, as the strings its inputs hold. */
 export type SlideFormValues = {

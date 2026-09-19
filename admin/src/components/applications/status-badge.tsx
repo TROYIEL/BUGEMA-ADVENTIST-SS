@@ -1,9 +1,9 @@
-import type { ApplicationStatus, DocumentVerificationStatus } from "@bass/db/enums";
+import type { ApplicationStatus, DocumentVerificationStatus } from "@/generated/prisma/enums";
 import {
   APPLICATION_STATUS_COPY,
   DOCUMENT_STATUS_COPY,
-} from "@bass/core/application-schemas";
-import { Badge, type BadgeTone } from "@bass/ui/badge";
+} from "@/lib/application-schemas";
+import { Badge, type BadgeTone } from "@/components/ui/badge";
 
 /** Staff-facing labels are shorter and more literal than the applicant's. */
 export const STAFF_STATUS_LABELS: Record<ApplicationStatus, string> = {

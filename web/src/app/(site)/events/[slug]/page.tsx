@@ -3,12 +3,15 @@ import { notFound } from "next/navigation";
 
 import { MediaImage } from "@/components/media-image";
 import { PageHeader } from "@/components/site/page-header";
-import { ButtonLink } from "@bass/ui/button";
-import { RichText } from "@bass/ui/rich-text";
-import { ContentStatus } from "@bass/db/enums";
-import { MEDIA_SELECT, formatDateRange } from "@bass/core/content";
-import { db } from "@bass/db";
-import { richTextToPlainText, truncate } from "@bass/core/sanitize";
+import { ButtonLink } from "@/components/ui/button";
+import { RichText } from "@/components/ui/rich-text";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { MEDIA_SELECT, formatDateRange } from "@/lib/content";
+import { db } from "@/lib/db";
+import { richTextToPlainText, truncate } from "@/lib/sanitize";
+import { getSiteUrl } from "@/lib/site-url";
+
+import { JsonLdScript, eventJsonLd } from "@/components/seo/json-ld";
 
 export const dynamic = "force-dynamic";
 
@@ -69,8 +72,20 @@ export default async function EventPage(props: PageProps<"/events/[slug]">) {
   }
   if (event.location) details.push(["Location", event.location]);
 
+  const structuredData = eventJsonLd({
+    siteUrl: getSiteUrl(),
+    path: `/events/${event.slug}`,
+    name: event.title,
+    description: event.description ?? truncate(richTextToPlainText(event.body), 155),
+    imageUrl: event.image ? `/media/${event.image.storageKey}` : null,
+    startDate: event.startDate,
+    endDate: event.endDate,
+    location: event.location,
+  });
+
   return (
     <main id="main" className="flex flex-1 flex-col">
+      <JsonLdScript data={structuredData} />
       <PageHeader
         title={event.title}
         subtitle={event.description}

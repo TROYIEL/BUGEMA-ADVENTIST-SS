@@ -1,5 +1,5 @@
-import { EnquiryStatus } from "@bass/db/enums";
-import type { BadgeTone } from "@bass/ui/badge";
+import { EnquiryStatus } from "@/generated/prisma/enums";
+import type { BadgeTone } from "@/components/ui/badge";
 
 export const ENQUIRY_BADGES: Record<EnquiryStatus, { label: string; tone: BadgeTone }> = {
   [EnquiryStatus.UNREAD]: { label: "Unread", tone: "gold" },

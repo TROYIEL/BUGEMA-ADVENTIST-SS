@@ -1,10 +1,5 @@
 @import "tailwindcss";
-@import "../../../../packages/ui/src/tokens.css";
-
-/* Tailwind scans the importing project by default; the shared component
-   package sits outside it and has to be pointed at explicitly, or every
-   class used only in @bass/ui is dropped from the build. */
-@source "../../../../packages/ui/src";
+@import "../components/ui/tokens.css";
 
 /* ---------------------------------------------------------------------------
    Utilities

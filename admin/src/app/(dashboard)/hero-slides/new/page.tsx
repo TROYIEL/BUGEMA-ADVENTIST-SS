@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listImageChoices } from "@bass/core/media-library";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listImageChoices } from "@/lib/media-library";
 
 import { EMPTY_VALUES } from "@/components/hero-slides/helpers";
 import { SlideForm } from "@/components/hero-slides/slide-form";

@@ -4,12 +4,12 @@ import Link from "next/link";
 import { ProgramCard } from "@/components/cards/content-cards";
 import { ContentPending } from "@/components/site/content-pending";
 import { PageHeader } from "@/components/site/page-header";
-import { ButtonLink } from "@bass/ui/button";
-import { Card, CardBody, CardText, CardTitle } from "@bass/ui/card";
-import { RichText } from "@bass/ui/rich-text";
-import { ContentStatus } from "@bass/db/enums";
-import { getAcademicPrograms, getPageBySlug } from "@bass/core/content";
-import { db } from "@bass/db";
+import { ButtonLink } from "@/components/ui/button";
+import { Card, CardBody, CardText, CardTitle } from "@/components/ui/card";
+import { RichText } from "@/components/ui/rich-text";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { getAcademicPrograms, getPageBySlug } from "@/lib/content";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

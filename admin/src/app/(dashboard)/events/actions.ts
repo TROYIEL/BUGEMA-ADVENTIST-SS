@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { recordAudit } from "@bass/core/audit";
-import { deleteEvent, getEvent, saveEvent, slugify } from "@bass/core/content-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { recordAudit } from "@/lib/audit";
+import { deleteEvent, getEvent, saveEvent, slugify } from "@/lib/content-admin";
 
 import { dateFromInput, firstIssues, flag, text, type FormState } from "@/lib/forms";
 

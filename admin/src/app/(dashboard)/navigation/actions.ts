@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { recordAudit } from "@bass/core/audit";
-import { deleteNavigationItem, MENU_KEYS, moveNavigationItem, saveNavigationItem } from "@bass/core/navigation-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { recordAudit } from "@/lib/audit";
+import { deleteNavigationItem, MENU_KEYS, moveNavigationItem, saveNavigationItem } from "@/lib/navigation-admin";
 
 import { firstIssues, flag, text, type FormState } from "@/lib/forms";
 

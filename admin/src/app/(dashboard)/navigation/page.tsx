@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { countNavigation, isMenuKey, listNavigation, MENU_KEYS, MENUS, type MenuKey, type NavigationRow } from "@bass/core/navigation-admin";
-import { Badge } from "@bass/ui/badge";
-import { cn } from "@bass/ui/cn";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { countNavigation, isMenuKey, listNavigation, MENU_KEYS, MENUS, type MenuKey, type NavigationRow } from "@/lib/navigation-admin";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/components/ui/cn";
 
 import { ConfigRow, ConfigSection, DeleteControl, MoveControls } from "@/components/config/layout";
 import { NavigationForm } from "@/components/settings/navigation-form";

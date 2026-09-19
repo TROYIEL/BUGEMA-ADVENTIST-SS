@@ -3,10 +3,10 @@ import Link from "next/link";
 
 import { MediaImage } from "@/components/media-image";
 import { PageHeader } from "@/components/site/page-header";
-import { EmptyState } from "@bass/ui/empty-state";
-import { ContentStatus } from "@bass/db/enums";
-import { MEDIA_SELECT } from "@bass/core/content";
-import { db } from "@bass/db";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { MEDIA_SELECT } from "@/lib/content";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

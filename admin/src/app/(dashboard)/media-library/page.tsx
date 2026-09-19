@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { listFolders, listMediaAssets } from "@bass/core/media-library";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label } from "@bass/ui/field";
-import { Pagination, parsePageParam } from "@bass/ui/pagination";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { listFolders, listMediaAssets } from "@/lib/media-library";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input, Label } from "@/components/ui/field";
+import { Pagination, parsePageParam } from "@/components/ui/pagination";
 
 import { formatBytes } from "@/components/applications/format";
 import { UploadForm } from "@/components/media-library/forms";

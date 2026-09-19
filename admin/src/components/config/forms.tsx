@@ -3,18 +3,18 @@
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { ApplicationStep, ContentStatus, FormFieldType, StudyLevel } from "@bass/db/enums";
+import { ApplicationStep, ContentStatus, FormFieldType, StudyLevel } from "@/generated/prisma/enums";
 import {
   DOCUMENT_FORMATS,
   FIELD_TYPE_LABELS,
   STEP_LABELS,
   keyFromLabel,
-} from "@bass/core/admissions-config-shared";
-import { LEVEL_LABELS } from "@bass/core/application-schemas";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+} from "@/lib/admissions-config-shared";
+import { LEVEL_LABELS } from "@/lib/application-schemas";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import type { ConfigState } from "@/app/(dashboard)/requirements/actions";
 

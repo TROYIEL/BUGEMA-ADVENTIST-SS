@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission, ROLE_LABELS } from "@bass/auth/rbac";
-import { listUsers } from "@bass/core/users-admin";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { ButtonLink } from "@bass/ui/button";
-import { Input } from "@bass/ui/field";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission, ROLE_LABELS } from "@/lib/auth/rbac";
+import { listUsers } from "@/lib/users-admin";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
+import { Input } from "@/components/ui/field";
 
 import { formatDateTime } from "@/components/applications/format";
 
@@ -48,7 +48,7 @@ export default async function UsersPage({ searchParams }: { searchParams: Promis
         </button>
       </form>
 
-      <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+      <div className="mt-6 relative overflow-x-auto rounded-lg border border-line bg-white">
         <table className="w-full text-sm">
           <thead className="bg-surface-sunken text-left text-xs uppercase tracking-wide text-ink-600">
             <tr>

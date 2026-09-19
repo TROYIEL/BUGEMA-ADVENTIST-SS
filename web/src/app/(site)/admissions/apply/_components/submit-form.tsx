@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 import type { SubmitFormState } from "../actions";
 

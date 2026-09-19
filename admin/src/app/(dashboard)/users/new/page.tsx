@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { UserRole } from "@bass/db/enums";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { UserRole } from "@/generated/prisma/enums";
 
 import { EditorShell } from "@/components/content/editor-shell";
 import { UserForm } from "@/components/settings/user-forms";

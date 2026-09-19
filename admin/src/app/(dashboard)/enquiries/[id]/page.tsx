@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { EnquiryStatus } from "@bass/db/enums";
-import { getEnquiry, markEnquiryRead } from "@bass/core/school-admin";
-import { Badge } from "@bass/ui/badge";
-import { Button, ButtonLink } from "@bass/ui/button";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { EnquiryStatus } from "@/generated/prisma/enums";
+import { getEnquiry, markEnquiryRead } from "@/lib/school-admin";
+import { Badge } from "@/components/ui/badge";
+import { Button, ButtonLink } from "@/components/ui/button";
 
 import { formatDateTime } from "@/components/applications/format";
 import { ENQUIRY_BADGES } from "@/components/school/enquiry-badges";

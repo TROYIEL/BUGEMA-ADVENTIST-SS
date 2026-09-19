@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requireUser } from "@bass/auth/dal";
-import { describePasswordProblem } from "@bass/auth/password-policy";
-import { recordAudit } from "@bass/core/audit";
-import { changeOwnPassword, updateOwnName } from "@bass/core/users-admin";
+import { requireUser } from "@/lib/auth/dal";
+import { describePasswordProblem } from "@/lib/auth/password-policy";
+import { recordAudit } from "@/lib/audit";
+import { changeOwnPassword, updateOwnName } from "@/lib/users-admin";
 
 import { firstIssues, text, type FormState } from "@/lib/forms";
 

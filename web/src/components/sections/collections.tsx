@@ -7,14 +7,14 @@ import {
 } from "@/components/cards/content-cards";
 import { MediaImage } from "@/components/media-image";
 import type { BlockContent } from "@/components/sections/blocks";
-import { ButtonLink } from "@bass/ui/button";
-import { SectionHeading } from "@bass/ui/card";
+import { ButtonLink } from "@/components/ui/button";
+import { SectionHeading } from "@/components/ui/card";
 import {
   getAcademicPrograms,
   getGalleryPreview,
   getLatestNews,
   getUpcomingEvents,
-} from "@bass/core/content";
+} from "@/lib/content";
 
 /**
  * Sections backed by a collection.

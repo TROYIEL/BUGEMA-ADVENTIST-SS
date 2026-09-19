@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 
-import { setDraftCookie } from "@bass/auth/applicant";
-import { findDraft } from "@bass/core/applications";
+import { setDraftCookie } from "@/lib/auth/applicant";
+import { getClientIp } from "@/lib/auth/session";
+import { findDraft } from "@/lib/applications";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +18,13 @@ export const dynamic = "force-dynamic";
  */
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get("token") ?? "";
+
+  const limit = await rateLimit({
+    key: `token-exchange:${(await getClientIp()) ?? "unknown"}`,
+    ...RATE_LIMITS.tokenExchange,
+  });
+  if (!limit.ok) redirect("/admissions/apply");
+
   const draft = await findDraft(token);
 
   if (draft) {

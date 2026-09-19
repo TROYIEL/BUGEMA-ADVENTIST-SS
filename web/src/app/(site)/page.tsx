@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
-import { getAdmissionsWindow } from "@bass/core/applications";
-import { getPublicHeroSlides } from "@bass/core/hero-slides";
-import { getHomeFeatures, getHomeHighlights, getHomeImages } from "@bass/core/home";
+import { getAdmissionsWindow } from "@/lib/applications";
+import { getPublicHeroSlides } from "@/lib/hero-slides";
+import { getHomeFeatures, getHomeHighlights, getHomeImages } from "@/lib/home";
 import {
   formatDate,
   formatDateRange,
   getLatestNews,
   getPageBySlug,
   getUpcomingEvents,
-} from "@bass/core/content";
-import { getSiteSettings, readSetting } from "@bass/core/settings";
-import { richTextToParagraphs, truncate } from "@bass/core/sanitize";
+} from "@/lib/content";
+import { getSiteSettings, readSetting } from "@/lib/settings";
+import { richTextToParagraphs, truncate } from "@/lib/sanitize";
 
 import type { HeroSlideData } from "@/components/sections/hero";
 import { HeroCarousel } from "@/components/sections/hero-carousel";

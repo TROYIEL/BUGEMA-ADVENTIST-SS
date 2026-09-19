@@ -3,11 +3,11 @@
 import { useActionState, useId } from "react";
 import { useFormStatus } from "react-dom";
 
-import type { ApplicationDocumentRow, DocumentTypeConfig } from "@bass/core/applications";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
+import type { ApplicationDocumentRow, DocumentTypeConfig } from "@/lib/applications";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
 
 import type { StepFormState } from "../actions";
 import { FormFooter, FormMessage, INITIAL_STATE } from "./form-parts";

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { listPages } from "@bass/core/content-admin";
-import { Alert } from "@bass/ui/alert";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { listPages } from "@/lib/content-admin";
+import { Alert } from "@/components/ui/alert";
 
 import { ContentHeader, ContentTable } from "@/components/content/content-table";
 

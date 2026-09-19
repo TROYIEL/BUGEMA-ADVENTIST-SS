@@ -1,7 +1,7 @@
 import { logoutAction } from "@/app/login/actions";
 import { AdminNav, type NavGroup } from "@/components/admin-nav";
-import { getCurrentUser } from "@bass/auth/dal";
-import { ROLE_LABELS, hasPermission, type Permission } from "@bass/auth/rbac";
+import { getCurrentUser } from "@/lib/auth/dal";
+import { ROLE_LABELS, hasPermission, type Permission } from "@/lib/auth/rbac";
 import { redirect } from "next/navigation";
 
 /**

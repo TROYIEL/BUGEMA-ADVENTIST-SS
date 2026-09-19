@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { recordAudit } from "@bass/core/audit";
+import { requirePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { recordAudit } from "@/lib/audit";
 import {
   addAlbumImages,
   deleteAlbum,
@@ -16,7 +16,7 @@ import {
   saveAlbum,
   slugify,
   updateAlbumImage,
-} from "@bass/core/content-admin";
+} from "@/lib/content-admin";
 
 import { firstIssues, text, type FormState } from "@/lib/forms";
 

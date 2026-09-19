@@ -3,21 +3,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { DocumentVerificationStatus } from "@bass/db/enums";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { DocumentVerificationStatus } from "@/generated/prisma/enums";
 import {
   APPLICATION_STATUS_COPY,
   BOARDING_LABELS,
   GENDER_LABELS,
   LEVEL_LABELS,
   formatAnswer,
-} from "@bass/core/application-schemas";
-import { documentTypesFor, getApplicationConfig, readAnswers } from "@bass/core/applications";
-import { getApplicationForStaff } from "@bass/core/applications-admin";
-import { formatDate } from "@bass/core/content";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
+} from "@/lib/application-schemas";
+import { documentTypesFor, getApplicationConfig, readAnswers } from "@/lib/applications";
+import { getApplicationForStaff } from "@/lib/applications-admin";
+import { formatDate } from "@/lib/content";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 
 import {
   DocumentReviewForm,
@@ -70,7 +70,7 @@ function Row({ label, value }: { label: string; value: ReactNode }) {
       <dt className="text-xs font-semibold uppercase tracking-[0.06em] text-ink-500 sm:pt-0.5">
         {label}
       </dt>
-      <dd className={empty ? "text-sm text-ink-400" : "text-sm text-navy-900"}>
+      <dd className={empty ? "text-sm text-ink-500" : "text-sm text-navy-900"}>
         {empty ? "Not given" : value}
       </dd>
     </div>
@@ -138,8 +138,16 @@ export default async function ApplicationPage({
             {application.submittedAt ? ` · submitted ${formatDay(application.submittedAt)}` : ""}
           </p>
         </div>
-        <div className="flex flex-col items-end gap-1">
+        <div className="flex flex-col items-end gap-2">
           <StatusBadge status={application.status} />
+          <Link
+            href={`/print/applications/${application.id}` as never}
+            target="_blank"
+            rel="noopener"
+            className="text-sm text-navy-800 underline decoration-navy-800/30 underline-offset-4 hover:decoration-navy-800"
+          >
+            Print or save as PDF
+          </Link>
           {application.decisionAt ? (
             <p className="text-xs text-ink-500">
               Decided {formatDay(application.decisionAt)}

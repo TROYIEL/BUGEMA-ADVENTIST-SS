@@ -1,5 +1,5 @@
 // Must be first: loads the repository-root .env before anything reads it.
-import "@bass/db/env-load";
+import "@/lib/db/env-load";
 
 import {
   AnnouncementPlacement,
@@ -9,9 +9,9 @@ import {
   Gender,
   BoardingPreference,
   StudyLevel,
-} from "@bass/db/enums";
-import { generateToken, hashToken } from "@bass/auth/crypto";
-import { createPrismaClient } from "@bass/db/client";
+} from "@/generated/prisma/enums";
+import { generateToken, hashToken } from "@/lib/auth/crypto";
+import { createPrismaClient } from "@/lib/db/client";
 
 const db = createPrismaClient({ direct: true });
 
@@ -570,7 +570,7 @@ async function applyDemo() {
     console.log(`  · ${created} applications with history`);
   }
 
-  const { reindexAll } = await import("@bass/core/search");
+  const { reindexAll } = await import("@/lib/search");
   console.log(`  · ${await reindexAll()} documents reindexed`);
 }
 
@@ -607,7 +607,7 @@ async function purgeDemo() {
 
   await db.academicYear.updateMany({ where: { isActive: true }, data: { isAcceptingApplications: false } });
 
-  const { reindexAll } = await import("@bass/core/search");
+  const { reindexAll } = await import("@/lib/search");
   await reindexAll();
   console.log("  · demonstration data removed");
 }

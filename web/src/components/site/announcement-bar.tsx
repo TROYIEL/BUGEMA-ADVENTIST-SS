@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { AnnouncementPlacement } from "@bass/db/enums";
-import { getActiveAnnouncement } from "@bass/core/announcements";
+import { AnnouncementPlacement } from "@/generated/prisma/enums";
+import { getActiveAnnouncement } from "@/lib/announcements";
 
 /**
  * Site-wide announcement strip. Renders nothing at all when no announcement is
@@ -16,7 +16,9 @@ export async function AnnouncementBar({
   if (!announcement) return null;
 
   return (
-    <div className="bg-gold-500 text-navy-950">
+    // A landmark, so assistive technology can jump to it and axe's "all
+    // content inside a landmark" rule is satisfied for real, not by wrapping.
+    <aside aria-label="Announcement" className="bg-gold-500 text-navy-950">
       <div className="container-page flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2.5 text-center text-sm">
         <p className="font-semibold">{announcement.title}</p>
         {announcement.body ? (
@@ -40,6 +42,6 @@ export async function AnnouncementBar({
           </Link>
         ) : null}
       </div>
-    </div>
+    </aside>
   );
 }

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 
 import { PageHeader } from "@/components/site/page-header";
-import { ButtonLink } from "@bass/ui/button";
-import { getPortalApplicationId } from "@bass/auth/applicant";
+import { ButtonLink } from "@/components/ui/button";
+import { getPortalApplicationId } from "@/lib/auth/applicant";
 import {
   getApplicationConfig,
   getPortalApplication,
   markMessagesRead,
-} from "@bass/core/applications";
-import { getSiteSettings, readSetting } from "@bass/core/settings";
+} from "@/lib/applications";
+import { getSiteSettings, readSetting } from "@/lib/settings";
 
 import { LookupForm } from "./lookup-form";
 import { Portal } from "./portal";

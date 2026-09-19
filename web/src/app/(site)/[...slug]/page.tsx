@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 
 import { ContentPending } from "@/components/site/content-pending";
 import { PageHeader } from "@/components/site/page-header";
-import type { Crumb } from "@bass/ui/breadcrumbs";
-import { RichText } from "@bass/ui/rich-text";
-import { getPageBySlug, publishedFilter } from "@bass/core/content";
-import { db } from "@bass/db";
-import { richTextToPlainText, truncate } from "@bass/core/sanitize";
+import type { Crumb } from "@/components/ui/breadcrumbs";
+import { RichText } from "@/components/ui/rich-text";
+import { getPageBySlug, publishedFilter } from "@/lib/content";
+import { db } from "@/lib/db";
+import { richTextToPlainText, truncate } from "@/lib/sanitize";
 
 /**
  * Generic renderer for CMS-authored pages.

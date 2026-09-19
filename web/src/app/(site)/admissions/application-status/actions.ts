@@ -8,9 +8,9 @@ import {
   getPortalApplicationId,
   grantPortalAccess,
   revokePortalAccess,
-} from "@bass/auth/applicant";
-import { getClientIp } from "@bass/auth/session";
-import { lookupSchema } from "@bass/core/application-schemas";
+} from "@/lib/auth/applicant";
+import { getClientIp } from "@/lib/auth/session";
+import { lookupSchema } from "@/lib/application-schemas";
 import {
   canApplicantUpload,
   documentTypesFor,
@@ -18,8 +18,8 @@ import {
   getApplicationConfig,
   getPortalApplication,
   storeDocument,
-} from "@bass/core/applications";
-import { RATE_LIMITS, rateLimit } from "@bass/core/rate-limit";
+} from "@/lib/applications";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 import type { StepFormState } from "../apply/actions";
 

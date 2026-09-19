@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import { ApplicationStep } from "@bass/db/enums";
+import { ApplicationStep } from "@/generated/prisma/enums";
 import {
   BOARDING_LABELS,
   GENDER_LABELS,
@@ -9,16 +9,16 @@ import {
   stepDefinition,
   type FormFieldDefinition,
   type StepDefinition,
-} from "@bass/core/application-schemas";
+} from "@/lib/application-schemas";
 import {
   documentTypesFor,
   fieldsForStep,
   readAnswers,
   type ApplicationConfig,
   type DraftApplication,
-} from "@bass/core/applications";
-import { formatDate } from "@bass/core/content";
-import { Badge } from "@bass/ui/badge";
+} from "@/lib/applications";
+import { formatDate } from "@/lib/content";
+import { Badge } from "@/components/ui/badge";
 
 import { formatBytes } from "./format";
 
@@ -66,7 +66,7 @@ function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
     <>
       <dt className="text-sm font-semibold text-ink-600">{label}</dt>
-      <dd className={`text-[0.9375rem] ${empty ? "text-ink-400" : "text-navy-900"}`}>
+      <dd className={`text-[0.9375rem] ${empty ? "text-ink-500" : "text-navy-900"}`}>
         {empty ? "Not given" : value}
       </dd>
     </>

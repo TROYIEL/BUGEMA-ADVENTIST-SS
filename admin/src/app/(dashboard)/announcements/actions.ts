@@ -3,10 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { AnnouncementPlacement } from "@bass/db/enums";
-import { recordAudit } from "@bass/core/audit";
-import { deleteAnnouncement, saveAnnouncement } from "@bass/core/content-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { AnnouncementPlacement } from "@/generated/prisma/enums";
+import { recordAudit } from "@/lib/audit";
+import { deleteAnnouncement, saveAnnouncement } from "@/lib/content-admin";
 
 import { dateTimeFromInput, firstIssues, flag, text, type FormState } from "@/lib/forms";
 

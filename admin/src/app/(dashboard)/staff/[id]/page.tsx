@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listImageChoices } from "@bass/core/media-library";
-import { getStaff } from "@bass/core/school-admin";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listImageChoices } from "@/lib/media-library";
+import { getStaff } from "@/lib/school-admin";
 
 import { EditorShell, siteUrl } from "@/components/content/editor-shell";
 import { StaffForm } from "@/components/school/forms";

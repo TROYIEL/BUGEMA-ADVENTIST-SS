@@ -1,4 +1,4 @@
-import { ButtonLink } from "@bass/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 export default function NotFound() {
   return (

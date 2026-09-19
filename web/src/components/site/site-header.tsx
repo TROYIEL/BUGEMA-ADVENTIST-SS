@@ -1,7 +1,7 @@
-import { NavigationMenu } from "@bass/db/enums";
-import { formatDate, getLatestNews } from "@bass/core/content";
-import { getNavigation } from "@bass/core/navigation";
-import { getSiteSettings, readSetting } from "@bass/core/settings";
+import { NavigationMenu } from "@/generated/prisma/enums";
+import { formatDate, getLatestNews } from "@/lib/content";
+import { getNavigation } from "@/lib/navigation";
+import { getSiteSettings, readSetting } from "@/lib/settings";
 
 import { SiteNav, type MenuArticle } from "@/components/site/site-nav";
 import type { MediaImageAsset } from "@/components/media-image";

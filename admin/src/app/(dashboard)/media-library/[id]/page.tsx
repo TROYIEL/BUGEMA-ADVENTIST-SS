@@ -3,11 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { getMediaAsset, listFolders, mediaUsage } from "@bass/core/media-library";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { getMediaAsset, listFolders, mediaUsage } from "@/lib/media-library";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 import { formatBytes, formatDateTime } from "@/components/applications/format";
 import { DetailsForm } from "@/components/media-library/forms";

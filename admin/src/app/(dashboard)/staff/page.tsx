@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listStaff } from "@bass/core/school-admin";
-import { Alert } from "@bass/ui/alert";
-import { Badge } from "@bass/ui/badge";
-import { Button, ButtonLink } from "@bass/ui/button";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label } from "@bass/ui/field";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listStaff } from "@/lib/school-admin";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input, Label } from "@/components/ui/field";
 
 import { moveStaffAction } from "./actions";
 

@@ -6,11 +6,11 @@ import {
   HoverRevealPanel,
   HoverRevealToggle,
 } from "@/components/sections/hover-reveal";
-import { ButtonLink } from "@bass/ui/button";
-import { SectionHeading } from "@bass/ui/card";
-import { RichText } from "@bass/ui/rich-text";
-import { cn } from "@bass/ui/cn";
-import { HoverFill } from "@bass/ui/hover-fill";
+import { ButtonLink } from "@/components/ui/button";
+import { SectionHeading } from "@/components/ui/card";
+import { RichText } from "@/components/ui/rich-text";
+import { cn } from "@/components/ui/cn";
+import { HoverFill } from "@/components/ui/hover-fill";
 
 /**
  * Homepage section blocks.

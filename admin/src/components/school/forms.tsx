@@ -2,11 +2,11 @@
 
 import { useId } from "react";
 
-import { ContentStatus, StudyLevel } from "@bass/db/enums";
-import { LEVEL_LABELS } from "@bass/core/application-schemas";
-import type { ImageChoice } from "@bass/core/media-library";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { ContentStatus, StudyLevel } from "@/generated/prisma/enums";
+import { LEVEL_LABELS } from "@/lib/application-schemas";
+import type { ImageChoice } from "@/lib/media-library";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import {
   BodyField,
@@ -65,7 +65,7 @@ export function ProgramForm({ action, values, choices, isNew }: { action: BoundA
         <Field id="summary" label="Summary" hint="Optional. One or two sentences for the programme card." error={form.error("summary")}>
           {(props) => <Textarea {...props} name="summary" rows={2} defaultValue={form.text("summary")} required={false} />}
         </Field>
-        <BodyField form={form} label="Details" />
+        <BodyField form={form} label="Details" images={choices} />
       </Section>
       <Section title="Showing">
         <StatusFields form={form} withDate={false} />
@@ -89,7 +89,7 @@ export function DepartmentForm({ action, values, choices, staff, isNew }: { acti
         <Field id="description" label="Summary" hint="Optional. One or two sentences." error={form.error("description")}>
           {(props) => <Textarea {...props} name="description" rows={2} defaultValue={form.text("description")} required={false} />}
         </Field>
-        <BodyField form={form} label="Details" />
+        <BodyField form={form} label="Details" images={choices} />
       </Section>
       <Section title="Showing">
         <StatusFields form={form} withDate={false} />

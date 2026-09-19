@@ -1,6 +1,6 @@
-import { Breadcrumbs, type Crumb } from "@bass/ui/breadcrumbs";
+import { Breadcrumbs, type Crumb } from "@/components/ui/breadcrumbs";
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 /**
  * Standard page masthead: breadcrumb trail, then a navy band carrying the

@@ -2,10 +2,10 @@
 
 import { z } from "zod";
 
-import { getClientIp } from "@bass/auth/session";
-import { db } from "@bass/db";
-import { getAdminNotificationAddress, sendMail } from "@bass/core/mail";
-import { RATE_LIMITS, rateLimit } from "@bass/core/rate-limit";
+import { getClientIp } from "@/lib/auth/session";
+import { db } from "@/lib/db";
+import { getAdminNotificationAddress, sendMail } from "@/lib/mail";
+import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 const enquirySchema = z.object({
   name: z.string().trim().min(2, "Enter your name.").max(120),

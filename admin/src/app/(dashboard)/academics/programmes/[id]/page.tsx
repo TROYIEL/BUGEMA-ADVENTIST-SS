@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { listImageChoices } from "@bass/core/media-library";
-import { getProgram } from "@bass/core/school-admin";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { listImageChoices } from "@/lib/media-library";
+import { getProgram } from "@/lib/school-admin";
 
 import { EditorShell, siteUrl } from "@/components/content/editor-shell";
 import { ProgramForm } from "@/components/school/forms";

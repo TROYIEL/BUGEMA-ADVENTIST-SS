@@ -1,16 +1,6 @@
-import path from "node:path";
-
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Workspace packages ship TypeScript source rather than a build step, so
-  // Next has to compile them itself.
-  transpilePackages: ["@bass/db", "@bass/auth", "@bass/core", "@bass/ui"],
-
-  // Without this, file tracing starts at the app directory and misses the
-  // shared packages, producing a standalone build that cannot boot.
-  outputFileTracingRoot: path.join(import.meta.dirname, "../.."),
-
   typedRoutes: true,
 
   experimental: {
@@ -38,6 +28,10 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
+          // Browsers ignore HSTS over plain HTTP, so sending it always is safe.
+          // `includeSubDomains` is deliberately left off: the school may have
+          // other subdomains this project knows nothing about.
+          { key: "Strict-Transport-Security", value: "max-age=31536000" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Frame-Options", value: "DENY" },

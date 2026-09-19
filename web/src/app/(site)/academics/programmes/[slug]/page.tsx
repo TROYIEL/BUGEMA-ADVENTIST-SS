@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PageHeader } from "@/components/site/page-header";
-import { ButtonLink } from "@bass/ui/button";
-import { RichText } from "@bass/ui/rich-text";
-import { ContentStatus, StudyLevel } from "@bass/db/enums";
-import { MEDIA_SELECT } from "@bass/core/content";
-import { db } from "@bass/db";
-import { richTextToPlainText, truncate } from "@bass/core/sanitize";
+import { ButtonLink } from "@/components/ui/button";
+import { RichText } from "@/components/ui/rich-text";
+import { ContentStatus, StudyLevel } from "@/generated/prisma/enums";
+import { MEDIA_SELECT } from "@/lib/content";
+import { db } from "@/lib/db";
+import { richTextToPlainText, truncate } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 

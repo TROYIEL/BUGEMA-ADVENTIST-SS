@@ -1,4 +1,4 @@
-import { ButtonLink } from "@bass/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 /** 404 inside the public site, so it keeps the header, footer and navigation. */
 export default function SiteNotFound() {

@@ -1,6 +1,6 @@
-import { getPortalApplicationId } from "@bass/auth/applicant";
-import { db } from "@bass/db";
-import { storage } from "@bass/core/storage";
+import { getPortalApplicationId } from "@/lib/auth/applicant";
+import { db } from "@/lib/db";
+import { storage } from "@/lib/storage";
 
 export const dynamic = "force-dynamic";
 

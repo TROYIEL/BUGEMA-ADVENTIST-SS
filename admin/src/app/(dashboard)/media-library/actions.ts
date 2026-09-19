@@ -4,15 +4,15 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { recordAudit } from "@bass/core/audit";
+import { requirePermission } from "@/lib/auth/dal";
+import { recordAudit } from "@/lib/audit";
 import {
   deleteMediaAsset,
   getMediaAsset,
   normaliseFolder,
   storePublicImage,
   updateMediaAsset,
-} from "@bass/core/media-library";
+} from "@/lib/media-library";
 
 /**
  * Staff actions on the media library. Uploads accept several photographs at

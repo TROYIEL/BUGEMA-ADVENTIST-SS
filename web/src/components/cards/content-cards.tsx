@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
-import { cn } from "@bass/ui/cn";
-import { formatDate, formatDateRange } from "@bass/core/content";
+import { cn } from "@/components/ui/cn";
+import { formatDate, formatDateRange } from "@/lib/content";
 
 /**
  * A corner tab with a cut edge, echoing the reference's angled labels. Purely
@@ -33,6 +33,13 @@ function ImageFallback({ label }: { label: string }) {
   );
 }
 
+/**
+ * Cards sit under an <h2> section heading on the homepage but directly under
+ * the page <h1> on a listing page, so the heading level has to be chosen by
+ * the caller — a fixed <h3> skips a level on listings.
+ */
+type HeadingLevel = "h2" | "h3";
+
 export type NewsCardData = {
   slug: string;
   title: string;
@@ -46,7 +53,15 @@ export type NewsCardData = {
  * News card with the title over the image, as in the reference. A gradient
  * scrim keeps the white text legible regardless of the photograph beneath it.
  */
-export function NewsCard({ article, sizes }: { article: NewsCardData; sizes: string }) {
+export function NewsCard({
+  article,
+  sizes,
+  headingLevel: Heading = "h3",
+}: {
+  article: NewsCardData;
+  sizes: string;
+  headingLevel?: HeadingLevel;
+}) {
   return (
     <article className="group relative isolate flex h-full min-h-[19rem] flex-col justify-end overflow-hidden bg-navy-900">
       <CornerLabel>{article.category ?? "News"}</CornerLabel>
@@ -72,11 +87,11 @@ export function NewsCard({ article, sizes }: { article: NewsCardData; sizes: str
             {formatDate(article.publishedAt)}
           </p>
         ) : null}
-        <h3 className="font-serif text-xl leading-snug text-white">
+        <Heading className="font-serif text-xl leading-snug text-white">
           <Link href={`/news/${article.slug}` as never} className="before:absolute before:inset-0">
             {article.title}
           </Link>
-        </h3>
+        </Heading>
       </div>
     </article>
   );

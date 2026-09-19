@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { MediaImage } from "@/components/media-image";
 import { ContentPending } from "@/components/site/content-pending";
 import { PageHeader } from "@/components/site/page-header";
-import { RichText } from "@bass/ui/rich-text";
-import { MEDIA_SELECT, getPageBySlug } from "@bass/core/content";
-import { db } from "@bass/db";
+import { RichText } from "@/components/ui/rich-text";
+import { MEDIA_SELECT, getPageBySlug } from "@/lib/content";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

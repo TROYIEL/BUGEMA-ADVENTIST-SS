@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import { ContentPending } from "@/components/site/content-pending";
 import { PageHeader } from "@/components/site/page-header";
-import { Badge } from "@bass/ui/badge";
-import { ContentStatus, StudyLevel } from "@bass/db/enums";
-import { db } from "@bass/db";
+import { Badge } from "@/components/ui/badge";
+import { ContentStatus, StudyLevel } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

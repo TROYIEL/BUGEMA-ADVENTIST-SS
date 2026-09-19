@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { ContentStatus } from "@bass/db/enums";
-import { getAlbum } from "@bass/core/content-admin";
-import { listImageChoices } from "@bass/core/media-library";
-import { Button } from "@bass/ui/button";
-import { Input } from "@bass/ui/field";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { getAlbum } from "@/lib/content-admin";
+import { listImageChoices } from "@/lib/media-library";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/field";
 
 import { EditorShell, siteUrl } from "@/components/content/editor-shell";
 import { AlbumForm } from "@/components/content/forms";

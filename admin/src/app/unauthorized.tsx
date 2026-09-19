@@ -1,4 +1,4 @@
-import { ButtonLink } from "@bass/ui/button";
+import { ButtonLink } from "@/components/ui/button";
 
 /** Rendered by `unauthorized()` — requires experimental.authInterrupts. */
 export default function Unauthorized() {

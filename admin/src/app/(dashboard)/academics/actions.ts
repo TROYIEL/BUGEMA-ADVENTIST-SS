@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { ContentStatus, StudyLevel } from "@bass/db/enums";
-import { db } from "@bass/db";
-import { recordAudit } from "@bass/core/audit";
-import { slugify } from "@bass/core/content-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { ContentStatus, StudyLevel } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
+import { recordAudit } from "@/lib/audit";
+import { slugify } from "@/lib/content-admin";
 import {
   deleteDepartment,
   deleteProgram,
@@ -19,7 +19,7 @@ import {
   saveDepartment,
   saveProgram,
   saveSubject,
-} from "@bass/core/school-admin";
+} from "@/lib/school-admin";
 
 import { firstIssues, flag, text, type FormState } from "@/lib/forms";
 

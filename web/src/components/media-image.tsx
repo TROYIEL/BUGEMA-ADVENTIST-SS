@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 export type MediaImageAsset = {
   storageKey: string;

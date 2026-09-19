@@ -1,13 +1,13 @@
 // Must be first: loads the repository-root .env before anything reads it.
-import "@bass/db/env-load";
+import "@/lib/db/env-load";
 
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
 
-import { UserRole } from "@bass/db/enums";
-import { hashPassword } from "@bass/auth/crypto";
-import { describePasswordProblem } from "@bass/auth/password-policy";
-import { createPrismaClient } from "@bass/db/client";
+import { UserRole } from "@/generated/prisma/enums";
+import { hashPassword } from "@/lib/auth/crypto";
+import { describePasswordProblem } from "@/lib/auth/password-policy";
+import { createPrismaClient } from "@/lib/db/client";
 
 /**
  * Creates an administrator account.

@@ -3,11 +3,11 @@
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { ApplicationStatus, DocumentVerificationStatus } from "@bass/db/enums";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { ApplicationStatus, DocumentVerificationStatus } from "@/generated/prisma/enums";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import type { ActionState } from "@/app/(dashboard)/applications/actions";
 import { STAFF_STATUS_LABELS } from "./status-badge";

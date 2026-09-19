@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 import { LoginForm } from "@/app/login/login-form";
-import { getCurrentUser } from "@bass/auth/dal";
+import { getCurrentUser } from "@/lib/auth/dal";
 
 export const metadata: Metadata = {
   title: "Sign in",

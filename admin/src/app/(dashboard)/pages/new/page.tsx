@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listImageChoices } from "@bass/core/media-library";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listImageChoices } from "@/lib/media-library";
 
 import { EditorShell } from "@/components/content/editor-shell";
 import { PageForm } from "@/components/content/forms";

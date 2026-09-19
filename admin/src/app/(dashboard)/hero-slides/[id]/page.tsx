@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { getHeroSlide } from "@bass/core/hero-slides";
-import { listImageChoices } from "@bass/core/media-library";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { getHeroSlide } from "@/lib/hero-slides";
+import { listImageChoices } from "@/lib/media-library";
 
 import { slideToValues } from "@/components/hero-slides/helpers";
 import { SlideForm } from "@/components/hero-slides/slide-form";

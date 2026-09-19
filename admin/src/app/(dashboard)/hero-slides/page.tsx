@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { isSlideLive, listHeroSlides, type HeroSlideRow } from "@bass/core/hero-slides";
-import { Alert } from "@bass/ui/alert";
-import { Badge, type BadgeTone } from "@bass/ui/badge";
-import { ButtonLink } from "@bass/ui/button";
-import { EmptyState } from "@bass/ui/empty-state";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { isSlideLive, listHeroSlides, type HeroSlideRow } from "@/lib/hero-slides";
+import { Alert } from "@/components/ui/alert";
+import { Badge, type BadgeTone } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
 
 import { formatDateTime } from "@/components/applications/format";
 

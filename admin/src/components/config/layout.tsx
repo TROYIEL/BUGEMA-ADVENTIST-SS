@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 /**
  * Layout for a list of configurable rows: each row shows its summary and

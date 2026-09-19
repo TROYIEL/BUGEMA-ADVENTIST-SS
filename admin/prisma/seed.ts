@@ -1,7 +1,7 @@
 // Must be first: loads the repository-root .env before anything reads it.
-import "@bass/db/env-load";
+import "@/lib/db/env-load";
 
-import { fromRepoRoot } from "@bass/db/env";
+import { fromProjectRoot } from "@/lib/db/env";
 
 import { readFile } from "node:fs/promises";
 import path from "node:path";
@@ -11,12 +11,12 @@ import {
   MediaVisibility,
   NavigationMenu,
   StudyLevel,
-} from "@bass/db/enums";
-import { checksum } from "@bass/auth/crypto";
-import { processImage } from "@bass/core/media";
-import { createPrismaClient } from "@bass/db/client";
-import { SETTINGS_REGISTRY, SETTING_KEYS } from "@bass/core/settings-registry";
-import { storage } from "@bass/core/storage";
+} from "@/generated/prisma/enums";
+import { checksum } from "@/lib/auth/crypto";
+import { processImage } from "@/lib/media";
+import { createPrismaClient } from "@/lib/db/client";
+import { SETTINGS_REGISTRY, SETTING_KEYS } from "@/lib/settings-registry";
+import { storage } from "@/lib/storage";
 
 const db = createPrismaClient({ direct: true });
 
@@ -38,9 +38,8 @@ const db = createPrismaClient({ direct: true });
 // frame and asserts nothing about the school.
 // ---------------------------------------------------------------------------
 
-// Resolved from the repository root, not the working directory: this script
-// runs from packages/db.
-const SOURCE_IMAGE_DIR = fromRepoRoot("bass-images");
+// The source photographs and crest ship with the project, next to this seed.
+const SOURCE_IMAGE_DIR = fromProjectRoot("prisma/images");
 
 const IMAGE_INVENTORY = [
   {
@@ -674,7 +673,7 @@ async function main() {
   await seedGallery(media);
 
   console.log("Search index");
-  const { reindexAll } = await import("@bass/core/search");
+  const { reindexAll } = await import("@/lib/search");
   console.log(`  \u00b7 ${await reindexAll()} documents indexed`);
 
   const admins = await db.user.count();

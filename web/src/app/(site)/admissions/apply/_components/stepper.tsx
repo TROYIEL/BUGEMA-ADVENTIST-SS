@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import type { ApplicationStep } from "@bass/db/enums";
-import { stepOrder, type StepDefinition } from "@bass/core/application-schemas";
-import { cn } from "@bass/ui/cn";
+import type { ApplicationStep } from "@/generated/prisma/enums";
+import { stepOrder, type StepDefinition } from "@/lib/application-schemas";
+import { cn } from "@/components/ui/cn";
 
 /**
  * Progress through the application.

@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 
 import { EventCard } from "@/components/cards/content-cards";
 import { PageHeader } from "@/components/site/page-header";
-import { EmptyState } from "@bass/ui/empty-state";
-import { ContentStatus } from "@bass/db/enums";
-import { db } from "@bass/db";
+import { EmptyState } from "@/components/ui/empty-state";
+import { ContentStatus } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 

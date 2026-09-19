@@ -3,10 +3,10 @@ import Link from "next/link";
 
 import { NewsCard } from "@/components/cards/content-cards";
 import { PageHeader } from "@/components/site/page-header";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Pagination, parsePageParam } from "@bass/ui/pagination";
-import { MEDIA_SELECT, publishedFilter } from "@bass/core/content";
-import { db } from "@bass/db";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Pagination, parsePageParam } from "@/components/ui/pagination";
+import { MEDIA_SELECT, publishedFilter } from "@/lib/content";
+import { db } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -109,6 +109,7 @@ export default async function NewsIndexPage(props: PageProps<"/news">) {
                 <li key={article.id}>
                   <NewsCard
                     article={article}
+                    headingLevel="h2"
                     sizes="(min-width: 1024px) 32vw, (min-width: 640px) 48vw, 100vw"
                   />
                 </li>

@@ -1,40 +1,8 @@
-# dependencies
-node_modules
-.pnp
-.pnp.*
+# Two independent projects live side by side here: web/ and admin/. Each has
+# its own .gitignore; this one only covers what sits at the top level.
 
-# testing
-coverage
-
-# next.js
-.next/
-out/
-next-env.d.ts
-
-# production
-build
-
-# generated Prisma client (recreated by `npm run db:generate`)
-packages/db/generated
-
-# uploaded media and application documents (never committed)
+# uploaded media and application documents (never committed). Both projects
+# point their STORAGE_LOCAL_DIR here when they run on one machine.
 storage/
 
-# env files
-.env*
-!.env.example
-
-# misc
 .DS_Store
-*.pem
-*.tsbuildinfo
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# vercel
-.vercel
-.neon

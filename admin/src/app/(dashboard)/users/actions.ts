@@ -4,20 +4,20 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { describePasswordProblem } from "@bass/auth/password-policy";
-import { ROLE_LABELS } from "@bass/auth/rbac";
-import { revokeAllSessionsForUser } from "@bass/auth/session";
-import { UserRole } from "@bass/db/enums";
-import { recordAudit } from "@bass/core/audit";
-import { createUser, deleteUser, getUser, resetUserPassword, setUserActive, updateUser } from "@bass/core/users-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { describePasswordProblem } from "@/lib/auth/password-policy";
+import { ROLE_LABELS } from "@/lib/auth/rbac";
+import { revokeAllSessionsForUser } from "@/lib/auth/session";
+import { UserRole } from "@/generated/prisma/enums";
+import { recordAudit } from "@/lib/audit";
+import { createUser, deleteUser, getUser, resetUserPassword, setUserActive, updateUser } from "@/lib/users-admin";
 
 import { firstIssues, text, type FormState } from "@/lib/forms";
 
 /**
  * Staff accounts. Everything here needs users:write, which only a super
  * administrator holds; the rules about the last super administrator and
- * one's own account live in @bass/core/users-admin.
+ * one's own account live in @/lib/users-admin.
  */
 
 const password = z.string().superRefine((v, ctx) => {

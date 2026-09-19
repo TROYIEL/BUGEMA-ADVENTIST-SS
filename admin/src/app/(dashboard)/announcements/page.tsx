@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { isAnnouncementLive, listAnnouncements } from "@bass/core/content-admin";
-import { PLACEMENT_LABELS } from "@bass/core/content-shared";
-import { Badge } from "@bass/ui/badge";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { isAnnouncementLive, listAnnouncements } from "@/lib/content-admin";
+import { PLACEMENT_LABELS } from "@/lib/content-shared";
+import { Badge } from "@/components/ui/badge";
 
 import { formatDateTime } from "@/components/applications/format";
 import { ConfigRow, ConfigSection, DeleteControl } from "@/components/config/layout";

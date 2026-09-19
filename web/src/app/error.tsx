@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { Button } from "@bass/ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function ErrorBoundary({
   error,

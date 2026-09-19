@@ -3,9 +3,9 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { ApplicationStep, ContentStatus, FormFieldType, StudyLevel } from "@bass/db/enums";
-import { db } from "@bass/db";
+import { requirePermission } from "@/lib/auth/dal";
+import { ApplicationStep, ContentStatus, FormFieldType, StudyLevel } from "@/generated/prisma/enums";
+import { db } from "@/lib/db";
 import {
   DOCUMENT_FORMATS,
   deleteClass,
@@ -19,9 +19,9 @@ import {
   saveDocumentType,
   saveFormField,
   saveRequirement,
-} from "@bass/core/admissions-config";
-import { MAX_DOCUMENT_BYTES } from "@bass/core/applications";
-import { recordAudit } from "@bass/core/audit";
+} from "@/lib/admissions-config";
+import { MAX_DOCUMENT_BYTES } from "@/lib/applications";
+import { recordAudit } from "@/lib/audit";
 
 /**
  * Staff actions on the admissions configuration. The public wizard reads all

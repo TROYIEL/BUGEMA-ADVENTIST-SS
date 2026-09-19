@@ -2,11 +2,11 @@
 
 import { useId } from "react";
 
-import { AnnouncementPlacement } from "@bass/db/enums";
-import { PLACEMENT_LABELS } from "@bass/core/content-shared";
-import type { ImageChoice } from "@bass/core/media-library";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { AnnouncementPlacement } from "@/generated/prisma/enums";
+import { PLACEMENT_LABELS } from "@/lib/content-shared";
+import type { ImageChoice } from "@/lib/media-library";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import {
   BodyField,
@@ -35,7 +35,7 @@ export function PageForm({ action, values, choices, isNew, isSystem }: { action:
         <Field id="subtitle" label="Introduction" hint="Optional. A sentence under the title, in the page's masthead." error={form.error("subtitle")}>
           {(props) => <Textarea {...props} name="subtitle" rows={2} defaultValue={form.text("subtitle")} required={false} />}
         </Field>
-        <BodyField form={form} />
+        <BodyField form={form} images={choices} />
       </Section>
       <Section title="Showing">
         <StatusFields form={form} />
@@ -59,7 +59,7 @@ export function NewsForm({ action, values, choices, categories, isNew }: { actio
         <Field id="excerpt" label="Summary" hint="Optional. One or two sentences shown in lists and at the top of the story." error={form.error("excerpt")}>
           {(props) => <Textarea {...props} name="excerpt" rows={2} defaultValue={form.text("excerpt")} required={false} />}
         </Field>
-        <BodyField form={form} />
+        <BodyField form={form} images={choices} />
       </Section>
       <Section title="Details">
         <div className="grid gap-5 md:grid-cols-2">
@@ -98,7 +98,7 @@ export function EventForm({ action, values, choices, isNew }: { action: BoundAct
         <Field id="description" label="Summary" hint="Optional. One or two sentences shown in lists." error={form.error("description")}>
           {(props) => <Textarea {...props} name="description" rows={2} defaultValue={form.text("description")} required={false} />}
         </Field>
-        <BodyField form={form} label="Details" />
+        <BodyField form={form} label="Details" images={choices} />
       </Section>
       <Section title="When and where">
         <div className="grid gap-5 md:grid-cols-2">

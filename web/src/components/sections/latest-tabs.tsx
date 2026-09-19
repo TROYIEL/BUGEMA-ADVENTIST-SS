@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useId, useState } from "react";
 
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 export type LatestItem = {
   id: string;

@@ -4,9 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { requirePermission } from "@bass/auth/dal";
-import { recordAudit } from "@bass/core/audit";
-import { deleteStaff, getStaff, moveSchoolRow, saveStaff } from "@bass/core/school-admin";
+import { requirePermission } from "@/lib/auth/dal";
+import { recordAudit } from "@/lib/audit";
+import { deleteStaff, getStaff, moveSchoolRow, saveStaff } from "@/lib/school-admin";
 
 import { firstIssues, flag, text, type FormState } from "@/lib/forms";
 

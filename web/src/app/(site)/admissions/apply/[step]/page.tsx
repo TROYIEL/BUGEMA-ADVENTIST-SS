@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/site/page-header";
-import { Alert } from "@bass/ui/alert";
-import { ButtonLink } from "@bass/ui/button";
-import { getDraftToken } from "@bass/auth/applicant";
-import { ApplicationStep } from "@bass/db/enums";
-import { stepFromSlug, stepOrder } from "@bass/core/application-schemas";
+import { Alert } from "@/components/ui/alert";
+import { ButtonLink } from "@/components/ui/button";
+import { getDraftToken } from "@/lib/auth/applicant";
+import { ApplicationStep } from "@/generated/prisma/enums";
+import { stepFromSlug, stepOrder } from "@/lib/application-schemas";
 import {
   academicValues,
   answersToFormValues,
@@ -22,7 +22,7 @@ import {
   stepBefore,
   visibleSteps,
   type DraftApplication,
-} from "@bass/core/applications";
+} from "@/lib/applications";
 
 import {
   completeDocuments,

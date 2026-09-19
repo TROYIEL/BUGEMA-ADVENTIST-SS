@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { listImageChoices } from "@bass/core/media-library";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { listImageChoices } from "@/lib/media-library";
 import {
   getSiteSettings,
   getUnconfiguredSettings,
@@ -11,7 +11,7 @@ import {
   SETTINGS_REGISTRY,
   type SettingGroup,
   type SettingKey,
-} from "@bass/core/settings";
+} from "@/lib/settings";
 
 import { SettingsGroupForm, type SettingValues } from "@/components/settings/settings-form";
 

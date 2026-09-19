@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { PageHeader } from "@/components/site/page-header";
-import { Badge } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input } from "@bass/ui/field";
-import { Pagination, parsePageParam } from "@bass/ui/pagination";
-import { SEARCH_TYPE_LABELS, searchContent } from "@bass/core/search";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input } from "@/components/ui/field";
+import { Pagination, parsePageParam } from "@/components/ui/pagination";
+import { SEARCH_TYPE_LABELS, searchContent } from "@/lib/search";
 
 export const dynamic = "force-dynamic";
 

@@ -4,13 +4,13 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { ContentStatus } from "@bass/db/enums";
-import type { ImageChoice } from "@bass/core/media-library";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
-import { RichTextEditor } from "@bass/ui/rich-text-editor";
+import { ContentStatus } from "@/generated/prisma/enums";
+import type { ImageChoice } from "@/lib/media-library";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 
 import type { FormState } from "@/lib/forms";
 
@@ -202,10 +202,31 @@ export function ImageField({
   );
 }
 
-export function BodyField({ form, name = "body", label = "Text", hint }: { form: ReturnType<typeof useContentForm>; name?: string; label?: string; hint?: string }) {
+export function BodyField({
+  form,
+  name = "body",
+  label = "Text",
+  hint,
+  images = [],
+}: {
+  form: ReturnType<typeof useContentForm>;
+  name?: string;
+  label?: string;
+  hint?: string;
+  /** Media-library images the editor's Image button may insert. */
+  images?: ImageChoice[];
+}) {
+  const editorImages = images.map((choice) => ({
+    src: `/media/${choice.storageKey}`,
+    alt: choice.alt ?? "",
+    label: choice.alt ?? choice.originalName,
+  }));
+
   return (
     <Field id={name} label={label} hint={hint} error={form.error(name)}>
-      {(props) => <RichTextEditor {...props} name={name} defaultValue={form.text(name)} />}
+      {(props) => (
+        <RichTextEditor {...props} name={name} defaultValue={form.text(name)} images={editorImages} />
+      )}
     </Field>
   );
 }

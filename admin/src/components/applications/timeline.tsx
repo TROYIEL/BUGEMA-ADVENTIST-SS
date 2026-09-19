@@ -1,7 +1,7 @@
-import { ActorType } from "@bass/db/enums";
-import { describeEvent } from "@bass/core/applications";
-import type { StaffApplication } from "@bass/core/applications-admin";
-import { cn } from "@bass/ui/cn";
+import { ActorType } from "@/generated/prisma/enums";
+import { describeEvent } from "@/lib/applications";
+import type { StaffApplication } from "@/lib/applications-admin";
+import { cn } from "@/components/ui/cn";
 
 import { formatDateTime } from "./format";
 

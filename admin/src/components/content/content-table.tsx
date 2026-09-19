@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-import { ContentStatus } from "@bass/db/enums";
-import type { ContentListRow } from "@bass/core/content-admin";
-import { Badge } from "@bass/ui/badge";
-import { Button, ButtonLink } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label } from "@bass/ui/field";
+import { ContentStatus } from "@/generated/prisma/enums";
+import type { ContentListRow } from "@/lib/content-admin";
+import { Badge } from "@/components/ui/badge";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input, Label } from "@/components/ui/field";
 
 import { formatDateTime } from "@/components/applications/format";
 
@@ -96,7 +96,11 @@ export function ContentTable({
           action={<ButtonLink href={`${basePath}/new` as never} withArrow>{newLabel}</ButtonLink>}
         />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+        // `relative` is load-bearing: the table's visually-hidden header text
+        // (`sr-only`) is position:absolute, and without a positioned wrapper its
+        // containing block is the viewport — it escapes this scroll container
+        // and stretches the whole page sideways on a phone.
+        <div className="relative mt-6 overflow-x-auto rounded-lg border border-line bg-white">
           <table className="w-full min-w-[48rem] text-sm">
             <thead className="bg-surface-sunken text-left text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">
               <tr>

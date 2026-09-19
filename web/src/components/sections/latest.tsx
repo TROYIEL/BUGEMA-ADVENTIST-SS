@@ -1,8 +1,8 @@
 import type { BlockContent } from "@/components/sections/blocks";
 import { LatestTabs, type LatestItem } from "@/components/sections/latest-tabs";
-import { ButtonLink } from "@bass/ui/button";
-import { SectionHeading } from "@bass/ui/card";
-import { formatDate, getLatestNews, getUpcomingEvents } from "@bass/core/content";
+import { ButtonLink } from "@/components/ui/button";
+import { SectionHeading } from "@/components/ui/card";
+import { formatDate, getLatestNews, getUpcomingEvents } from "@/lib/content";
 
 /**
  * News and events in one tabbed grid, matching the reference's combined

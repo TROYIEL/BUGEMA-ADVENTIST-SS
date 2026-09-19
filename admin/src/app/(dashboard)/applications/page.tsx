@@ -1,20 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { requirePagePermission } from "@bass/auth/dal";
-import { hasPermission } from "@bass/auth/rbac";
-import { ApplicationStatus } from "@bass/db/enums";
+import { requirePagePermission } from "@/lib/auth/dal";
+import { hasPermission } from "@/lib/auth/rbac";
+import { ApplicationStatus } from "@/generated/prisma/enums";
 import {
   countApplicationsByStatus,
   listApplications,
   listFilterOptions,
-} from "@bass/core/applications-admin";
-import { Button, ButtonLink } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
-import { EmptyState } from "@bass/ui/empty-state";
-import { Input, Label } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
-import { Pagination, parsePageParam } from "@bass/ui/pagination";
+} from "@/lib/applications-admin";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
+import { EmptyState } from "@/components/ui/empty-state";
+import { Input, Label } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
+import { Pagination, parsePageParam } from "@/components/ui/pagination";
 
 import { queryFor, readFilters, type Search } from "@/components/applications/filters";
 import { formatDay, fullName } from "@/components/applications/format";
@@ -172,7 +172,7 @@ export default async function ApplicationsPage({
           }
         />
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
+        <div className="mt-6 relative overflow-x-auto rounded-lg border border-line bg-white">
           <table className="w-full min-w-[56rem] text-sm">
             <thead className="bg-surface-sunken text-left text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">
               <tr>

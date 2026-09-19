@@ -1,20 +1,20 @@
-import { DocumentVerificationStatus } from "@bass/db/enums";
+import { DocumentVerificationStatus } from "@/generated/prisma/enums";
 import {
   APPLICATION_STATUS_COPY,
   DOCUMENT_STATUS_COPY,
-} from "@bass/core/application-schemas";
+} from "@/lib/application-schemas";
 import {
   canApplicantUpload,
   describeEvent,
   documentTypesFor,
   type ApplicationConfig,
   type PortalApplication,
-} from "@bass/core/applications";
-import { formatDate } from "@bass/core/content";
-import { Alert } from "@bass/ui/alert";
-import { Badge, type BadgeTone } from "@bass/ui/badge";
-import { Button } from "@bass/ui/button";
-import { cn } from "@bass/ui/cn";
+} from "@/lib/applications";
+import { formatDate } from "@/lib/content";
+import { Alert } from "@/components/ui/alert";
+import { Badge, type BadgeTone } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/components/ui/cn";
 
 import { DocumentUploader } from "../apply/_components/documents-panel";
 import { formatBytes } from "../apply/_components/format";

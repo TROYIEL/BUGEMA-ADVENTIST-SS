@@ -3,9 +3,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { PageHeader } from "@/components/site/page-header";
-import { Alert } from "@bass/ui/alert";
-import { Button, ButtonLink } from "@bass/ui/button";
-import { getDraftToken } from "@bass/auth/applicant";
+import { Alert } from "@/components/ui/alert";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { getDraftToken } from "@/lib/auth/applicant";
 import {
   documentTypesFor,
   findDraft,
@@ -13,9 +13,9 @@ import {
   getAdmissionsWindow,
   getApplicationConfig,
   visibleSteps,
-} from "@bass/core/applications";
-import { formatDate } from "@bass/core/content";
-import { getSiteSettings, readSetting } from "@bass/core/settings";
+} from "@/lib/applications";
+import { formatDate } from "@/lib/content";
+import { getSiteSettings, readSetting } from "@/lib/settings";
 
 import { startApplication } from "./actions";
 

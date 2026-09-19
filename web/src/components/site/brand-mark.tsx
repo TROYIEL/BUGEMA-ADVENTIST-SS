@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { MediaImage, type MediaImageAsset } from "@/components/media-image";
-import { cn } from "@bass/ui/cn";
+import { cn } from "@/components/ui/cn";
 
 /**
  * The school wordmark.

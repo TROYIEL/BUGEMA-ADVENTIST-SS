@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 import { Breadcrumb } from "./content-table";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormFieldDefinition } from "@bass/core/application-schemas";
+import type { FormFieldDefinition } from "@/lib/application-schemas";
 
 import type { StepFormState } from "../actions";
 import {

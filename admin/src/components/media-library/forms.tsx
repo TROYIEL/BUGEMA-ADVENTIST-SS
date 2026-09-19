@@ -3,10 +3,10 @@
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
-import { Picker } from "@bass/ui/picker";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
+import { Picker } from "@/components/ui/picker";
 
 import type { MediaFormState } from "@/app/(dashboard)/media-library/actions";
 

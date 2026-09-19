@@ -3,9 +3,9 @@
 import { useActionState } from "react";
 
 import { submitEnquiry, type ContactState } from "@/app/(site)/contact/actions";
-import { Alert } from "@bass/ui/alert";
-import { Button } from "@bass/ui/button";
-import { Field, Input, Textarea } from "@bass/ui/field";
+import { Alert } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Field, Input, Textarea } from "@/components/ui/field";
 
 const INITIAL: ContactState = { status: "idle" };
 

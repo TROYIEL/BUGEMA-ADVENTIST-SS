@@ -4,10 +4,13 @@ import { notFound } from "next/navigation";
 import { NewsCard } from "@/components/cards/content-cards";
 import { MediaImage } from "@/components/media-image";
 import { PageHeader } from "@/components/site/page-header";
-import { RichText } from "@bass/ui/rich-text";
-import { MEDIA_SELECT, formatDate, publishedFilter } from "@bass/core/content";
-import { db } from "@bass/db";
-import { richTextToPlainText, truncate } from "@bass/core/sanitize";
+import { RichText } from "@/components/ui/rich-text";
+import { MEDIA_SELECT, formatDate, publishedFilter } from "@/lib/content";
+import { db } from "@/lib/db";
+import { richTextToPlainText, truncate } from "@/lib/sanitize";
+import { getSiteUrl } from "@/lib/site-url";
+
+import { JsonLdScript, articleJsonLd } from "@/components/seo/json-ld";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +25,7 @@ async function getArticle(slug: string) {
       body: true,
       category: true,
       publishedAt: true,
+      updatedAt: true,
       seoTitle: true,
       seoDescription: true,
       author: { select: { name: true } },
@@ -82,8 +86,20 @@ export default async function NewsArticlePage(
     },
   });
 
+  const structuredData = articleJsonLd({
+    siteUrl: getSiteUrl(),
+    path: `/news/${article.slug}`,
+    headline: article.title,
+    description: article.excerpt ?? truncate(richTextToPlainText(article.body), 155),
+    imageUrl: article.featuredImage ? `/media/${article.featuredImage.storageKey}` : null,
+    publishedAt: article.publishedAt,
+    modifiedAt: article.updatedAt,
+    authorName: article.author?.name,
+  });
+
   return (
     <main id="main" className="flex flex-1 flex-col">
+      <JsonLdScript data={structuredData} />
       <PageHeader
         title={article.title}
         eyebrow={article.category}

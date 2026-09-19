@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-import { serveMedia } from "@bass/core/media-route";
+import { serveMedia } from "@/lib/media-route";
 
 export async function GET(
   _request: NextRequest,

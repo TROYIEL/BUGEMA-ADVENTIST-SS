@@ -1,9 +1,9 @@
 import type { NextRequest } from "next/server";
 
-import { authErrorResponse, requirePermission } from "@bass/auth/dal";
-import { getApplicationConfig } from "@bass/core/applications";
-import { exportApplicationsCsv } from "@bass/core/applications-admin";
-import { recordAudit } from "@bass/core/audit";
+import { authErrorResponse, requirePermission } from "@/lib/auth/dal";
+import { getApplicationConfig } from "@/lib/applications";
+import { exportApplicationsCsv } from "@/lib/applications-admin";
+import { recordAudit } from "@/lib/audit";
 
 import { readFilters } from "@/components/applications/filters";
 
