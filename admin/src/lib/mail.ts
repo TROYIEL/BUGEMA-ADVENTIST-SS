@@ -3,6 +3,8 @@ import "server-only";
 import { EmailStatus } from "@/generated/prisma/enums";
 import { db } from "@/lib/db";
 
+import { getSiteSettings, readSetting } from "./settings";
+
 /**
  * Outgoing mail.
  *
@@ -16,6 +18,8 @@ import { db } from "@/lib/db";
 export type MailMessage = {
   to: string;
   toName?: string;
+  /** Where a reply from the recipient should go, when not the sender. */
+  replyTo?: string;
   subject: string;
   html: string;
   text?: string;
@@ -25,6 +29,8 @@ export type MailMessage = {
 };
 
 export type MailResult = {
+  /** The outbox row, so a caller can link to it or show its fate later. */
+  id: string;
   /** Whether the message was actually handed to a mail server. */
   delivered: boolean;
   /** Always true once the message is safely recorded. */
@@ -96,6 +102,7 @@ class SmtpDriver implements MailDriver {
       to: message.toName
         ? { name: message.toName, address: message.to }
         : message.to,
+      replyTo: message.replyTo,
       subject: message.subject,
       html: message.html,
       text: message.text ?? stripHtml(message.html),
@@ -136,6 +143,7 @@ export async function sendMail(message: MailMessage): Promise<MailResult> {
     data: {
       toAddress: message.to,
       toName: message.toName,
+      replyTo: message.replyTo,
       subject: message.subject,
       html: message.html,
       text: message.text ?? stripHtml(message.html),
@@ -158,7 +166,7 @@ export async function sendMail(message: MailMessage): Promise<MailResult> {
       },
     });
 
-    return { delivered, queued: true, driver: driver.name };
+    return { id: record.id, delivered, queued: true, driver: driver.name };
   } catch (error) {
     const reason = error instanceof Error ? error.message : String(error);
 
@@ -172,7 +180,7 @@ export async function sendMail(message: MailMessage): Promise<MailResult> {
     });
 
     console.error(`[mail] delivery failed for "${message.subject}":`, reason);
-    return { delivered: false, queued: true, driver: driver.name, error: reason };
+    return { id: record.id, delivered: false, queued: true, driver: driver.name, error: reason };
   }
 }
 
@@ -262,6 +270,7 @@ export async function flushOutboxWith(
     const message: MailMessage = {
       to: row.toAddress,
       toName: row.toName ?? undefined,
+      replyTo: row.replyTo ?? undefined,
       subject: row.subject,
       html: row.html,
       text: row.text ?? undefined,
@@ -300,10 +309,28 @@ export function isMailDeliveryConfigured(): boolean {
   return process.env.MAIL_DRIVER === "smtp" && Boolean(process.env.SMTP_HOST);
 }
 
-/** Address that receives new-application and new-enquiry notifications. */
+/** Fallback address from the environment, for a deployment with no settings yet. */
 export function getAdminNotificationAddress(): string | null {
   const address = process.env.MAIL_ADMIN_NOTIFICATIONS?.trim();
   return address ? address : null;
+}
+
+export type NotificationKind = "enquiry" | "application";
+
+/**
+ * Where the school wants to be told about something. Configured by the
+ * school under Site settings; the environment variable remains as a
+ * fallback so a fresh deployment is never silent. New applications fall
+ * back to the public admissions address before that, since that inbox
+ * exists whenever admissions are open at all.
+ */
+export async function getNotificationAddress(kind: NotificationKind): Promise<string | null> {
+  const settings = await getSiteSettings();
+  const configured =
+    kind === "enquiry"
+      ? readSetting(settings, "contact.notificationEmail")
+      : (readSetting(settings, "admissions.notificationEmail") ?? readSetting(settings, "admissions.email"));
+  return configured ?? getAdminNotificationAddress();
 }
 
 /** Absolute URL for links inside outgoing mail, which has no origin of its own. */

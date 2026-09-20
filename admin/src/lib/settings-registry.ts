@@ -147,6 +147,15 @@ const REGISTRY = {
     default: "",
     order: 10,
   },
+  "contact.notificationEmail": {
+    group: "contact",
+    label: "Where website enquiries are sent",
+    description:
+      "Every message from the contact form is emailed here as well as appearing under Enquiries. Leave empty to rely on the Enquiries page alone.",
+    type: "email",
+    default: "",
+    order: 15,
+  },
   "contact.phone": {
     group: "contact",
     label: "Main telephone number",
@@ -310,6 +319,15 @@ const REGISTRY = {
     type: "email",
     default: "",
     order: 30,
+  },
+  "admissions.notificationEmail": {
+    group: "admissions",
+    label: "Where new applications are announced",
+    description:
+      "Each submitted application is announced by email to this address. Leave empty to use the admissions email address above.",
+    type: "email",
+    default: "",
+    order: 35,
   },
   "admissions.phone": {
     group: "admissions",

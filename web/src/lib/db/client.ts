@@ -1,6 +1,22 @@
+import dns from "node:dns";
+import net from "node:net";
+
 import { PrismaPg } from "@prisma/adapter-pg";
 
 import { PrismaClient } from "@/generated/prisma/client";
+
+// How Node opens the TCP connection matters more than it should. A hostname
+// with several addresses is tried one address at a time ("happy eyeballs"),
+// each attempt given only 250 ms by default. Neon's hosts publish IPv6 and
+// IPv4 addresses; on a network with no IPv6 route the IPv6 ones fail at once,
+// and a real IPv4 handshake to the region takes 200-700 ms — longer than the
+// budget — so every attempt is abandoned and the query dies with a bare
+// `ETIMEDOUT`. Measured here: one connection in five, and usually the first
+// one a process makes. Prefer IPv4 and give each attempt a realistic budget.
+// Process-wide and idempotent, so it belongs next to the one place every
+// database connection is created.
+dns.setDefaultResultOrder("ipv4first");
+net.setDefaultAutoSelectFamilyAttemptTimeout(1500);
 
 /**
  * Builds a Prisma Client.

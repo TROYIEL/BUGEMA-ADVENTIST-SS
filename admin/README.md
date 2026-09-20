@@ -142,7 +142,20 @@ user management), `ADMISSIONS_OFFICER` (applications, documents, messages,
 admissions configuration), `CONTENT_EDITOR` (pages, news, events, gallery,
 announcements, media), `STAFF` (read-only until a role is assigned). The
 sidebar, dashboard tiles and buttons are filtered by the same table on the
-server, and every Server Action, Route Handler and page re-checks it.
+server, and every Server Action, Route Handler and page re-checks it. The
+sidebar also carries live counters — applications awaiting first review,
+documents pending verification, unread enquiries, failed mail — computed
+for the role in `src/lib/nav-counts.ts`, rendered by the layout and
+refreshed from `/api/nav-counts` on every navigation and tab focus
+(a layout is not re-rendered on client-side navigation). Icons come from
+`lucide-react`, resolved by name in `src/components/admin-nav.tsx`.
+
+Across the top of every page sits `src/components/admin-topbar.tsx`: a
+search box over every module the role may open (`/search`, backed by
+`src/lib/search-admin.ts`; `/` or Ctrl/⌘-K focuses it), a **New…** menu of
+the things staff create most, a bell listing what is waiting, and the account
+menu. On small screens it also holds the sidebar toggle; the drawer opens
+beneath it (`src/components/admin-shell.tsx` shares that state).
 
 ### Admissions
 
@@ -180,7 +193,12 @@ live. Rows that applications refer to are switched off, not deleted.
   on the website shows it; the page lists every place.
 - **Academics, staff, enquiries** — `src/lib/school-admin.ts`. Programmes,
   departments and subjects with ordering; staff profiles behind the
-  leadership page; the inbox for the website's contact form.
+  leadership page; the inbox for the website's contact form. An enquiry is
+  answered from its own page: the reply is saved (`enquiry_replies`), then
+  emailed from the school's address with the school's enquiries inbox as
+  Reply-To and the original message quoted; the thread shows each reply's
+  delivery state and the enquiry moves to **Replied**. Replying from one's
+  own mail program remains available as a fallback.
 - **Outbox** — `/outbox` over `src/lib/mail-admin.ts` (`settings:write`):
   every email the system has tried to send, filterable by status, with the
   message as sent, the last error, and a **Resend** for queued or failed
@@ -188,7 +206,10 @@ live. Rows that applications refer to are switched off, not deleted.
   configured; a manual resend ignores the automatic five-attempt cap.
 - **Site settings** — generated from `src/lib/settings-registry.ts`, one form
   per group; an unfilled setting is badged and the dashboard lists it under
-  "Complete your site". **Navigation**, **Users** (super administrators only;
+  "Complete your site". Two of them route mail: "Where website enquiries are
+  sent" (Contact) and "Where new applications are announced" (Admissions);
+  `MAIL_ADMIN_NOTIFICATIONS` in `.env` is only the fallback while they are
+  empty. **Navigation**, **Users** (super administrators only;
   used accounts are disabled, never deleted), **Audit log** (read-only), and
   an **account page** for one's own name and password.
 

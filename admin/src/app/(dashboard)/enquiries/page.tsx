@@ -56,9 +56,10 @@ export default async function EnquiriesPage({ searchParams }: { searchParams: Pr
 
       <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
         <div className="flex flex-wrap gap-2">
-          {chip(undefined, "Inbox", counts.UNREAD + counts.READ + counts.ARCHIVED)}
+          {chip(undefined, "Inbox", counts.UNREAD + counts.READ + counts.REPLIED + counts.ARCHIVED)}
           {chip(EnquiryStatus.UNREAD, "Unread", counts.UNREAD)}
           {chip(EnquiryStatus.READ, "Read", counts.READ)}
+          {chip(EnquiryStatus.REPLIED, "Replied", counts.REPLIED)}
           {chip(EnquiryStatus.ARCHIVED, "Archived", counts.ARCHIVED)}
           {chip(EnquiryStatus.SPAM, "Spam", counts.SPAM)}
         </div>

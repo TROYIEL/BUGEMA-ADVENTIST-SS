@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CalendarDays, FileCheck2, FileText, FolderOpen, Inbox, Newspaper, Send, Settings, type LucideIcon } from "lucide-react";
 import Link from "next/link";
 
 import { ApplicationStatus, ContentStatus, EnquiryStatus } from "@/generated/prisma/enums";
@@ -9,6 +10,7 @@ import { getSiteSettings, getUnconfiguredSettings } from "@/lib/settings";
 import { isMailDeliveryConfigured } from "@/lib/mail";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/components/ui/cn";
 import { ButtonLink } from "@/components/ui/button";
 
 export const dynamic = "force-dynamic";
@@ -19,19 +21,44 @@ function StatCard({
   label,
   value,
   hint,
+  icon: Icon,
+  href,
+  attention = false,
 }: {
   label: string;
   value: number | string;
   hint?: string;
+  icon: LucideIcon;
+  /** Where the number leads; the whole tile becomes the link. */
+  href?: string;
+  /** True when the number is work waiting for someone, not just a total. */
+  attention?: boolean;
 }) {
-  return (
-    <div className="rounded-lg border border-line bg-white p-4">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">
-        {label}
-      </p>
+  const body = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.08em] text-ink-500">{label}</p>
+        <span
+          aria-hidden="true"
+          className={cn(
+            "grid size-8 shrink-0 place-items-center rounded-full",
+            attention && Number(value) > 0 ? "bg-gold-100 text-gold-800" : "bg-navy-50 text-navy-700",
+          )}
+        >
+          <Icon className="size-4" />
+        </span>
+      </div>
       <p className="mt-1.5 text-3xl font-semibold tabular-nums text-navy-900">{value}</p>
       {hint ? <p className="mt-1 text-xs text-ink-500">{hint}</p> : null}
-    </div>
+    </>
+  );
+  const className = "block rounded-lg border border-line bg-white p-4";
+  return href ? (
+    <Link href={href as never} className={cn(className, "transition-colors hover:border-navy-300 hover:bg-navy-50/40")}>
+      {body}
+    </Link>
+  ) : (
+    <div className={className}>{body}</div>
   );
 }
 
@@ -107,11 +134,15 @@ export default async function DashboardPage() {
                 label="Applications"
                 value={applicationsTotal}
                 hint={`${applicationsNew} awaiting first review`}
+                icon={FileText}
+                href="/applications"
               />
               <StatCard
                 label="Decided"
                 value={applicationsDecided}
                 hint="Accepted, conditional or rejected"
+                icon={FileCheck2}
+                href="/applications"
               />
             </>
           ) : null}
@@ -119,14 +150,19 @@ export default async function DashboardPage() {
             label="News published"
             value={newsPublished}
             hint={newsDrafts > 0 ? `${newsDrafts} in draft` : "No drafts"}
+            icon={Newspaper}
+            href="/news"
           />
-          <StatCard label="Upcoming events" value={eventsUpcoming} />
-          {canSeeMedia ? <StatCard label="Media files" value={mediaCount} /> : null}
+          <StatCard label="Upcoming events" value={eventsUpcoming} icon={CalendarDays} href="/events" />
+          {canSeeMedia ? <StatCard label="Media files" value={mediaCount} icon={FolderOpen} href="/media-library" /> : null}
           {canSeeEnquiries ? (
             <StatCard
               label="Unread enquiries"
               value={enquiriesUnread}
               hint={enquiriesUnread > 0 ? "Needs a reply" : "All caught up"}
+              icon={Inbox}
+              href="/enquiries?status=UNREAD"
+              attention
             />
           ) : null}
           {canSeeSettings ? (
@@ -135,11 +171,17 @@ export default async function DashboardPage() {
                 label="Mail waiting"
                 value={queuedMail}
                 hint={mailConfigured ? "Queued or failed — see Outbox" : "Not being delivered"}
+                icon={Send}
+                href="/outbox"
+                attention
               />
               <StatCard
                 label="Settings to complete"
                 value={outstanding.length}
                 hint={outstanding.length === 0 ? "All filled in" : "Awaiting real values"}
+                icon={Settings}
+                href="/settings"
+                attention
               />
             </>
           ) : null}
@@ -193,12 +235,6 @@ export default async function DashboardPage() {
           ) : null}
         </section>
       ) : null}
-
-      <Alert tone="info" title="Milestone 4 complete" className="mt-8 max-w-3xl">
-        Every module in the sidebar is live, and everything shown above is live
-        data from the database. Next is the hardening pass: security sweep,
-        performance, accessibility and a responsive check across both apps.
-      </Alert>
 
       <p className="mt-6 text-xs text-ink-500">
         You have {ROLE_PERMISSIONS[user.role].length} permissions.

@@ -121,6 +121,14 @@ Action, so it works without JavaScript. The action never trusts the body for
 *which* application is being edited — that comes from the cookie — and
 re-validates everything from the stored row at submission.
 
+Both the contact form and a submitted application notify the school by
+email. The addresses are settings the school edits in the administration
+system (`contact.notificationEmail`, `admissions.notificationEmail`), read
+here through `getNotificationAddress()` in `src/lib/mail.ts`; the
+`MAIL_ADMIN_NOTIFICATIONS` variable is only a fallback while they are empty.
+The enquiry itself is saved to `contact_enquiries` before any mail is
+attempted, so a mail failure can never lose it.
+
 Submission (`finaliseSubmission` in `src/lib/applications.ts`) is one atomic
 SQL statement: lock the draft only if it is still a draft, bump the per-year
 counter, write the reference (`BASS-2026-000123`), the status and the history

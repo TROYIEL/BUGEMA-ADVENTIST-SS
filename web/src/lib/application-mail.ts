@@ -3,7 +3,7 @@ import "server-only";
 import {
   absoluteUrl,
   escapeHtml,
-  getAdminNotificationAddress,
+  getNotificationAddress,
   sendMail,
 } from "./mail";
 
@@ -81,7 +81,7 @@ export async function sendAdminNewApplicationNotice({
   className: string | null;
   applicationId: string;
 }): Promise<void> {
-  const notify = getAdminNotificationAddress();
+  const notify = await getNotificationAddress("application");
   if (!notify) return;
 
   await sendMail({

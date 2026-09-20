@@ -5,14 +5,16 @@ import { notFound } from "next/navigation";
 import { requirePagePermission } from "@/lib/auth/dal";
 import { hasPermission } from "@/lib/auth/rbac";
 import { EnquiryStatus } from "@/generated/prisma/enums";
-import { getEnquiry, markEnquiryRead } from "@/lib/school-admin";
+import { isMailDeliveryConfigured } from "@/lib/mail";
+import { getEnquiry, listEnquiryReplies, markEnquiryRead } from "@/lib/school-admin";
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
 
 import { formatDateTime } from "@/components/applications/format";
 import { ENQUIRY_BADGES } from "@/components/school/enquiry-badges";
+import { ReplyForm } from "@/components/school/reply-form";
 
-import { deleteEnquiryAction, setEnquiryStatusAction } from "../actions";
+import { deleteEnquiryAction, replyToEnquiryAction, setEnquiryStatusAction } from "../actions";
 
 export const dynamic = "force-dynamic";
 
@@ -31,6 +33,7 @@ export default async function EnquiryPage({ params }: { params: Promise<{ id: st
   if (canWrite) await markEnquiryRead(id, user.id);
   const row = await getEnquiry(id);
   if (!row) notFound();
+  const replies = await listEnquiryReplies(id);
 
   const replySubject = encodeURIComponent(`Re: ${row.subject}`);
   const replyBody = encodeURIComponent(`\n\n----\nOn ${formatDateTime(row.createdAt)}, ${row.name} wrote:\n${row.body}`);
@@ -71,11 +74,54 @@ export default async function EnquiryPage({ params }: { params: Promise<{ id: st
           <p className="whitespace-pre-line px-5 py-5 text-[0.9375rem] leading-relaxed text-ink-800">{row.body}</p>
         </article>
 
-        <aside className="flex flex-col gap-4">
-          <ButtonLink href={`mailto:${row.email}?subject=${replySubject}&body=${replyBody}` as never} withArrow>
-            Reply by email
+        {/* The thread continues below the message: every reply the school has
+            sent, newest last, then the box to write the next one. */}
+        <div className="flex flex-col gap-4 lg:col-start-1">
+          {replies.map((reply) => {
+            const fate = reply.outbox?.status;
+            return (
+              <article key={reply.id} className="ml-6 rounded-lg border border-navy-200 bg-navy-50/50 sm:ml-12">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-navy-200/70 px-5 py-2.5 text-sm">
+                  <p>
+                    <span className="font-medium text-navy-900">{reply.sentBy?.name ?? "The school"}</span>
+                    <span className="text-ink-600"> replied · {formatDateTime(reply.createdAt)}</span>
+                  </p>
+                  {fate === "SENT" ? (
+                    <Badge tone="success">Sent by email</Badge>
+                  ) : fate === "FAILED" ? (
+                    <Link href={`/outbox/${reply.outbox!.id}` as never} className="underline decoration-danger-600/40 underline-offset-4">
+                      <Badge tone="danger">Email failed — see outbox</Badge>
+                    </Link>
+                  ) : fate === "QUEUED" ? (
+                    <Link href={`/outbox/${reply.outbox!.id}` as never} className="underline decoration-gold-600/40 underline-offset-4">
+                      <Badge tone="gold">Queued, not yet sent</Badge>
+                    </Link>
+                  ) : (
+                    <Badge tone="neutral">Saved</Badge>
+                  )}
+                </div>
+                <p className="whitespace-pre-line px-5 py-4 text-[0.9375rem] leading-relaxed text-ink-800">{reply.body}</p>
+              </article>
+            );
+          })}
+
+          {canWrite ? (
+            <section aria-label="Reply" className="rounded-lg border border-line bg-white p-5">
+              <ReplyForm
+                enquiryId={row.id}
+                recipient={`${row.name} <${row.email}>`}
+                action={replyToEnquiryAction}
+                deliveryConfigured={isMailDeliveryConfigured()}
+              />
+            </section>
+          ) : null}
+        </div>
+
+        <aside className="flex flex-col gap-4 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+          <ButtonLink href={`mailto:${row.email}?subject=${replySubject}&body=${replyBody}` as never} variant="secondary" size="sm">
+            Reply from your own mail program instead
           </ButtonLink>
-          <p className="text-xs text-ink-500">Opens your own mail program with the message quoted. Mark it as archived once it is dealt with.</p>
+          <p className="text-xs text-ink-500">Replies written below are sent from the school&rsquo;s address and kept on this page. Archive the enquiry once it is dealt with.</p>
           {canWrite ? (
             <div className="flex flex-wrap gap-2 border-t border-line pt-4">
               {statusButton(EnquiryStatus.ARCHIVED, "Archive")}

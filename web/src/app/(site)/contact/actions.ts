@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { getClientIp } from "@/lib/auth/session";
 import { db } from "@/lib/db";
-import { getAdminNotificationAddress, sendMail } from "@/lib/mail";
+import { getNotificationAddress, sendMail } from "@/lib/mail";
 import { RATE_LIMITS, rateLimit } from "@/lib/rate-limit";
 
 const enquirySchema = z.object({
@@ -99,7 +99,7 @@ export async function submitEnquiry(
 
   // The enquiry is already saved, so a mail failure cannot lose it. Staff will
   // still see it in the dashboard even if no notification goes out.
-  const notify = getAdminNotificationAddress();
+  const notify = await getNotificationAddress("enquiry");
   if (notify) {
     await sendMail({
       to: notify,

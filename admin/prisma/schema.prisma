@@ -100,6 +100,7 @@ enum ActorType {
 enum EnquiryStatus {
   UNREAD
   READ
+  REPLIED
   ARCHIVED
   SPAM
 }
@@ -150,6 +151,7 @@ model User {
   decidedApplications Application[]        @relation("ApplicationDecider")
   sentMessages        ApplicationMessage[] @relation("MessageSender")
   handledEnquiries    ContactEnquiry[]     @relation("EnquiryHandler")
+  enquiryReplies      EnquiryReply[]       @relation("EnquiryReplier")
   staffProfile        StaffProfile?
 
   @@index([role])
@@ -874,10 +876,29 @@ model ContactEnquiry {
   readAt      DateTime?
   createdAt   DateTime      @default(now())
 
-  handledBy User? @relation("EnquiryHandler", fields: [handledById], references: [id], onDelete: SetNull)
+  handledBy User?          @relation("EnquiryHandler", fields: [handledById], references: [id], onDelete: SetNull)
+  replies   EnquiryReply[]
 
   @@index([status, createdAt])
   @@map("contact_enquiries")
+}
+
+// A reply written by staff from the enquiry page. The text is kept here as
+// the record of what was said; the linked outbox row says whether it left.
+model EnquiryReply {
+  id        String   @id @default(cuid())
+  enquiryId String
+  body      String
+  sentById  String?
+  outboxId  String?  @unique
+  createdAt DateTime @default(now())
+
+  enquiry ContactEnquiry @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+  sentBy  User?          @relation("EnquiryReplier", fields: [sentById], references: [id], onDelete: SetNull)
+  outbox  EmailOutbox?   @relation(fields: [outboxId], references: [id], onDelete: SetNull)
+
+  @@index([enquiryId, createdAt])
+  @@map("enquiry_replies")
 }
 
 // Every outgoing message is persisted first. With no SMTP configured this is
@@ -886,6 +907,7 @@ model EmailOutbox {
   id          String      @id @default(cuid())
   toAddress   String
   toName      String?
+  replyTo     String?
   subject     String
   html        String
   text        String?
@@ -896,6 +918,8 @@ model EmailOutbox {
   relatedId   String?
   sentAt      DateTime?
   createdAt   DateTime    @default(now())
+
+  enquiryReply EnquiryReply?
 
   @@index([status, createdAt])
   @@map("email_outbox")

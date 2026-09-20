@@ -74,7 +74,7 @@ file bodies, downloads, redirects from emailed links, and the cron endpoint.
 
 ## 3. Database
 
-34 Prisma models, 15 enums, 7 migrations (`admin/prisma`; `web/prisma/schema.prisma` is an identical copy without migrations).
+35 Prisma models, 15 enums, 8 migrations (`admin/prisma`; `web/prisma/schema.prisma` is an identical copy without migrations).
 
 | Group | Models |
 | --- | --- |
@@ -82,7 +82,7 @@ file bodies, downloads, redirects from emailed links, and the cron endpoint.
 | Admissions | `AcademicYear`, `ApplicationClass`, `AdmissionRequirement`, `DocumentType`, `ApplicationFormField`, `Application`, `ApplicationDocument`, `ApplicationEvent`, `ApplicationNote`, `ApplicationMessage`, `ApplicationCounter` |
 | Content | `Page`, `HomeFeature`, `HomeHighlight`, `HeroSlide`, `NewsArticle`, `Event`, `GalleryAlbum`, `GalleryImage`, `Announcement`, `NavigationItem`, `SiteSetting`, `MediaAsset` |
 | School | `AcademicDepartment`, `Subject`, `AcademicProgram`, `StaffProfile` |
-| Infrastructure | `ContactEnquiry`, `EmailOutbox`, `SearchDocument`, `RateLimit` |
+| Infrastructure | `ContactEnquiry`, `EnquiryReply`, `EmailOutbox`, `SearchDocument`, `RateLimit` |
 
 Notable details:
 
@@ -191,8 +191,9 @@ two-way messages with the admissions office.
 - **Site settings** — grouped, typed settings (identity, contact, social,
   admissions, SEO); the dashboard lists every placeholder still unfilled.
 - **Navigation** — the header and footer menus, reorderable.
-- **Enquiries** — contact-form messages, marked unread / read / archived /
-  spam.
+- **Enquiries** — contact-form messages, marked unread / read / replied /
+  archived / spam; answered from the enquiry page (saved, then emailed with
+  the school's inbox as Reply-To).
 - **Users** and **Audit log** — every administrative write is recorded with
   actor, target and before / after.
 
@@ -227,7 +228,7 @@ driver.
 | `STORAGE_S3_BUCKET`, `STORAGE_S3_ACCESS_KEY_ID`, `STORAGE_S3_SECRET_ACCESS_KEY` | S3 credentials. |
 | `STORAGE_S3_ENDPOINT`, `STORAGE_S3_REGION`, `STORAGE_S3_FORCE_PATH_STYLE` | Non-AWS providers; region defaults to `auto`. |
 | `MAIL_DRIVER` | `outbox` (store only, default), `console`, or `smtp`. |
-| `MAIL_FROM_NAME`, `MAIL_FROM_ADDRESS`, `MAIL_ADMIN_NOTIFICATIONS` | Sender identity; address that gets new-application / new-enquiry notices. |
+| `MAIL_FROM_NAME`, `MAIL_FROM_ADDRESS`, `MAIL_ADMIN_NOTIFICATIONS` | Sender identity; fallback address for new-application / new-enquiry notices. The school sets the real addresses under Site settings (Contact → "Where website enquiries are sent", Admissions → "Where new applications are announced"). |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASSWORD` | SMTP delivery. |
 | `CRON_SECRET` | Bearer token for `/api/cron/mail`; the endpoint is 404 until set. |
 | `MAIL_FLUSH_LIMIT` | Rows per `mail:flush` run (default 50). |

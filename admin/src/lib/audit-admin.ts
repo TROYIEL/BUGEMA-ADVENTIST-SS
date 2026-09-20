@@ -95,6 +95,7 @@ export const ACTION_WORDS: Record<AuditAction, string> = {
   account_enabled: "Account enabled",
   exported: "Exported",
   resent: "Re-sent",
+  replied: "Replied",
 };
 
 /** "application_document" → "Application document". */

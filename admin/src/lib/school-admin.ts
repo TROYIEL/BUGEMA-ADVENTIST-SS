@@ -6,7 +6,9 @@ import { db } from "@/lib/db";
 
 import { MEDIA_SELECT } from "./content";
 import { uniqueSlug, type ContentFilters, type ContentListRow } from "./content-admin";
+import { escapeHtml, getNotificationAddress, sendMail } from "./mail";
 import { richTextToPlainText, sanitizeRichText, truncate } from "./sanitize";
+import { getSiteSettings, readSetting } from "./settings";
 import { indexDocument, removeFromIndex } from "./search";
 
 /**
@@ -404,6 +406,107 @@ export async function setEnquiryStatus(id: string, status: EnquiryStatus, userId
 
 export async function deleteEnquiry(id: string): Promise<void> {
   await db.contactEnquiry.delete({ where: { id } });
+}
+
+// ---------------------------------------------------------------------------
+// Replies
+// ---------------------------------------------------------------------------
+
+const REPLY_SELECT = {
+  id: true,
+  body: true,
+  createdAt: true,
+  sentBy: { select: { name: true } },
+  outbox: { select: { id: true, status: true, sentAt: true, lastError: true, toAddress: true } },
+} satisfies Prisma.EnquiryReplySelect;
+
+export type EnquiryReplyRow = Prisma.EnquiryReplyGetPayload<{ select: typeof REPLY_SELECT }>;
+
+export async function listEnquiryReplies(enquiryId: string): Promise<EnquiryReplyRow[]> {
+  return db.enquiryReply.findMany({ where: { enquiryId }, orderBy: { createdAt: "asc" }, select: REPLY_SELECT });
+}
+
+export const REPLY_MAX_LENGTH = 5000;
+
+/**
+ * Answers an enquiry from the admin: the reply is recorded first, then
+ * emailed to the person who wrote in, with the school's own address as
+ * Reply-To so their answer comes back to a real inbox rather than to
+ * no-reply. The enquiry moves to "replied" whatever it was before, unless it
+ * had been filed as spam or archived.
+ *
+ * Returns the reply together with whether the email actually left; a mail
+ * failure is recorded on the outbox row and shown on the thread, never
+ * thrown — the reply text must not be lost because SMTP was down.
+ */
+export async function replyToEnquiry(
+  enquiryId: string,
+  body: string,
+  userId: string,
+): Promise<{ reply: EnquiryReplyRow; delivered: boolean } | null> {
+  const enquiry = await db.contactEnquiry.findUnique({
+    where: { id: enquiryId },
+    select: { id: true, name: true, email: true, subject: true, body: true, status: true, createdAt: true },
+  });
+  if (!enquiry) return null;
+
+  const sender = await db.user.findUnique({ where: { id: userId }, select: { name: true } });
+  const settings = await getSiteSettings();
+  const schoolName = readSetting(settings, "school.name") ?? "the school";
+  // Where the parent's answer should land: the enquiries inbox if the school
+  // named one, otherwise the general address.
+  const replyTo = (await getNotificationAddress("enquiry")) ?? readSetting(settings, "contact.email") ?? undefined;
+
+  const text =
+    `${body.trim()}\n\n` +
+    `${sender?.name ?? "The school office"}\n${schoolName}\n\n` +
+    `----\nOn ${enquiry.createdAt.toLocaleString("en-GB", { timeZone: "Africa/Kampala" })}, you wrote:\n` +
+    enquiry.body
+      .split("\n")
+      .map((line) => `> ${line}`)
+      .join("\n");
+
+  const paragraph = (value: string) =>
+    value
+      .trim()
+      .split(/\n{2,}/)
+      .map((chunk) => `<p>${escapeHtml(chunk).replace(/\n/g, "<br>")}</p>`)
+      .join("");
+
+  const html =
+    `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.55;color:#171a1f">` +
+    paragraph(body) +
+    `<p style="margin-top:1.5em">${escapeHtml(sender?.name ?? "The school office")}<br>${escapeHtml(schoolName)}</p>` +
+    `<hr style="border:0;border-top:1px solid #d9dde3;margin:1.5em 0">` +
+    `<p style="color:#5f656e;font-size:13px">On ${escapeHtml(enquiry.createdAt.toLocaleString("en-GB", { timeZone: "Africa/Kampala" }))}, you wrote:</p>` +
+    `<blockquote style="margin:0;padding-left:1em;border-left:3px solid #d9dde3;color:#5f656e;font-size:13px">${paragraph(enquiry.body)}</blockquote>` +
+    `</div>`;
+
+  const mail = await sendMail({
+    to: enquiry.email,
+    toName: enquiry.name,
+    replyTo,
+    subject: enquiry.subject.toLowerCase().startsWith("re:") ? enquiry.subject : `Re: ${enquiry.subject}`,
+    html,
+    text,
+    relatedType: "contact_enquiry",
+    relatedId: enquiry.id,
+  });
+
+  const [reply] = await Promise.all([
+    db.enquiryReply.create({
+      data: { enquiryId: enquiry.id, body: body.trim(), sentById: userId, outboxId: mail.id },
+      select: REPLY_SELECT,
+    }),
+    enquiry.status === EnquiryStatus.SPAM || enquiry.status === EnquiryStatus.ARCHIVED
+      ? db.contactEnquiry.update({ where: { id: enquiry.id }, data: { handledById: userId } })
+      : db.contactEnquiry.update({
+          where: { id: enquiry.id },
+          data: { status: EnquiryStatus.REPLIED, handledById: userId, readAt: enquiry.status === EnquiryStatus.UNREAD ? new Date() : undefined },
+        }),
+  ]);
+
+  return { reply, delivered: mail.delivered };
 }
 
 export const LEVEL_WORDS: Record<StudyLevel, string> = {
