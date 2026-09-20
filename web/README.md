@@ -183,6 +183,16 @@ which headless Chrome does not match unless launched with the blink flags in
 `export const dynamic = "force-dynamic"`, so edits made in the administration
 system appear immediately and `next build` needs no reachable database.
 
+Navigations animate through React's `<ViewTransition>` (`(site)/template.tsx`
+re-mounts per route: old page out, new page in) with a gold progress bar
+along the top while the next page loads (`components/site/navigation-progress.tsx`).
+There is deliberately **no route-level `loading.tsx`**: a streamed Suspense
+fallback fixes the status at 200 before `notFound()` can run, turning every
+unknown URL into a soft 404. Instead the news, events and gallery pages
+render their header at once and stream the list behind a card skeleton
+(`components/site/list-skeleton.tsx`) from a boundary *inside* the page, so
+404s stay real. Animation CSS is in `src/components/ui/tokens.css`.
+
 **Keeping the two projects in step.** When the administration project
 changes `prisma/schema.prisma`, copy the file here unchanged and run
 `npm run db:generate`. Tests only ever touch rows they created (prefixed

@@ -1,8 +1,11 @@
+import { Suspense } from "react";
+
 import { getSiteSettings, readSetting } from "@/lib/settings";
 import { getSiteUrl } from "@/lib/site-url";
 
 import { JsonLdScript, organisationJsonLd, websiteJsonLd } from "@/components/seo/json-ld";
 import { AnnouncementBar } from "@/components/site/announcement-bar";
+import { NavigationProgress } from "@/components/site/navigation-progress";
 import { SiteFooter, getBrandLogo } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 
@@ -43,6 +46,10 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
       <JsonLdScript data={structuredData} />
+      {/* useSearchParams needs a boundary for the statically rendered not-found route. */}
+      <Suspense fallback={null}>
+        <NavigationProgress />
+      </Suspense>
       <AnnouncementBar />
       <SiteHeader logo={logo} />
       {children}

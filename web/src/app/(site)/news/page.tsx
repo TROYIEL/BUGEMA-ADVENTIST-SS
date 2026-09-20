@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense, ViewTransition } from "react";
 
 import { NewsCard } from "@/components/cards/content-cards";
+import { CardGridSkeleton } from "@/components/site/list-skeleton";
 import { PageHeader } from "@/components/site/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Pagination, parsePageParam } from "@/components/ui/pagination";
@@ -23,6 +25,19 @@ export default async function NewsIndexPage(props: PageProps<"/news">) {
   const categoryParam = searchParams.category;
   const category = Array.isArray(categoryParam) ? categoryParam[0] : categoryParam;
 
+  // The header renders immediately; the list streams in behind a skeleton.
+  // The boundary sits inside the page, so a 404 elsewhere is still a real 404.
+  return (
+    <main id="main" className="flex flex-1 flex-col">
+      <PageHeader title="News" crumbs={[{ label: "News" }]} />
+      <Suspense key={`${page}:${category ?? ""}`} fallback={<CardGridSkeleton count={PER_PAGE} label="Loading news" />}>
+        <NewsList page={page} category={category} />
+      </Suspense>
+    </main>
+  );
+}
+
+async function NewsList({ page, category }: { page: number; category: string | undefined }) {
   const where = {
     ...publishedFilter(),
     ...(category ? { category } : {}),
@@ -58,9 +73,7 @@ export default async function NewsIndexPage(props: PageProps<"/news">) {
     .filter((value): value is string => Boolean(value));
 
   return (
-    <main id="main" className="flex flex-1 flex-col">
-      <PageHeader title="News" crumbs={[{ label: "News" }]} />
-
+    <ViewTransition enter="fade-in" default="none">
       <div className="container-page py-14 md:py-16">
         {availableCategories.length > 0 ? (
           <nav aria-label="Filter news by category" className="mb-10">
@@ -125,6 +138,6 @@ export default async function NewsIndexPage(props: PageProps<"/news">) {
           </>
         )}
       </div>
-    </main>
+    </ViewTransition>
   );
 }

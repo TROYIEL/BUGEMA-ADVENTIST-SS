@@ -94,6 +94,7 @@ export const ACTION_WORDS: Record<AuditAction, string> = {
   account_disabled: "Account disabled",
   account_enabled: "Account enabled",
   exported: "Exported",
+  resent: "Re-sent",
 };
 
 /** "application_document" → "Application document". */
@@ -128,6 +129,8 @@ export function entityPath(entityType: string, entityId: string | null): string 
       return `/staff/${entityId}`;
     case "contact_enquiry":
       return `/enquiries/${entityId}`;
+    case "email_outbox":
+      return `/outbox/${entityId}`;
     case "user":
       return `/users/${entityId}`;
     case "subject":

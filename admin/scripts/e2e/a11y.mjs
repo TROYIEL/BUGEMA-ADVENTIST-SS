@@ -10,7 +10,7 @@ const pages = [
   "/login", "/", "/applications", "/documents", "/requirements", "/academic-years",
   "/hero-slides", "/media-library", "/pages", "/news", "/news/new", "/events",
   "/gallery", "/announcements", "/academics", "/staff", "/enquiries",
-  "/settings", "/navigation", "/users", "/audit", "/account",
+  "/settings", "/navigation", "/outbox", "/users", "/audit", "/account",
 ].map((p) => ({ app: "admin", url: BASE + p }));
 
 const VIEWPORTS = [

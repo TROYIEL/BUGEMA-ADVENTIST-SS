@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense, ViewTransition } from "react";
 
 import { EventCard } from "@/components/cards/content-cards";
+import { CardGridSkeleton } from "@/components/site/list-skeleton";
 import { PageHeader } from "@/components/site/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ContentStatus } from "@/generated/prisma/enums";
@@ -24,7 +26,19 @@ const EVENT_SELECT = {
   location: true,
 } as const;
 
-export default async function EventsPage() {
+export default function EventsPage() {
+  // The header renders immediately; the lists stream in behind a skeleton.
+  return (
+    <main id="main" className="flex flex-1 flex-col">
+      <PageHeader title="Events" crumbs={[{ label: "Events" }]} />
+      <Suspense fallback={<CardGridSkeleton count={3} label="Loading events" />}>
+        <EventLists />
+      </Suspense>
+    </main>
+  );
+}
+
+async function EventLists() {
   const now = new Date();
 
   const [upcoming, past] = await Promise.all([
@@ -49,9 +63,7 @@ export default async function EventsPage() {
   ]);
 
   return (
-    <main id="main" className="flex flex-1 flex-col">
-      <PageHeader title="Events" crumbs={[{ label: "Events" }]} />
-
+    <ViewTransition enter="fade-in" default="none">
       <div className="container-page py-14 md:py-16">
         <h2 className="font-serif text-2xl text-navy-900">Upcoming</h2>
 
@@ -84,6 +96,6 @@ export default async function EventsPage() {
           </>
         ) : null}
       </div>
-    </main>
+    </ViewTransition>
   );
 }

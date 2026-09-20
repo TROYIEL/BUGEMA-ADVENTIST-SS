@@ -72,7 +72,7 @@ export default async function DashboardPage() {
     }),
     db.mediaAsset.count(),
     db.contactEnquiry.count({ where: { status: EnquiryStatus.UNREAD } }),
-    db.emailOutbox.count({ where: { status: "QUEUED" } }),
+    db.emailOutbox.count({ where: { status: { in: ["QUEUED", "FAILED"] } } }),
   ]);
 
   const outstanding = getUnconfiguredSettings(settings);
@@ -132,9 +132,9 @@ export default async function DashboardPage() {
           {canSeeSettings ? (
             <>
               <StatCard
-                label="Mail queued"
+                label="Mail waiting"
                 value={queuedMail}
-                hint={mailConfigured ? "Sending is configured" : "Not being delivered"}
+                hint={mailConfigured ? "Queued or failed — see Outbox" : "Not being delivered"}
               />
               <StatCard
                 label="Settings to complete"
@@ -149,8 +149,8 @@ export default async function DashboardPage() {
       {canSeeSettings && !mailConfigured && queuedMail > 0 ? (
         <Alert tone="warning" title="Email is not being delivered" className="mt-6 max-w-3xl">
           {queuedMail} {queuedMail === 1 ? "message is" : "messages are"} sitting in
-          the outbox. No SMTP server is configured, so nothing has actually been
-          sent. Set the SMTP_* variables to start delivery.
+          the <Link href="/outbox" className="font-semibold underline">outbox</Link>. No SMTP server is configured, so
+          nothing has actually been sent. Set the SMTP_* variables to start delivery.
         </Alert>
       ) : null}
 

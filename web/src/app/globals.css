@@ -66,3 +66,35 @@
 @utility edge-angled-bottom {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5rem), 0 100%);
 }
+
+/* ---------------------------------------------------------------------------
+   Navigation progress (components/site/navigation-progress.tsx)
+
+   Idle: invisible. Loading: creeps to ~85% over a few seconds, so a slow
+   page still looks alive. Done: snaps to the end and fades out.
+--------------------------------------------------------------------------- */
+
+@keyframes nav-progress-creep {
+  from { transform: scaleX(0); }
+  20% { transform: scaleX(0.4); }
+  60% { transform: scaleX(0.7); }
+  to { transform: scaleX(0.85); }
+}
+
+.nav-progress {
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 200ms ease-out 150ms;
+}
+.nav-progress[data-phase="loading"] {
+  opacity: 1;
+  transition: none;
+  animation: nav-progress-creep 6s cubic-bezier(0.1, 0.6, 0.3, 1) both;
+}
+.nav-progress[data-phase="done"] {
+  opacity: 0;
+  transform: scaleX(1);
+  transition:
+    transform 150ms ease-out,
+    opacity 250ms ease-out 150ms;
+}

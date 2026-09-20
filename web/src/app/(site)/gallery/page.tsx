@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense, ViewTransition } from "react";
 
 import { MediaImage } from "@/components/media-image";
+import { CardGridSkeleton } from "@/components/site/list-skeleton";
 import { PageHeader } from "@/components/site/page-header";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ContentStatus } from "@/generated/prisma/enums";
@@ -15,7 +17,19 @@ export const metadata: Metadata = {
   alternates: { canonical: "/gallery" },
 };
 
-export default async function GalleryIndexPage() {
+export default function GalleryIndexPage() {
+  // The header renders immediately; the albums stream in behind a skeleton.
+  return (
+    <main id="main" className="flex flex-1 flex-col">
+      <PageHeader title="Gallery" crumbs={[{ label: "Gallery" }]} />
+      <Suspense fallback={<CardGridSkeleton count={3} label="Loading albums" />}>
+        <AlbumGrid />
+      </Suspense>
+    </main>
+  );
+}
+
+async function AlbumGrid() {
   const albums = await db.galleryAlbum.findMany({
     where: { status: ContentStatus.PUBLISHED },
     orderBy: { order: "asc" },
@@ -30,9 +44,7 @@ export default async function GalleryIndexPage() {
   });
 
   return (
-    <main id="main" className="flex flex-1 flex-col">
-      <PageHeader title="Gallery" crumbs={[{ label: "Gallery" }]} />
-
+    <ViewTransition enter="fade-in" default="none">
       <div className="container-page py-14 md:py-16">
         {albums.length === 0 ? (
           <EmptyState
@@ -77,6 +89,6 @@ export default async function GalleryIndexPage() {
           </ul>
         )}
       </div>
-    </main>
+    </ViewTransition>
   );
 }

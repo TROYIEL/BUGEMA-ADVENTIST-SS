@@ -181,6 +181,11 @@ live. Rows that applications refer to are switched off, not deleted.
 - **Academics, staff, enquiries** — `src/lib/school-admin.ts`. Programmes,
   departments and subjects with ordering; staff profiles behind the
   leadership page; the inbox for the website's contact form.
+- **Outbox** — `/outbox` over `src/lib/mail-admin.ts` (`settings:write`):
+  every email the system has tried to send, filterable by status, with the
+  message as sent, the last error, and a **Resend** for queued or failed
+  rows (or all of them at once). Buttons are disabled until SMTP is
+  configured; a manual resend ignores the automatic five-attempt cap.
 - **Site settings** — generated from `src/lib/settings-registry.ts`, one form
   per group; an unfilled setting is badged and the dashboard lists it under
   "Complete your site". **Navigation**, **Users** (super administrators only;
@@ -230,6 +235,14 @@ one SQL statement, not an interactive transaction with several awaits inside
 
 `cacheComponents` is deliberately off: pages that read the database use
 `export const dynamic = "force-dynamic"`.
+
+Navigations animate through React's `<ViewTransition>`: `(dashboard)/template.tsx`
+re-mounts per route so the old page fades out and the new one rises in, and
+`(dashboard)/loading.tsx` shows a table skeleton the instant a link is
+clicked. A consequence of that streamed fallback is that an unknown id
+renders the not-found page with HTTP 200 (with `noindex`); acceptable on
+this origin, which is never indexed. Animation CSS is in
+`src/components/ui/tokens.css` under "Page transitions".
 
 **Keeping the two projects in step.** `prisma/schema.prisma` is the single
 source of truth. After a migration here, copy the schema file into the

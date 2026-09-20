@@ -10,7 +10,7 @@ const ADMIN_ROUTES = [
   "/", "/applications", "/documents", "/requirements", "/academic-years",
   "/hero-slides", "/media-library", "/pages", "/news", "/events", "/gallery",
   "/announcements", "/academics", "/staff", "/enquiries", "/settings",
-  "/navigation", "/users", "/audit", "/account",
+  "/navigation", "/outbox", "/users", "/audit", "/account",
 ];
 
 async function status(url, headers = {}) {

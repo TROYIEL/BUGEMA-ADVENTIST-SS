@@ -25,7 +25,8 @@ export type AuditAction =
   | "password_changed"
   | "account_disabled"
   | "account_enabled"
-  | "exported";
+  | "exported"
+  | "resent";
 
 export type RecordAuditInput = {
   actorUserId?: string | null;

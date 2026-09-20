@@ -51,6 +51,7 @@ const NAV: { heading: string; entries: { label: string; href: string; permission
       entries: [
         { label: "Site settings", href: "/settings", permission: "settings:write", available: true },
         { label: "Navigation", href: "/navigation", permission: "navigation:write", available: true },
+        { label: "Outbox", href: "/outbox", permission: "settings:write", available: true },
         { label: "Users", href: "/users", permission: "users:read", available: true },
         { label: "Audit log", href: "/audit", permission: "audit:read", available: true },
       ],
