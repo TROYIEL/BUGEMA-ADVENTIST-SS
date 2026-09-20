@@ -51,9 +51,16 @@ export function QuickActions({
   return (
     // Dark band with its top-left corner cut away, the transition device the
     // reference uses between its hero and the first light content.
+    //
+    // The cut must stay inside the band's own padding, or it slices through
+    // the heading and buttons: a phone has 1.25rem of side padding, a laptop
+    // 4rem. So up to 1760px it is a chamfer that ends 2.5rem (3rem on md)
+    // down the left edge — always above the 3rem/3.5rem top padding — and
+    // only from 1760px, where the centred container leaves 80px+ of margin,
+    // does it become the full-height slant.
     <section
       aria-label="Quick links"
-      className="on-dark relative bg-navy-950 text-white mt-14 [clip-path:polygon(5rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(5rem_0,100%_0,100%_100%,7%_100%)]"
+      className="on-dark relative mt-14 bg-navy-950 text-white [clip-path:polygon(0_2.5rem,3rem_0,100%_0,100%_100%,0_100%)] md:[clip-path:polygon(0_3rem,6rem_0,100%_0,100%_100%,0_100%)] min-[110rem]:[clip-path:polygon(5rem_0,100%_0,100%_100%,7%_100%)]"
     >
       <div className="container-page py-12 md:py-14">
         <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] lg:gap-14">

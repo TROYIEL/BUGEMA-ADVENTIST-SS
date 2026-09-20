@@ -14,5 +14,5 @@ COPY . .
 # run time, never from the image.
 RUN DATABASE_URL=postgresql://build:build@localhost/build npx prisma generate
 
-EXPOSE 3001
+EXPOSE 3000
 CMD ["npm", "run", "dev"]

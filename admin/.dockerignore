@@ -1,0 +1,26 @@
+# dependencies
+node_modules
+.pnp
+.pnp.*
+
+# testing
+coverage
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# production
+build
+
+# generated Prisma client (regenerated inside the image)
+src/generated/
+
+# secrets stay out of the image; compose injects them with env_file
+.env*
+!.env.example
+
+# uploads and local scratch
+storage/
+*.tsbuildinfo
