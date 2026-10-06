@@ -17,3 +17,5 @@ RUN NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
 ENV NODE_ENV=production
 EXPOSE 3000
 CMD ["npm", "run", "start"]
+
+
