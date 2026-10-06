@@ -36,7 +36,7 @@ async function crestDataUrl(logoId: string | null): Promise<string | null> {
     return null;
   }
 }
-
+export const dynamic = "force-dynamic";
 export default async function OpenGraphImage() {
   const settings = await getSiteSettings();
   const name = readSetting(settings, "school.name") ?? "Bugema Adventist Secondary School";
