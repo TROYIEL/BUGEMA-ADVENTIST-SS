@@ -3,7 +3,7 @@ name: Build and deploy
 on:
   push:
     branches:
-      - main
+      - eli-working
   workflow_dispatch:
 
 env:
