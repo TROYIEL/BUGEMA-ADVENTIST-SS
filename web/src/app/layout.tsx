@@ -16,7 +16,7 @@ const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
   display: "swap",
 });
-
+export const dynamic = "force-dynamic";
 export const viewport: Viewport = {
   // themeColor belongs on the viewport export; inside `metadata` it has been
   // deprecated since Next 14.
