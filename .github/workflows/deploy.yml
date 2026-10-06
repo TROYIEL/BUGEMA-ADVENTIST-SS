@@ -60,7 +60,7 @@ jobs:
             ${{ env.REGISTRY }}/${{ steps.namespace.outputs.value }}/${{ matrix.app.image }}:${{ env.IMAGE_TAG }}
             ${{ env.REGISTRY }}/${{ steps.namespace.outputs.value }}/${{ matrix.app.image }}:latest
           cache-from: type=gha,scope=${{ matrix.app.name }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.app.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.app.name }} 
 
   deploy:
     name: Deploy to server
