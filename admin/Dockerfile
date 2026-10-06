@@ -1,8 +1,6 @@
 FROM node:22-alpine
 WORKDIR /app
 
-
-
 # Dependencies first, so this layer is cached until the lockfile changes.
 # Scripts are skipped here on purpose: postinstall runs `prisma generate`,
 # which needs the schema and prisma.config.ts that are only copied in below.

@@ -9,12 +9,14 @@ RUN npm ci --ignore-scripts
 
 COPY . .
 
-# Generate the Prisma client and compile the production Next.js output.
+# Generate the Prisma client and compile the production Next.js output. The
+# build URL only satisfies Prisma's config validation; the real database URL is
+# injected by compose at runtime.
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
 RUN export DATABASE_URL=postgresql://build:build@localhost:5432/build \
     && npx prisma generate \
     && npm run build
-    
+
 ENV NODE_ENV=production
-EXPOSE 3000
+
 CMD ["npm", "run", "start"]
