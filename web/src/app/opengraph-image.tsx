@@ -18,6 +18,7 @@ import { storage } from "@/lib/storage";
 export const alt = "Bugema Adventist Secondary School";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+export const dynamic = "force-dynamic";
 
 /**
  * The crest as a PNG data URL, or null when none is configured or it cannot
@@ -36,7 +37,7 @@ async function crestDataUrl(logoId: string | null): Promise<string | null> {
     return null;
   }
 }
-export const dynamic = "force-dynamic";
+
 export default async function OpenGraphImage() {
   const settings = await getSiteSettings();
   const name = readSetting(settings, "school.name") ?? "Bugema Adventist Secondary School";

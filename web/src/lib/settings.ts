@@ -25,9 +25,14 @@ export type SiteSettings = Record<SettingKey, SettingValue>;
  * rather than an empty or invented detail.
  */
 export const getSiteSettings = cache(async (): Promise<SiteSettings> => {
-  const rows = await db.siteSetting.findMany({
-    select: { key: true, value: true, isConfigured: true },
-  });
+// `next build` in Docker has no database. Treat the table as empty so
+  // prerendering falls back to registry defaults. Runtime always queries.
+  let rows: { key: string; value: unknown; isConfigured: boolean }[] = [];
+  if (process.env.NEXT_PHASE !== "phase-production-build") {
+    rows = await db.siteSetting.findMany({
+      select: { key: true, value: true, isConfigured: true },
+    });
+  }
 
   const byKey = new Map(rows.map((row) => [row.key, row]));
   const settings = {} as SiteSettings;
