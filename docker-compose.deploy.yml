@@ -1,0 +1,26 @@
+services:
+  admin:
+    image: ${ADMIN_IMAGE:?ADMIN_IMAGE is required}
+    container_name: bass-admin
+    restart: unless-stopped
+    env_file:
+      - ./admin/.env
+    ports:
+      - "${ADMIN_PORT:-3001}:3001"
+    volumes:
+      - bass-storage:/app/storage
+
+  web:
+    image: ${WEB_IMAGE:?WEB_IMAGE is required}
+    container_name: bass-web
+    restart: unless-stopped
+    env_file:
+      - ./web/.env
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    volumes:
+      - bass-storage:/app/storage
+
+volumes:
+  bass-storage:
+    name: bass-storage
