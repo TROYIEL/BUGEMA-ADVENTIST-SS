@@ -11,7 +11,8 @@ COPY . .
 
 # Generate the Prisma client and compile the production Next.js output.
 ARG NEXT_PUBLIC_SITE_URL=http://localhost:3000
-RUN NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
+RUN DATABASE_URL=postgresql://build:build@localhost:5432/build \
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL \
     npx prisma generate && npm run build
 
 ENV NODE_ENV=production

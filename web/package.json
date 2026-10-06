@@ -4,9 +4,9 @@
   "private": true,
   "description": "Bugema Adventist Secondary School - public website, admissions and applicant portal",
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev",
     "build": "next build",
-    "start": "next start --port 3000",
+    "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "node --conditions=react-server --import tsx --test \"src/**/*.test.ts\"",
