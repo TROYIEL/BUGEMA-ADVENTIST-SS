@@ -20,3 +20,4 @@ RUN export DATABASE_URL=postgresql://build:build@localhost:5432/build \
 ENV NODE_ENV=production
 
 CMD ["npm", "run", "start"]
+
