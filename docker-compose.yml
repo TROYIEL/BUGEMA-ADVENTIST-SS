@@ -61,6 +61,8 @@ services:
     depends_on:
       db-check:
         condition: service_completed_successfully
+    networks:
+      - bass-network
   web:
     build:
       context: ./web
@@ -74,3 +76,9 @@ services:
     depends_on:
       db-check:
         condition: service_completed_successfully
+    networks:
+      - bass-network
+
+networks:
+  bass-network:
+    name: bass-network

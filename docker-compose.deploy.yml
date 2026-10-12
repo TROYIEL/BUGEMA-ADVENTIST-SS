@@ -6,9 +6,11 @@ services:
     env_file:
       - ./admin/.env
     ports:
-      - "${ADMIN_PORT:-3001}:3001"
+      - "${ADMIN_PORT:-4001}:4001"
     volumes:
       - bass-storage:/app/storage
+    networks:
+      - bass-network
 
   web:
     image: ${WEB_IMAGE:?WEB_IMAGE is required}
@@ -20,7 +22,13 @@ services:
       - "${WEB_PORT:-4000}:4000"
     volumes:
       - bass-storage:/app/storage
+    networks:
+      - bass-network
 
 volumes:
   bass-storage:
     name: bass-storage
+
+networks:
+  bass-network:
+    name: bass-network
